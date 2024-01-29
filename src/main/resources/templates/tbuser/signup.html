@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+회원 가입
+<br/>
+!!
+ID : <input id="create_username" />
+PW : <input id="create_password" />
+
+<div>
+=========================================
+</div>
+
+<a onclick="signup()">signup</a>
+<script>
+    function signup(){
+        $.ajax({
+            url: "/api/tbuser/signup",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'username' : $("#create_username").val(),
+                'password' : $("#create_password").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+
+</script>
+</body>
+</html>

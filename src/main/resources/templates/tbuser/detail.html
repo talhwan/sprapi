@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+게시글 상세 조회
+
+<label for="detail_id">ID</label>
+<input id="detail_id" />
+<br/>
+<div>
+    =========================================
+</div>
+제목<div id="div_title">-</div>
+내용<div id="div_content">-</div>
+
+<a onclick="detail_tbuser()">select</a>
+<script>
+    function detail_tbuser(){
+        $.ajax({
+            url: "/api/tbuser/" + $("#detail_id").val(),
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+                $("#div_title").html(data.title);
+                $("#div_content").html(data.content);
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+    function create_tbuser(){
+        $.ajax({
+            url: "/api/tbuser",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'title' : $("#create_title").val(),
+                'content' : $("#create_content").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+
+</script>
+</body>
+</html>

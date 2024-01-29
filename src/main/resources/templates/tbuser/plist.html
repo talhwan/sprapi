@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+게시글 목록 조회(페이지로 볼껍니다)
+<br/>
+<label for="search_title">제목 키워드</label>
+<input id="search_title" />
+<label for="search_deleted">deleted 키워드</label>
+<input id="search_deleted" />
+<br/>
+<label for="search_callpage">요청 페이지</label>
+<input id="search_callpage" />
+<label for="search_perpage">한번에 볼 페이지</label>
+<input id="search_perpage" />
+<br/>
+<label for="search_sdate">시작일</label>
+<input id="search_sdate" type="date" />
+<label for="search_fdate">종료일</label>
+<input id="search_fdate" type="date" />
+
+<label for="search_orderby">정렬기준</label>
+<select id="search_orderby">
+    <option value="created_at" selected="selected">작성일</option>
+    <option value="title">제목</option>
+</select>
+<label for="search_orderway">정렬방향</label>
+<select id="search_orderway">
+    <option value="desc" selected="selected">역순</option>
+    <option value="asc">정순</option>
+</select>
+
+<div>
+    =========================================
+</div>
+총 글 수 : <h1 id="font_tbuser_list_size">-</h1> 개 <br/>
+가장 끝 페이지 수 : <h1 id="font_tbuser_page_size">-</h1> 개
+<div id="tbody_tbuser_list">
+</div>
+
+
+<a onclick="search_tbuser()">search</a>
+<script>
+    function search_tbuser(){
+        $.ajax({
+            url: "/api/tbuser/pagedList",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'sdate' : $("#search_sdate").val(),
+                'fdate' : $("#search_fdate").val(),
+                'orderby' : $("#search_orderby").val(),
+                'orderway' : $("#search_orderway").val(),
+                'callpage' : $("#search_callpage").val(),
+                'perpage' : $("#search_perpage").val(),
+                'title' : $("#search_title").val(),
+                'deleted' : $("#search_deleted").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+                $("#font_tbuser_list_size").html(data.listsize);
+                $("#font_tbuser_page_size").html(data.lastpage);
+                $("#tbody_tbuser_list").html("");
+                $("#search_callpage").val(data.callpage);
+                $("#search_perpage").val(data.perpage);
+                let tlist = data.list;
+                for(let i=0;i<tlist.length;i++){
+                    $("#tbody_tbuser_list").append(
+                        "<div>" + JSON.stringify(tlist[i])   +"</div>"
+                    );
+                }
+
+                //alert("data length : " + data.list.length);
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+    }
+
+
+</script>
+</body>
+</html>

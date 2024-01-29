@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbcmtMapper">
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbcmtDto$TbcmtSelectDto">
+		SELECT tbcmt.id
+			,tbcmt.tbboard_id
+			,tbcmt.content
+			,tbcmt.deleted
+			,tbcmt.created_at
+			,tbcmt.modified_at
+		FROM tbcmt
+		WHERE tbcmt.id = #{id}
+	</select>
+	<select id="list" parameterType="com.thc.sprapi.dto.TbcmtDto$TbcmtListDto" resultType="com.thc.sprapi.dto.TbcmtDto$TbcmtSelectDto">
+		SELECT tbcmt.id
+			,tbcmt.tbboard_id
+			,tbcmt.content
+			,tbcmt.deleted
+			,tbcmt.created_at
+			,tbcmt.modified_at
+		FROM tbcmt
+		WHERE tbcmt.id is not null
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbcmt.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbcmt.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbcmt.deleted = #{deleted}</if>
+		ORDER BY tbcmt.created_at DESC
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbcmtDto$TbcmtMoreListDto" resultType="com.thc.sprapi.dto.TbcmtDto$TbcmtSelectDto">
+		SELECT tbcmt.id
+		,tbcmt.tbboard_id
+		,tbcmt.content
+		,tbcmt.deleted
+		,tbcmt.created_at
+		,tbcmt.modified_at
+		FROM tbcmt
+		WHERE tbcmt.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbcmt.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcmt.created_at</if>
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbcmt.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbcmt.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbcmt.deleted = #{deleted}</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbcmt.created_at ORDER BY tbcmt.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbcmt.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbcmt.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbcmtDto$TbcmtPagedListDto" resultType="com.thc.sprapi.dto.TbcmtDto$TbcmtSelectDto">
+		SELECT tbcmt.id
+		,tbcmt.tbboard_id
+		,tbcmt.content
+		,tbcmt.deleted
+		,tbcmt.created_at
+		,tbcmt.modified_at
+		FROM tbcmt
+		WHERE tbcmt.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbcmt.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcmt.created_at</if>
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbcmt.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbcmt.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbcmt.deleted = #{deleted}</if>
+		<if test = "orderby =='created_at'">ORDER BY tbcmt.created_at </if>
+		<if test = "orderby =='tbboard_id'">ORDER BY tbcmt.tbboard_id </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbcmtDto$TbcmtPagedListDto" resultType="Integer">
+		SELECT count(tbcmt.id) as listsize
+		FROM tbcmt
+		WHERE tbcmt.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbcmt.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcmt.created_at</if>
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbcmt.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbcmt.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbcmt.deleted = #{deleted}</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+게시글 목록 조회
+<input id="list_title" />
+<input id="list_deleted" />
+
+<div>
+    =========================================
+</div>
+
+
+<a onclick="list_tbuser()">list</a>
+<script>
+    function list_tbuser(){
+        $.ajax({
+            url: "/api/tbuser/list",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'title' : $("#list_title").val(),
+                'deleted' : $("#list_deleted").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+                alert("data length : " + JSON.stringify(data.length));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+    }
+
+
+</script>
+</body>
+</html>

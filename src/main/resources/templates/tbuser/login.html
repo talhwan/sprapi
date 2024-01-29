@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+로그인
+<br/>
+!!
+ID : <input id="create_username" />
+PW : <input id="create_password" />
+
+<div>
+=========================================
+</div>
+
+<a onclick="login()">login</a>
+<br/>
+<a onclick="access_token()">access token 발급</a>
+<script>
+    function login(){
+        $.ajax({
+            url: "/api/login",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'username' : $("#create_username").val(),
+                'password' : $("#create_password").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                //alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+                let refreshToken = xhr.getResponseHeader("RefreshToken");
+                alert(refreshToken);
+                localStorage.setItem("refreshToken", refreshToken);
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+    function access_token(){
+
+        $.ajax({
+            url: "/api/auth/access-token",
+            method: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("RefreshToken", localStorage.getItem("refreshToken"));
+            },
+            /*
+            headers: {
+                "Content-Type": "application/json",
+                "RefreshToken": localStorage.getItem("refreshToken"),
+            },
+            */
+            cache: false,
+            success: (data, status, xhr)=>{
+                switch(xhr.status){
+                    case 200:
+                        let accessToken = xhr.getResponseHeader("Authorization");
+                        alert(accessToken);
+                        //let accessToken = data + "";
+                        //accessToken = accessToken.substring(12, accessToken.length);
+                        localStorage.setItem("accessToken", accessToken);
+
+                        break;
+                    default:
+                        console.log("no matching status code");
+                }
+            },
+            error: (data)=>{
+            },
+        });
+
+
+    }
+
+
+
+</script>
+</body>
+</html>

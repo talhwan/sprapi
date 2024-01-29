@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbpicMapper">
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbpicDto$TbpicSelectDto">
+		SELECT tbpic.id
+			,tbpic.tbboard_id
+			,tbpic.content
+			,tbpic.type
+			,tbpic.deleted
+			,tbpic.created_at
+			,tbpic.modified_at
+		FROM tbpic
+		WHERE tbpic.id = #{id}
+	</select>
+	<select id="list" parameterType="com.thc.sprapi.dto.TbpicDto$TbpicListDto" resultType="com.thc.sprapi.dto.TbpicDto$TbpicSelectDto">
+		SELECT tbpic.id
+			,tbpic.tbboard_id
+			,tbpic.content
+			,tbpic.type
+			,tbpic.deleted
+			,tbpic.created_at
+			,tbpic.modified_at
+		FROM tbpic
+		WHERE tbpic.id is not null
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbpic.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbpic.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpic.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpic.deleted = #{deleted}</if>
+		ORDER BY tbpic.created_at ASC
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbpicDto$TbpicMoreListDto" resultType="com.thc.sprapi.dto.TbpicDto$TbpicSelectDto">
+		SELECT tbpic.id
+		,tbpic.tbboard_id
+		,tbpic.content
+		,tbpic.deleted
+		,tbpic.created_at
+		,tbpic.modified_at
+		FROM tbpic
+		WHERE tbpic.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbpic.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpic.created_at</if>
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbpic.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbpic.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpic.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpic.deleted = #{deleted}</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbpic.created_at ORDER BY tbpic.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbpic.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbpic.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbpicDto$TbpicPagedListDto" resultType="com.thc.sprapi.dto.TbpicDto$TbpicSelectDto">
+		SELECT tbpic.id
+		,tbpic.tbboard_id
+		,tbpic.content
+		,tbpic.deleted
+		,tbpic.created_at
+		,tbpic.modified_at
+		FROM tbpic
+		WHERE tbpic.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbpic.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpic.created_at</if>
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbpic.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbpic.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpic.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpic.deleted = #{deleted}</if>
+		<if test = "orderby =='created_at'">ORDER BY tbpic.created_at </if>
+		<if test = "orderby =='tbboard_id'">ORDER BY tbpic.tbboard_id </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbpicDto$TbpicPagedListDto" resultType="Integer">
+		SELECT count(tbpic.id) as listsize
+		FROM tbpic
+		WHERE tbpic.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbpic.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpic.created_at</if>
+		<if test = "tbboard_id != null and tbboard_id !=''">AND tbpic.tbboard_id = #{tbboard_id}</if>
+		<if test = "content != null and content !=''">AND tbpic.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpic.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpic.deleted = #{deleted}</if>
+	</select>
+
+</mapper>

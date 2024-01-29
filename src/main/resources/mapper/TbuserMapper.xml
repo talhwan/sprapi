@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbuserMapper">
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
+		SELECT tbuser.id
+			,tbuser.uid
+			,tbuser.nick
+			,tbuser.sfrom
+			,tbuser.name
+			,tbuser.process
+			,tbuser.phone
+			,tbuser.mpic
+			,tbuser.deleted
+			,tbuser.created_at
+			,tbuser.modified_at
+		FROM tbuser
+		WHERE tbuser.id = #{id}
+	</select>
+	<select id="list" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserListDto" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
+		SELECT tbuser.id
+		,tbuser.uid
+		,tbuser.nick
+		,tbuser.sfrom
+		,tbuser.name
+		,tbuser.process
+		,tbuser.phone
+		,tbuser.mpic
+		,tbuser.deleted
+		,tbuser.created_at
+		,tbuser.modified_at
+		FROM tbuser
+		WHERE tbuser.id is not null
+		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
+		<if test = "process != null and process !=''">AND tbuser.process = #{process}</if>
+		<if test = "deleted != null and deleted !=''">AND tbuser.deleted = #{deleted}</if>
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserMoreListDto" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
+		SELECT tbuser.id
+		,,tbuser.uid
+		,tbuser.nick
+		,tbuser.sfrom
+		,tbuser.name
+		,tbuser.process
+		,tbuser.phone
+		,tbuser.mpic
+		,tbuser.deleted
+		,tbuser.created_at
+		,tbuser.modified_at
+		FROM tbuser
+		WHERE tbuser.id is not null
+		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
+		<if test = "process != null and process !=''">AND tbuser.process = #{process}</if>
+		<if test = "deleted != null and deleted !=''">AND tbuser.deleted = #{deleted}</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbuser.created_at ORDER BY tbuser.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbuser.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbuser.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserPagedListDto" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
+		SELECT tbuser.id
+		,tbuser.uid
+		,tbuser.nick
+		,tbuser.sfrom
+		,tbuser.name
+		,tbuser.process
+		,tbuser.phone
+		,tbuser.mpic
+		,tbuser.deleted
+		,tbuser.created_at
+		,tbuser.modified_at
+		FROM tbuser
+		WHERE tbuser.id is not null
+		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
+		<if test = "process != null and process !=''">AND tbuser.process = #{process}</if>
+		<if test = "deleted != null and deleted !=''">AND tbuser.deleted = #{deleted}</if>
+		<if test = "orderby =='created_at'">ORDER BY tbuser.created_at </if>
+		<if test = "orderby =='title'">ORDER BY tbuser.title </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserPagedListDto" resultType="Integer">
+		SELECT count(tbuser.id) as listsize
+		FROM tbuser
+		WHERE tbuser.id is not null
+		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
+		<if test = "process != null and process !=''">AND tbuser.process = #{process}</if>
+		<if test = "deleted != null and deleted !=''">AND tbuser.deleted = #{deleted}</if>
+	</select>
+
+</mapper>

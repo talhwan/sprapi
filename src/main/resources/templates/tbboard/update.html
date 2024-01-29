@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+글쓴거 수정하기
+<br/>
+<label for="update_id">ID</label>
+<input id="update_id" />
+<label for="update_title">UPDATE</label>
+<input id="update_title" />
+<label for="update_content">CONTENT</label>
+<input id="update_content" />
+<label for="update_deleted">DELETED</label>
+<input id="update_deleted" />
+<div>
+=========================================
+</div>
+
+<a onclick="update_tbboard()">update</a>
+<script>
+    function update_tbboard(){
+        $.ajax({
+            url: "/api/tbboard",
+            type: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'id' : $("#update_id").val(),
+                'title' : $("#update_title").val(),
+                'content' : $("#update_content").val(),
+                'deleted' : $("#update_deleted").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+
+</script>
+</body>
+</html>

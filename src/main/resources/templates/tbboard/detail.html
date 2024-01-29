@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+게시글 상세 조회
+<br/>
+image
+<div id="div_tbboard_pics_image">
+</div>
+file
+<div id="div_tbboard_pics_file">
+</div>
+<div>
+    =========================================
+</div>
+제목<div id="div_title">-</div>
+작성일시<div id="div_created_at">-</div>
+내용<div id="div_content">-</div>
+<input id="detail_tboard_id" type="hidden"/>
+////<br/>
+<div style="display: none;">
+<label for="search_tbboardId">제목 키워드</label>
+<input id="search_tbboardId" />
+<label for="search_deleted">deleted 키워드</label>
+<input id="search_deleted" />
+<br/>
+<label for="search_callpage">요청 페이지</label>
+<input id="search_callpage" />
+<label for="search_perpage">한번에 볼 페이지</label>
+<input id="search_perpage" />
+<br/>
+<label for="search_sdate">시작일</label>
+<input id="search_sdate" type="date" />
+<label for="search_fdate">종료일</label>
+<input id="search_fdate" type="date" />
+
+<label for="search_orderby">정렬기준</label>
+<select id="search_orderby">
+    <option value="created_at" selected="selected">작성일</option>
+</select>
+<label for="search_orderway">정렬방향</label>
+<select id="search_orderway">
+    <option value="desc" selected="selected">역순</option>
+    <option value="asc">정순</option>
+</select>
+</div>
+
+<div>
+    =========================================
+</div>
+총 댓글 수 : <h1 id="font_tbcmt_list_size">-</h1> 개 <br/>
+<div style="display: none;">
+가장 끝 페이지 수 : <h1 id="font_tbcmt_page_size">-</h1> 개
+</div>
+<div id="tbody_tbcmt_list">
+</div>
+
+////<br/>
+댓글 작성
+<input id="create_content" />
+<a onclick="create_tbcmt()">comment</a>
+<!--<a onclick="detail_tbboard()">select</a>-->
+<input class="hide" type="file" id="create_mpic" onchange="readURLFile(this)" accept="image/*" />
+<button class="btn btn-warning me-2" onclick="$('#create_mpic').click();return false;">사진 추가</button>
+
+    <script>
+        let limit_each_file_size = 10;
+        function readURLFile(input) {
+            let temp_id = $(input).attr("id") + "";
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                reader.onload = function(e) {
+                    let temp_each_file_size = input.files[0].size / (1024 * 1024);
+                    if (temp_each_file_size > limit_each_file_size) {
+                        alert("파일 1개 당 " + limit_each_file_size + "mb 용량 제한 초과 입니다!");
+                        $(input).val("");
+                        return false;
+                    }
+                    if (!input.files[0].type.match('image.*')) {
+                        //alert(input.files[0].type);
+                        alert("이미지 파일이 아닙니다!");
+                        $('#' + temp_id).val(null);
+                        $('#img_' + temp_id).attr('src', "/resources/image/no-pic.jpg");
+                    } else {
+                        listener_upload_file(input.files[0]);
+                    }
+                }
+            }
+        }
+        function listener_upload_file(obj_file) {
+            let fileData = new FormData();
+            fileData.append("file", obj_file);
+
+            $.ajax({
+                url: "/api/default/uploadFile",
+                type: "POST",
+                data: fileData ,
+                cache : false,
+                contentType : false,
+                processData : false,
+                success: (data, status, xhr)=>{
+                    //alert(xhr.status);
+                    switch(xhr.status){
+                        case 201:
+                            //alert(data);
+                            create_tbpic(data);
+                            break;
+                        default:
+                            console.log("no matching status code");
+                    }
+                },
+                error: (data)=>{
+                    switch(data.status){
+                        case 500:
+                            alert("권한 외의 요청입니다.");
+                            location.href="/index";
+                            break;
+                        default:
+                            alert("네트워크 에러가 발생하였습니다. 다시 요청해주시기 바랍니다.");
+                            console.log("no matching status code");
+                            break;
+                    }
+                },
+            });
+
+
+        }
+    </script>
+<script>
+    function listener_delete_tbpic(obj_this){
+        let id = $(obj_this).attr("key");
+        //alert(id);
+        delete_tbpic(id);
+    }
+    function delete_tbpic(id){
+        $.ajax({
+            url: "/api/tbpic",
+            type: "DELETE",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'id' : id
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                if(status == "success"){
+                    //$("#div_tbpic_" + id).remove();
+                    $("#p_tbpic_" + id).text("Y");
+                }
+
+                //alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+</script>
+<script>
+    detail_tbboard();
+    function detail_tbboard(){
+
+        let temp_url_with_idx = window.location.href;
+        // http://localhost:8080/tbboard/detail/de0ea4ddc1cf46c1a971d770f8a94b44
+        let split_slash_temp_idx = temp_url_with_idx.split('/');
+        let temp_idx = split_slash_temp_idx[split_slash_temp_idx.length - 1];
+        let split_question_temp_idx = temp_idx.split('?');
+        if(split_question_temp_idx.length > 0){
+            temp_idx = split_question_temp_idx[0];
+            // de0ea4ddc1cf46c1a971d770f8a94b44
+        }
+        $("#detail_tboard_id").val(temp_idx);
+        search_tbcmt();
+
+        $.ajax({
+            url: "/api/tbboard/" + temp_idx,
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            cache: false,
+            success: (data, status, xhr)=>{
+                //alert("data : " + JSON.stringify(data));
+                $("#div_title").html(data.title);
+                $("#div_content").html(data.content);
+                $("#div_created_at").html(data.created_at);
+                let pics = data.pics;
+                for(pic of pics){
+                    $("#div_tbboard_pics_image").append(
+                        "<div id='div_tbpic_"+pic.id+"'>"
+                        +"id : " + pic.id
+                        +"//deleted : <font id='p_tbpic_"+pic.id+"'>"+pic.deleted+"</font>"
+                        +"<img height='100px' src='"+pic.content+"' />"
+                        +"<a key='"+pic.id+"' onclick='listener_delete_tbpic(this)'> 삭제</a>"
+                        +"</div>"
+                    );
+                }
+                let files = data.files;
+                for(pic of files){
+                    $("#div_tbboard_pics_file").append(
+                        "<div id='div_tbpic_"+pic.id+"'>"
+                        +"id : " + pic.id
+                        +"//deleted : <font id='p_tbpic_"+pic.id+"'>"+pic.deleted+"</font>"
+
+                        +'<a class="a_thisisdownload" target="_blank" href="'+pic.content+'">'+pic.content+'다운로드</a>'
+
+                        +"<a key='"+pic.id+"' onclick='listener_delete_tbpic(this)'> 삭제</a>"
+                        +"</div>"
+                    );
+                }
+                let a_thisisdownload = $(".a_thisisdownload");
+                for(let i = 0;i<a_thisisdownload.length;i++){
+                    let a_thisisdownload_href = $(a_thisisdownload[i]).attr("href");
+                    a_thisisdownload_href = a_thisisdownload_href.replace("uploadfile/", "download/");
+                    $(a_thisisdownload[i]).attr("href", a_thisisdownload_href);
+                    $(a_thisisdownload[i]).removeClass("a_thisisdownload");
+                }
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+
+    function create_tbpic(content){
+        $.ajax({
+            url: "/api/tbpic",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'tbboardId' : $("#detail_tboard_id").val(),
+                'content' : content,
+                'type' : "image"
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                //
+                alert("xhr : " + JSON.stringify(xhr));
+                if(status == "success"){
+
+                    //xhr : {"readyState":4,"responseText":"{\"id\":\"f051928922e7423889b9d9b035954204\"}","responseJSON":{"id":"f051928922e7423889b9d9b035954204"},"status":201,"statusText":"success"}
+                    //alert(content);
+
+                    let pic = new Map();
+                    pic.id = data.id;
+                    pic.content = content;
+                    pic.deleted = "N";
+
+                    $("#div_tbboard_pics_image").append(
+                        "<div id='div_tbpic_"+pic.id+"'>"
+                        +"id : " + pic.id
+                        +"//deleted : <font id='p_tbpic_"+pic.id+"'>"+pic.deleted+"</font>"
+                        +"<img height='100px' src='"+pic.content+"' />"
+                        +"<a key='"+pic.id+"' onclick='listener_delete_tbpic(this)'> 삭제</a>"
+                        +"</div>"
+                    );
+
+                }
+                //alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+    function create_tbcmt(){
+        $.ajax({
+            url: "/api/tbcmt",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'tbboardId' : $("#detail_tboard_id").val(),
+                'content' : $("#create_content").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                //
+                if(status == "success"){
+                    search_tbcmt();
+                    $("#create_content").val("");
+                }
+                //alert("data : " + JSON.stringify(data));
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+
+    }
+    function search_tbcmt(){
+        $.ajax({
+            url: "/api/tbcmt/pagedList",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'sdate' : $("#search_sdate").val(),
+                'fdate' : $("#search_fdate").val(),
+                'orderby' : $("#search_orderby").val(),
+                'orderway' : $("#search_orderway").val(),
+                'callpage' : $("#search_callpage").val(),
+                'perpage' : $("#search_perpage").val(),
+                'tbboard_id' : $("#detail_tboard_id").val(),
+                'deleted' : $("#search_deleted").val()
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                //alert("data : " + JSON.stringify(data));
+                $("#font_tbcmt_list_size").html(data.listsize);
+                $("#font_tbcmt_page_size").html(data.lastpage);
+                $("#tbody_tbcmt_list").html("");
+                $("#search_callpage").val(data.callpage);
+                $("#search_perpage").val(data.perpage);
+                let tlist = data.list;
+                for(let i=0;i<tlist.length;i++){
+                    $("#tbody_tbcmt_list").append(
+                        "<div>" +tlist[i].content + "//"+ JSON.stringify(tlist[i].created_at)  +"</div>"
+                    );
+                }
+
+                //alert("data length : " + data.list.length);
+                //alert("status : " + JSON.stringify(status));
+                //alert("xhr : " + JSON.stringify(xhr));
+            },
+            error: (data)=>{
+            },
+        });
+    }
+</script>
+</body>
+</html>

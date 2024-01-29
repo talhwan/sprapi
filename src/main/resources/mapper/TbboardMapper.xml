@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbboardMapper">
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
+		SELECT tbboard.id
+			,tbboard.title
+			,tbboard.content
+			,tbboard.deleted
+			,tbboard.created_at
+			,tbboard.modified_at
+		FROM tbboard
+		WHERE tbboard.id = #{id}
+	</select>
+	<select id="list" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
+		SELECT tbboard.id
+			,tbboard.title
+			,tbboard.content
+			,tbboard.deleted
+			,tbboard.created_at
+			,tbboard.modified_at
+		FROM tbboard
+		WHERE tbboard.id is not null
+		<if test = "title != null and title !=''">AND tbboard.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbboard.deleted = #{deleted}</if>
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardMoreListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
+		SELECT tbboard.id
+		,tbboard.title
+		,tbboard.content
+		,tbboard.deleted
+		,tbboard.created_at
+		,tbboard.modified_at
+		FROM tbboard
+		WHERE tbboard.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbboard.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbboard.created_at</if>
+		<if test = "title != null and title !=''">AND tbboard.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbboard.deleted = #{deleted}</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbboard.created_at ORDER BY tbboard.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbboard.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbboard.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardPagedListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
+		SELECT tbboard.id
+		,tbboard.title
+		,tbboard.content
+		,tbboard.deleted
+		,tbboard.created_at
+		,tbboard.modified_at
+		FROM tbboard
+		WHERE tbboard.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbboard.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbboard.created_at</if>
+		<if test = "title != null and title !=''">AND tbboard.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbboard.deleted = #{deleted}</if>
+		<if test = "orderby =='created_at'">ORDER BY tbboard.created_at </if>
+		<if test = "orderby =='title'">ORDER BY tbboard.title </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardPagedListDto" resultType="Integer">
+		SELECT count(tbboard.id) as listsize
+		FROM tbboard
+		WHERE tbboard.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbboard.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbboard.created_at</if>
+		<if test = "title != null and title !=''">AND tbboard.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "deleted != null and deleted !=''">AND tbboard.deleted = #{deleted}</if>
+	</select>
+
+</mapper>
