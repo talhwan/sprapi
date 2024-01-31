@@ -20,6 +20,7 @@ file
 제목<div id="div_title">-</div>
 작성일시<div id="div_created_at">-</div>
 내용<div id="div_content">-</div>
+작성자<div id="div_tbuser_nick">-</div>
 <input id="detail_tboard_id" type="hidden"/>
 ////<br/>
 <div style="display: none;">
@@ -187,6 +188,7 @@ file
                 //alert("data : " + JSON.stringify(data));
                 $("#div_title").html(data.title);
                 $("#div_content").html(data.content);
+                $("#div_tbuser_nick").html(data.tbuser_nick);
                 $("#div_created_at").html(data.created_at);
                 let pics = data.pics;
                 for(pic of pics){

@@ -9,9 +9,14 @@
 			,tbboard.deleted
 			,tbboard.created_at
 			,tbboard.modified_at
-		FROM tbboard
+			,tbboard.tbuser_id
+			,IF(tbuser.deleted = 'Y', '(정보없음)', tbuser.nick) as tbuser_nick
+			,tbuser.mpic as tbuser_mpic
+		FROM tbboard, tbuser
 		WHERE tbboard.id = #{id}
+		AND tbboard.tbuser_id = tbuser.id
 	</select>
+
 	<select id="list" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
 		SELECT tbboard.id
 			,tbboard.title
@@ -47,11 +52,6 @@
 
 	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardPagedListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
 		SELECT tbboard.id
-		,tbboard.title
-		,tbboard.content
-		,tbboard.deleted
-		,tbboard.created_at
-		,tbboard.modified_at
 		FROM tbboard
 		WHERE tbboard.id is not null
 		<if test = "sdate != null and sdate !=''">AND tbboard.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>

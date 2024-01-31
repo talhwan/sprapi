@@ -45,9 +45,12 @@ public class TbboardRestController {
     @PreAuthorize("hasRole('USER')")
     //@PreAuthorize("permitAll()")
     public ResponseEntity<TbboardDto.TbboardAfterCreateDto> save(@Valid @RequestBody TbboardDto.TbboardCreateDto params, HttpServletRequest request, HttpServletResponse response
-    , @AuthenticationPrincipal PrincipalDetails principalDetails
+    //, @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
+        //스프링 시큐리티 에서 유저 정보 담아서 가기 위한 코드
+        params.setTbuserId(response.getHeader("tbuserId"));
 
+        /*
         String tbuserId = response.getHeader("tbuserId") + "";
         logger.info("tbuserId : " + tbuserId);
 
@@ -63,6 +66,7 @@ public class TbboardRestController {
         } else {
             logger.info("tbuserId_1 class: " + authentication.getPrincipal().getClass());
         }
+         */
 
         /*
         String[] pics = params.getPics();
@@ -85,6 +89,7 @@ public class TbboardRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("")
     public ResponseEntity<TbboardDto.TbboardAfterUpdateDto> update(@Valid @RequestBody TbboardDto.TbboardUpdateDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbboardService.update(params));
@@ -96,6 +101,7 @@ public class TbboardRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
     )
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ResponseEntity<TbboardDto.TbboardSelectDto> detail(@PathVariable("id") String id) {
         return ResponseEntity.status(HttpStatus.OK).body(tbboardService.detail(id));
@@ -106,6 +112,7 @@ public class TbboardRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/list")
     public ResponseEntity<List<TbboardDto.TbboardSelectDto>> list(@Valid @RequestBody TbboardDto.TbboardListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbboardService.list(params));
@@ -116,6 +123,7 @@ public class TbboardRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
+    @PreAuthorize("permitAll()")
     @PostMapping("/moreList")
     public ResponseEntity<List<TbboardDto.TbboardSelectDto>> moreList(@Valid @RequestBody TbboardDto.TbboardMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbboardService.moreList(params));
@@ -127,6 +135,7 @@ public class TbboardRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
+    @PreAuthorize("permitAll()")
     @PostMapping("/pagedList")
     public ResponseEntity<CommonAfterPagedListDto<TbboardDto.TbboardSelectDto>> pagedList(@Valid @RequestBody TbboardDto.TbboardPagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbboardService.pagedList(params));

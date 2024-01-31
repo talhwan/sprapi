@@ -35,8 +35,11 @@ PW : <input id="create_password" />
                 //alert("status : " + JSON.stringify(status));
                 //alert("xhr : " + JSON.stringify(xhr));
                 let refreshToken = xhr.getResponseHeader("RefreshToken");
-                alert(refreshToken);
+                let accessToken = xhr.getResponseHeader("Authorization");
+                alert("0 : " + refreshToken);
+                alert("1 : " + accessToken);
                 localStorage.setItem("refreshToken", refreshToken);
+                localStorage.setItem("accessToken", accessToken);
             },
             error: (data)=>{
             },

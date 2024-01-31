@@ -91,7 +91,15 @@ public class TbboardServiceImpl implements TbboardService {
         return tbboardMapper.moreList(params);
     }
     public CommonAfterPagedListDto<TbboardDto.TbboardSelectDto> pagedList(TbboardDto.TbboardPagedListDto params){
-        return new CommonAfterPagedListDto<>(params.afterBuild(tbboardMapper.pagedListCount(params)), tbboardMapper.pagedList(params));
+        return new CommonAfterPagedListDto<>(params.afterBuild(tbboardMapper.pagedListCount(params)), addListDetails(tbboardMapper.pagedList(params)));
+    }
+
+    public List<TbboardDto.TbboardSelectDto> addListDetails(List<TbboardDto.TbboardSelectDto> a_list){
+        List<TbboardDto.TbboardSelectDto> result_list = new ArrayList<>();
+        for(TbboardDto.TbboardSelectDto a : a_list){
+            result_list.add(detail(a.getId()));
+        }
+        return result_list;
     }
 
 }

@@ -17,10 +17,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 절대경로 file:///c:/upload/
         // 상대경로 file:./upload/
         registry
-                .addResourceHandler("/images/**")
+                .addResourceHandler("/files/**")
                 //접근할 파일이 있는 위치를 지정
                 .addResourceLocations("file:" + "C:/workspace/uploadfiles/")
-                .setCachePeriod(60 * 60) // 초 단위 => 한시간
+                .setCachePeriod(60 * 5) // 초 단위
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }

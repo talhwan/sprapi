@@ -34,13 +34,16 @@ public class TbboardDto {
 		@Size(max=200)
 		private String content;
 
+		@Schema(description = "tbuserId", example="tbuserId")
+		private String tbuserId;
+
 		@Schema(description = "pics", example="pics")
 		private String[] pics;
 		@Schema(description = "types", example="types")
 		private String[] types;
 
 		public Tbboard toEntity() {
-			return Tbboard.of(title, content);
+			return Tbboard.of(title, content, tbuserId);
 		}
 	}
 	@Schema
@@ -118,6 +121,11 @@ public class TbboardDto {
 		private String created_at;
 		@Schema(description = "modified_at", example="2024-01-01 00:00:00.000000")
 		private String modified_at;
+
+		@Schema(description = "tbuser_nick", example="")
+		private String tbuser_nick;
+		@Schema(description = "tbuser_mpic", example="")
+		private String tbuser_mpic;
 
 		@Schema(description = "pics", example="pics")
 		private List<TbpicDto.TbpicSelectDto> pics;

@@ -61,7 +61,7 @@ public class AuthRestController {
 				response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + jwtTokenDto.getAccessToken());
 				
 				// return 200(OK).
-				//responseEntity = ResponseEntity.status(HttpStatus.OK).build();
+				responseEntity = ResponseEntity.status(HttpStatus.OK).build();
 				//responseEntity = ResponseEntity.status(HttpStatus.OK).body(externalProperties.getTokenPrefix() + jwtTokenDto.getAccessToken());
 			} catch (JWTVerificationException e) {
 				e.printStackTrace();

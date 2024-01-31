@@ -154,6 +154,10 @@
                 if(data.status == 401){
                     alert("access token expired!");
                 }
+                if(data.status == 403){
+                    alert("권한 없는듯..");
+                }
+
                 /*
                 alert("error : data : " + JSON.stringify(data));
                 alert("error : status : " + JSON.stringify(status));

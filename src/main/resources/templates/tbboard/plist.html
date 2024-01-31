@@ -73,7 +73,7 @@
                 let tlist = data.list;
                 for(let i=0;i<tlist.length;i++){
                     $("#tbody_tbboard_list").append(
-                        "<div>" + "<a href='/tbboard/detail/"+tlist[i].id+"'>"+JSON.stringify(tlist[i].title)+"</a>"+"//"+ JSON.stringify(tlist[i].created_at)  +"</div>"
+                        "<div>" + "<a href='/tbboard/detail/"+tlist[i].id+"'>"+JSON.stringify(tlist[i].title)+"</a>"+"//" +tlist[i].tbuser_nick +"//"+ JSON.stringify(tlist[i].created_at)  +"</div>"
                     );
                 }
 
