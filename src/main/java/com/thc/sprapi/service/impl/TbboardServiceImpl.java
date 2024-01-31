@@ -67,6 +67,10 @@ public class TbboardServiceImpl implements TbboardService {
         tbboardRepository.save(tbboard);
         return tbboard.toAfterUpdateDto();
     }
+    public TbboardDto.TbboardAfterUpdateDto delete(TbboardDto.TbboardUpdateDto params){
+        params.setDeleted("Y");
+        return update(params);
+    }
 
     public TbboardDto.TbboardSelectDto detail(String id){
         TbboardDto.TbboardSelectDto result = tbboardMapper.detail(id);
@@ -75,20 +79,11 @@ public class TbboardServiceImpl implements TbboardService {
         return result;
     }
     public List<TbboardDto.TbboardSelectDto> list(TbboardDto.TbboardListDto params){
-        /*
-        // 상세 정보 조회 하는 것을 디테일에만 맡길때
-        List<TbboardDto.TbboardSelectDto> a_list = tbboardMapper.list(params);
-        List<TbboardDto.TbboardSelectDto> result_list = new ArrayList<>();
-        for(TbboardDto.TbboardSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
-        }
-        return result_list;
-         */
-        return tbboardMapper.list(params);
+        return addListDetails(tbboardMapper.list(params));
     }
     public List<TbboardDto.TbboardSelectDto> moreList(TbboardDto.TbboardMoreListDto params){
         params.afterBuild();
-        return tbboardMapper.moreList(params);
+        return addListDetails(tbboardMapper.moreList(params));
     }
     public CommonAfterPagedListDto<TbboardDto.TbboardSelectDto> pagedList(TbboardDto.TbboardPagedListDto params){
         return new CommonAfterPagedListDto<>(params.afterBuild(tbboardMapper.pagedListCount(params)), addListDetails(tbboardMapper.pagedList(params)));

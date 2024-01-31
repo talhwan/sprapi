@@ -2,6 +2,7 @@ package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.TbboardDto;
+import com.thc.sprapi.dto.TbpicDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbboardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,46 +42,9 @@ public class TbboardRestController {
                     + "@exception 중복 <br />"
     )
     @PostMapping("")
-    //@PreAuthorize("hasRole('ADMIN')")
     @PreAuthorize("hasRole('USER')")
-    //@PreAuthorize("permitAll()")
-    public ResponseEntity<TbboardDto.TbboardAfterCreateDto> save(@Valid @RequestBody TbboardDto.TbboardCreateDto params, HttpServletRequest request, HttpServletResponse response
-    //, @AuthenticationPrincipal PrincipalDetails principalDetails
-    ) {
-        //스프링 시큐리티 에서 유저 정보 담아서 가기 위한 코드
-        params.setTbuserId(response.getHeader("tbuserId"));
-
-        /*
-        String tbuserId = response.getHeader("tbuserId") + "";
-        logger.info("tbuserId : " + tbuserId);
-
-        //파라미터로도 받을 수 있음!
-        String tbuserId_0 = principalDetails.getTbuser().getId();
-        logger.info("tbuserId_0 : " + tbuserId_0);
-
-        //SecurityContextHolder에 직접 접근 할수도 있음.(위에 기능 구현한것)
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof PrincipalDetails) {
-            String tbuserId_1 = ((PrincipalDetails) authentication.getPrincipal()).getTbuser().getId();
-            logger.info("tbuserId_1 : " + tbuserId_1);
-        } else {
-            logger.info("tbuserId_1 class: " + authentication.getPrincipal().getClass());
-        }
-         */
-
-        /*
-        String[] pics = params.getPics();
-        for (String pic : pics) {
-            logger.info("Ctrl- / {} : {}", i, pic);
-        }
-        */
-        /*
-        logger.info("Ctrl- / test_auth : " + request.getAttribute("test_auth"));
-        logger.info("Ctrl- / test_header : " + response.getHeader("test_header"));
-        request.setAttribute("test_auth_1", "1Y");
-        response.setHeader("test_header_1", "1!");
-         */
-
+    public ResponseEntity<TbboardDto.TbboardAfterCreateDto> save(@Valid @RequestBody TbboardDto.TbboardCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbboardService.create(params));
     }
     @Operation(summary = "게시판 글 수정",
@@ -93,6 +57,18 @@ public class TbboardRestController {
     @PutMapping("")
     public ResponseEntity<TbboardDto.TbboardAfterUpdateDto> update(@Valid @RequestBody TbboardDto.TbboardUpdateDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbboardService.update(params));
+    }
+
+    @Operation(summary = "게시판 글 삭제",
+            description = "게시판 글 삭제를 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param TbboardUpdateDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardAfterUpdateDto\\> <br />"
+                    + "@exception 해당 자료 없음 <br />"
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("")
+    public ResponseEntity<TbboardDto.TbboardAfterUpdateDto> delete(@Valid @RequestBody TbboardDto.TbboardUpdateDto params) {
+        return ResponseEntity.status(HttpStatus.OK).body(tbboardService.delete(params));
     }
 
     @Operation(summary = "게시판 글 정보 조회",

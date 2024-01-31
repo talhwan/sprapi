@@ -168,6 +168,12 @@ public class TbboardDto {
 		private String title;
 		@Schema(description = "deleted", example="N")
 		private String deleted;
+		@Schema(description = "tbuser_id", example="")
+		private String tbuser_id;
+		@Schema(description = "tbuser_username", example="")
+		private String tbuser_username;
+		@Schema(description = "tbuser_nick", example="")
+		private String tbuser_nick;
 	}
 	
 	

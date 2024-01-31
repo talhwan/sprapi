@@ -66,14 +66,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 		// TbuserId로 리프레시토큰 발급
-		String refreshToken = authService.createRefreshToken(principalDetails.getTbuser().getId());
 		System.out.println("principalDetails.getTbuser().getId() : " + principalDetails.getTbuser().getId());
+		String refreshToken = authService.createRefreshToken(principalDetails.getTbuser().getId());
 		String accessToken = authService.createAccessToken(refreshToken);
 
 		// header에 담아서 전달!!
 		response.addHeader(externalProperties.getRefreshKey(), externalProperties.getTokenPrefix() + refreshToken);
 		response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + accessToken);
 		// 바디에도 담아줍시다.
+		//TbuserDto.TbuserLoginDto tbuserLoginDto = new TbuserDto.TbuserLoginDto(externalProperties.getTokenPrefix() + refreshToken, externalProperties.getTokenPrefix() + accessToken);
+		//response.getWriter().write(tbuserLoginDto.toString());
 		//response.getWriter().write(externalProperties.getTokenPrefix() + refreshToken);
 		
 		System.out.println("successfulAuthentication : login success?!");

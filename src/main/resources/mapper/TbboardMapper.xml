@@ -11,19 +11,14 @@
 			,tbboard.modified_at
 			,tbboard.tbuser_id
 			,IF(tbuser.deleted = 'Y', '(정보없음)', tbuser.nick) as tbuser_nick
-			,tbuser.mpic as tbuser_mpic
+			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuser_mpic
 		FROM tbboard, tbuser
-		WHERE tbboard.id = #{id}
-		AND tbboard.tbuser_id = tbuser.id
+		WHERE tbboard.tbuser_id = tbuser.id
+		  AND tbboard.id = #{id}
 	</select>
 
 	<select id="list" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
 		SELECT tbboard.id
-			,tbboard.title
-			,tbboard.content
-			,tbboard.deleted
-			,tbboard.created_at
-			,tbboard.modified_at
 		FROM tbboard
 		WHERE tbboard.id is not null
 		<if test = "title != null and title !=''">AND tbboard.title LIKE CONCAT('%', #{title}, '%')</if>
@@ -32,17 +27,15 @@
 
 	<select id="moreList" parameterType="com.thc.sprapi.dto.TbboardDto$TbboardMoreListDto" resultType="com.thc.sprapi.dto.TbboardDto$TbboardSelectDto">
 		SELECT tbboard.id
-		,tbboard.title
-		,tbboard.content
-		,tbboard.deleted
-		,tbboard.created_at
-		,tbboard.modified_at
-		FROM tbboard
-		WHERE tbboard.id is not null
+		FROM tbboard, tbuser
+		WHERE tbboard.tbuser_id = tbuser.id
 		<if test = "sdate != null and sdate !=''">AND tbboard.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbboard.created_at</if>
 		<if test = "title != null and title !=''">AND tbboard.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "deleted != null and deleted !=''">AND tbboard.deleted = #{deleted}</if>
+		<if test = "tbuser_id != null and tbuser_id !=''">AND tbboard.tbuser_id = #{tbuser_id}</if>
+		<if test = "tbuser_username != null and tbuser_username !=''">AND tbuser.username = #{tbuser_username}</if>
+		<if test = "tbuser_nick != null and tbuser_nick !=''">AND tbuser.nick LIKE CONCAT('%', #{tbuser_nick}, '%')</if>
 		<if test = "cdatetime != null and cdatetime !=''">
 			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbboard.created_at ORDER BY tbboard.created_at DESC</if>
 			<if test = "cway =='recent'">AND tbboard.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbboard.created_at ASC</if>

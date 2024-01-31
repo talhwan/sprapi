@@ -18,7 +18,7 @@ public class Tbboard extends AuditingFields {
 
     @Setter @Column(nullable = false) private String title; // 제목
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문
-    @Setter @Column(nullable = false) private String tbuserId;
+    @Setter @Column(nullable = false) private String tbuserId; //작성자!
 
     protected Tbboard(){}
     private Tbboard(String title, String content, String tbuserId) {

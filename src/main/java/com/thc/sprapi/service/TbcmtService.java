@@ -8,6 +8,7 @@ import java.util.List;
 public interface TbcmtService {
     public TbcmtDto.TbcmtAfterCreateDto create(TbcmtDto.TbcmtCreateDto params);
     public TbcmtDto.TbcmtAfterUpdateDto update(TbcmtDto.TbcmtUpdateDto params);
+    public TbcmtDto.TbcmtAfterUpdateDto delete(TbcmtDto.TbcmtUpdateDto params);
     public TbcmtDto.TbcmtSelectDto detail(String id);
     public List<TbcmtDto.TbcmtSelectDto> list(TbcmtDto.TbcmtListDto params);
     public List<TbcmtDto.TbcmtSelectDto> moreList(TbcmtDto.TbcmtMoreListDto params);

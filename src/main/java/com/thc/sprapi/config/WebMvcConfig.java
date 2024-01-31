@@ -20,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceHandler("/files/**")
                 //접근할 파일이 있는 위치를 지정
                 .addResourceLocations("file:" + "C:/workspace/uploadfiles/")
-                .setCachePeriod(60 * 5) // 초 단위
+                .setCachePeriod(60 * 60) // 초 단위
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }

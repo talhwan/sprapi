@@ -6,7 +6,6 @@ import com.thc.sprapi.security.FilterExceptionHandlerFilter;
 import com.thc.sprapi.security.JwtAuthenticationFilter;
 import com.thc.sprapi.security.JwtAuthorizationFilter;
 import com.thc.sprapi.service.AuthService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableMethodSecurity
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfig {
 	
 	private final TbuserRepository tbuserRepository;
 	private final CorsFilterConfiguration corsFilterConfiguration;
@@ -33,7 +32,7 @@ public class SecurityConfiguration {
 	private final AuthService authService;
 	private final ExternalProperties externalProperties;
 
-	public SecurityConfiguration(TbuserRepository tbuserRepository, CorsFilterConfiguration corsFilterConfiguration, ObjectMapper objectMapper, AuthService authService
+	public SecurityConfig(TbuserRepository tbuserRepository, CorsFilterConfiguration corsFilterConfiguration, ObjectMapper objectMapper, AuthService authService
 			, ExternalProperties externalProperties) {
 		this.tbuserRepository = tbuserRepository;
 		this.corsFilterConfiguration = corsFilterConfiguration;

@@ -2,6 +2,7 @@ package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.TbcmtDto;
+import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbcmtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,18 +32,31 @@ public class TbcmtRestController {
         this.tbcmtService = tbcmtService;
     }
 
-    @Operation(summary = "댓글 글 등록",
-            description = "댓글 신규 글 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "댓글 등록",
+            description = "댓글 신규 등록 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcmtCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbcmtAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
     )
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("")
-    public ResponseEntity<TbcmtDto.TbcmtAfterCreateDto> save(@Valid @RequestBody TbcmtDto.TbcmtCreateDto params, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<TbcmtDto.TbcmtAfterCreateDto> save(@Valid @RequestBody TbcmtDto.TbcmtCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbcmtService.create(params));
     }
-    @Operation(summary = "댓글 글 수정",
-            description = "댓글 기존 글 수정을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "댓글 수정",
+            description = "댓글 수정 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param TbcmtUpdateDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbcmtAfterUpdateDto\\> <br />"
+                    + "@exception 해당 자료 없음 <br />"
+    )
+    @DeleteMapping("")
+    public ResponseEntity<TbcmtDto.TbcmtAfterUpdateDto> delete(@Valid @RequestBody TbcmtDto.TbcmtUpdateDto params) {
+        return ResponseEntity.status(HttpStatus.OK).body(tbcmtService.delete(params));
+    }
+
+    @Operation(summary = "댓글 삭제",
+            description = "댓글 삭제 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcmtUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcmtAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"

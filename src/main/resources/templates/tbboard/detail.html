@@ -275,6 +275,10 @@ file
         $.ajax({
             url: "/api/tbcmt",
             type: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+            },
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({
                 'tbboardId' : $("#detail_tboard_id").val(),
@@ -322,7 +326,7 @@ file
                 let tlist = data.list;
                 for(let i=0;i<tlist.length;i++){
                     $("#tbody_tbcmt_list").append(
-                        "<div>" +tlist[i].content + "//"+ JSON.stringify(tlist[i].created_at)  +"</div>"
+                        "<div>" +tlist[i].content + "//"+ tlist[i].tbuser_nick+ "//"+ JSON.stringify(tlist[i].created_at)  +"</div>"
                     );
                 }
 

@@ -49,8 +49,8 @@ public class TbpicRestController {
     public ResponseEntity<TbpicDto.TbpicAfterUpdateDto> update(@Valid @RequestBody TbpicDto.TbpicUpdateDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpicService.update(params));
     }
-    @Operation(summary = "게시글 이미지 글 수정",
-            description = "게시글 이미지 기존 글 수정을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "게시글 이미지 글 삭제",
+            description = "게시글 이미지 삭제를 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbpicUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpicAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"

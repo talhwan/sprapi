@@ -21,17 +21,16 @@ public class Tbcmt extends AuditingFields {
 
     @Setter @Column(nullable = false) private String tbboardId; // 게시판의 pk
     @Setter @Column(nullable = false, length = 10000) private String content;
+    @Setter @Column(nullable = false) private String tbuserId; //작성자!
 
     protected Tbcmt(){}
-    private Tbcmt(String tbboardId, String content) {
+    private Tbcmt(String tbboardId, String content, String tbuserId) {
         this.tbboardId = tbboardId;
         this.content = content;
+        this.tbuserId = tbuserId;
     }
-    public static Tbcmt of(String tbboardId, String content) {
-        return new Tbcmt(tbboardId, content);
-    }
-    public static Tbcmt of(String tbboardId) {
-        return new Tbcmt(tbboardId, "");
+    public static Tbcmt of(String tbboardId, String content, String tbuserId) {
+        return new Tbcmt(tbboardId, content, tbuserId);
     }
 
     public TbcmtDto.TbcmtAfterCreateDto toAfterCreateDto() {

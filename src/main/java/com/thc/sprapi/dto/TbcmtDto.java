@@ -28,8 +28,11 @@ public class TbcmtDto {
 		@Size(max=200)
 		private String content;
 
+		@Schema(description = "tbuserId", example="tbuserId")
+		private String tbuserId;
+
 		public Tbcmt toEntity() {
-			return Tbcmt.of(tbboardId, content);
+			return Tbcmt.of(tbboardId, content, tbuserId);
 		}
 	}
 	@Schema
@@ -107,6 +110,11 @@ public class TbcmtDto {
 		private String created_at;
 		@Schema(description = "modified_at", example="2024-01-01 00:00:00.000000")
 		private String modified_at;
+
+		@Schema(description = "tbuser_nick", example="")
+		private String tbuser_nick;
+		@Schema(description = "tbuser_mpic", example="")
+		private String tbuser_mpic;
 
 	}
 

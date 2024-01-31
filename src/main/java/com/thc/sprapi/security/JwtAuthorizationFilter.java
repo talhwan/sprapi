@@ -91,11 +91,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 		// SecurityContextHolder에 Authentication을 담아서 Spring Security가 권한 처리 할 수 있게 한다.
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
+
+		/*
 		//사용자 정보 추출을 위한 코드
 		response.setHeader("tbuserId", tbuserId);
 		System.out.println("tbuserId!!! : " + tbuserId);
-		
+		*/
+
 		chain.doFilter(request, response);
 	}
 
