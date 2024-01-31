@@ -11,7 +11,10 @@ import com.thc.sprapi.mapper.TbuserMapper;
 import com.thc.sprapi.repository.RoleTypeRepository;
 import com.thc.sprapi.repository.TbuserRepository;
 import com.thc.sprapi.repository.TbuserRoleTypeRepository;
+import com.thc.sprapi.security.JwtTokenDto;
+import com.thc.sprapi.service.AuthService;
 import com.thc.sprapi.service.TbuserService;
+import com.thc.sprapi.util.SnsLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -33,20 +38,40 @@ public class TbuserServiceImpl implements TbuserService {
     private final TbuserRoleTypeRepository tbuserRoleTypeRepository;
     private final TbuserMapper tbuserMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthService authService;
     public TbuserServiceImpl(
             TbuserRepository tbuserRepository
             , RoleTypeRepository roleTypeRepository
             , TbuserRoleTypeRepository tbuserRoleTypeRepository
             , TbuserMapper tbuserMapper
             , BCryptPasswordEncoder bCryptPasswordEncoder
+            , AuthService authService
     ) {
         this.tbuserRepository = tbuserRepository;
         this.roleTypeRepository = roleTypeRepository;
         this.tbuserRoleTypeRepository = tbuserRoleTypeRepository;
         this.tbuserMapper = tbuserMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.authService = authService;
     }
 
+    public JwtTokenDto naver(String token){
+        return sns(SnsLogin.naver(token));
+    }
+    public JwtTokenDto sns(TbuserDto.TbuserCreateDto params){
+        Tbuser tbuser = tbuserRepository.findByUsername(params.getUsername());
+        if(tbuser == null){
+            String nick = UUID.randomUUID().toString().replace("-", "").substring(0,12);
+            params.setNick(nick);
+            create(params);
+            tbuser = tbuserRepository.findByUsername(params.getUsername());
+        }
+        String refreshToken = authService.createRefreshToken(tbuser.getId());
+        JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
+        jwtTokenDto.setRefreshToken(refreshToken);
+        //JwtTokenDto jwtTokenDto = new JwtTokenDto();
+        return jwtTokenDto;
+    }
     public TbuserDto.TbuserAfterCreateDto signup(TbuserDto.TbuserCreateDto params){
         //사용자는 중복체크가 필요합니다!!
         Tbuser tbuser = tbuserRepository.findByUsername(params.getUsername());

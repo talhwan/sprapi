@@ -2,6 +2,7 @@ package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.TbuserDto;
+import com.thc.sprapi.security.JwtTokenDto;
 import com.thc.sprapi.service.TbuserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +29,18 @@ public class TbuserRestController {
         this.tbuserService = tbuserService;
     }
 
+    @Operation(summary = "회원 NAVER 로그인",
+            description = "회원 NAVER 로그인 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param String token <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<JwtTokenDto\\> <br />"
+                    + "@exception 중복 <br />"
+    )
+    @PreAuthorize("permitAll()")
+    @PostMapping("/naver")
+    public ResponseEntity<JwtTokenDto> naver(@Valid @RequestBody String token) {
+        logger.info("token : " + token);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tbuserService.naver(token));
+    }
     @Operation(summary = "회원 가입",
             description = "회원 가입을 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbuserCreateDto <br />"

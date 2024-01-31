@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+
+</head>
+<body>
+로그인
+<br/>
+<div style="text-align:center;width:100%;margin-top:0px;" id="div_google_btn">
+    <div>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <div id="g_id_onload"
+             data-client_id="868730276300-vmg16fubqhgv0g90gdn4t9g1quctjqiq.apps.googleusercontent.com"
+             data-login_uri="/tbuser/login/google"
+             data-auto_prompt="false"
+             data-context="use">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
+    </div>
+</div>
+
+<div>
+    =========================================
+</div>
+
+<div id="naver_id_login"></div>
+
+<script>
+    var temp_http_host = document.location.host;
+    var temp_http_protocol = document.location.protocol;
+    var temp_http = temp_http_protocol + "//" + temp_http_host;
+    //alert(temp_http);
+    //temp_http = "https://www.dalmada.co.kr";
+</script>
+
+<!-- //네이버아이디로로그인 버튼 노출 영역 -->
+<script type="text/javascript">
+    var naver_id_login = new naver_id_login("ZiXF_tUh2N3buf3vcdnb",  temp_http + "/tbuser/login/naver");
+    var state = naver_id_login.getUniqState();
+    naver_id_login.setButton("white", 3,40);
+    naver_id_login.setDomain(temp_http_host);
+    //naver_id_login.setPopup();
+    naver_id_login.setState(state);
+    naver_id_login.init_naver_id_login();
+</script>
+
+<div>
+=========================================
+</div>
+
+</body>
+</html>

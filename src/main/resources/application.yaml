@@ -55,3 +55,6 @@ aws:
     project_folder_name: jiksang
     access_key: 1
     secret_key: 2
+google:
+  login:
+    client_id: 868730276300-vmg16fubqhgv0g90gdn4t9g1quctjqiq.apps.googleusercontent.com

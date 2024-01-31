@@ -11,6 +11,16 @@ import lombok.*;
 
 public class TbuserDto {
 
+	@Builder
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class TbuserSnsDto {
+		private String username;
+		private String password;
+	}
+
 	@Schema
 	@Builder
 	@Getter
