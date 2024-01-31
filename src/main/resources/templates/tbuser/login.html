@@ -76,7 +76,13 @@ PW : <input id="create_password" />
                         console.log("no matching status code");
                 }
             },
-            error: (data)=>{
+            error: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+                switch(data.status){
+                    case 401:
+                        alert("리프레시 토큰 안된다고 함...");
+                        break;
+                }
             },
         });
 

@@ -68,11 +68,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// TbuserId로 리프레시토큰 발급
 		System.out.println("principalDetails.getTbuser().getId() : " + principalDetails.getTbuser().getId());
 		String refreshToken = authService.createRefreshToken(principalDetails.getTbuser().getId());
-		String accessToken = authService.createAccessToken(refreshToken);
+
+		//String accessToken = authService.createAccessToken(principalDetails.getTbuser().getId());
+		JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
 
 		// header에 담아서 전달!!
 		response.addHeader(externalProperties.getRefreshKey(), externalProperties.getTokenPrefix() + refreshToken);
-		response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + accessToken);
+		response.addHeader(externalProperties.getAccessKey(), externalProperties.getTokenPrefix() + jwtTokenDto.getAccessToken());
 		// 바디에도 담아줍시다.
 		//TbuserDto.TbuserLoginDto tbuserLoginDto = new TbuserDto.TbuserLoginDto(externalProperties.getTokenPrefix() + refreshToken, externalProperties.getTokenPrefix() + accessToken);
 		//response.getWriter().write(tbuserLoginDto.toString());

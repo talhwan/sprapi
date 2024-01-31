@@ -1,8 +1,13 @@
 package com.thc.sprapi.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
+import com.thc.sprapi.domain.RefreshToken;
+import com.thc.sprapi.dto.RefreshTokenDto;
 import com.thc.sprapi.exception.InvalidTokenException;
+import com.thc.sprapi.exception.NoMatchingDataException;
+import com.thc.sprapi.repository.RefreshTokenRepository;
 import com.thc.sprapi.security.ExternalProperties;
 import com.thc.sprapi.security.JwtTokenDto;
 import com.thc.sprapi.service.AuthService;
@@ -16,20 +21,15 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 public class AuthServiceImpl implements AuthService {
 
 	private final ExternalProperties externalProperties;
-	public AuthServiceImpl(
-			ExternalProperties externalProperties
-	) {
-		this.externalProperties = externalProperties;
-	}
-	/*
 	private final RefreshTokenRepository refreshTokenRepository;
 	public AuthServiceImpl(
-			RefreshTokenRepository refreshTokenRepository
-		) {
+			ExternalProperties externalProperties
+			, RefreshTokenRepository refreshTokenRepository
+	) {
+		this.externalProperties = externalProperties;
 		this.refreshTokenRepository = refreshTokenRepository;
 	}
-	 */
-	
+
 	@Override
 	public Algorithm getTokenAlgorithm() {
 		return Algorithm.HMAC512(externalProperties.getTokenSecretKey());
@@ -70,12 +70,20 @@ public class AuthServiceImpl implements AuthService {
 	 */
 	@Override
 	public String createRefreshToken(String tbuserId) {
+
+		// refreshToken 기존꺼 지우기 (로그인 하면 이전 리프레시 토큰 지우는 기능)
+		refreshTokenRepository.deleteAll(refreshTokenRepository.findByTbuserId(tbuserId));
+
     	String refreshToken = JWT.create()
 			     				 .withSubject("refreshToken")
 			     				 .withClaim("id", tbuserId)
 			     				 .withExpiresAt(new Date(System.currentTimeMillis()+externalProperties.getRefreshTokenExpirationTime()))
 			     				 .sign(getTokenAlgorithm());
+
+
 		//디비나 redis에 저장하는 과정 추가 가능!!
+		refreshTokenRepository.save(new RefreshTokenDto.RefreshTokenCreateDto(refreshToken, tbuserId).toEntity());
+
 		return refreshToken;
 	}
 
@@ -85,7 +93,10 @@ public class AuthServiceImpl implements AuthService {
 	 */
 	@Override
 	public String verifyRefreshToken(String refreshToken) throws JWTVerificationException {
-		refreshToken = refreshToken.substring(12, refreshToken.length());
+
+		refreshTokenRepository.findByContent(refreshToken)
+				.orElseThrow(() -> new InvalidTokenException(""));
+
 		return JWT.require(getTokenAlgorithm())
 				.build()
 				.verify(refreshToken)

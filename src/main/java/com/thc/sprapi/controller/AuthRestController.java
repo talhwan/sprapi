@@ -54,6 +54,7 @@ public class AuthRestController {
 			responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();	
 		} else {
 			try {
+				refreshToken = refreshToken.substring(12, refreshToken.length());
 				// 쿠키에 Refresh Token 있으면 검증 후 Access token 발급.
 				JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
 				// Access Token 발급 완료.
