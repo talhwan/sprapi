@@ -40,6 +40,10 @@ public class DefaultPageController {
     public String page(){
         return "/test";
     }
+    @GetMapping("/front")
+    public String front(){
+        return "/front";
+    }
 
     @ResponseBody
     @RequestMapping(value = "/uploadfile/{file_name:.+}", method = {RequestMethod.GET,RequestMethod.POST})

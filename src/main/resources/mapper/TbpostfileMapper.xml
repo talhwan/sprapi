@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbpostfileMapper">
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileSelectDto">
+		SELECT tbpostfile.id
+			,tbpostfile.tbpost_id as tbpostId
+			,tbpostfile.content
+			,tbpostfile.type
+			,tbpostfile.deleted
+			,tbpostfile.created_at as createdAt
+			,tbpostfile.modified_at as modifiedAt
+		FROM tbpostfile
+		WHERE tbpostfile.id = #{id}
+	</select>
+	<select id="list" parameterType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileListDto" resultType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileSelectDto">
+		SELECT tbpostfile.id
+		FROM tbpostfile
+		WHERE tbpostfile.id is not null
+		<if test = "tbpostId != null and tbpostId !=''">AND tbpostfile.tbpost_id = #{tbpostId}</if>
+		<if test = "content != null and content !=''">AND tbpostfile.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpostfile.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpostfile.deleted = #{deleted}</if>
+		ORDER BY tbpostfile.created_at ASC
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileMoreListDto" resultType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileSelectDto">
+		SELECT tbpostfile.id
+		FROM tbpostfile
+		WHERE tbpostfile.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbpostfile.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpostfile.created_at</if>
+		<if test = "tbpostId != null and tbpostId !=''">AND tbpostfile.tbpost_id = #{tbpostId}</if>
+		<if test = "content != null and content !=''">AND tbpostfile.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpostfile.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpostfile.deleted = #{deleted}</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbpostfile.created_at ORDER BY tbpostfile.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbpostfile.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbpostfile.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbpostfileDto$TbpostfilePagedListDto" resultType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileSelectDto">
+		SELECT tbpostfile.id
+		FROM tbpostfile
+		WHERE tbpostfile.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbpostfile.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpostfile.created_at</if>
+		<if test = "tbpostId != null and tbpostId !=''">AND tbpostfile.tbpost_id = #{tbpostId}</if>
+		<if test = "content != null and content !=''">AND tbpostfile.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpostfile.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpostfile.deleted = #{deleted}</if>
+		<if test = "orderby =='created_at'">ORDER BY tbpostfile.created_at </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbpostfileDto$TbpostfilePagedListDto" resultType="Integer">
+		SELECT count(tbpostfile.id) as listsize
+		FROM tbpostfile
+		WHERE tbpostfile.id is not null
+		<if test = "sdate != null and sdate !=''">AND tbpostfile.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpostfile.created_at</if>
+		<if test = "tbpostId != null and tbpostId !=''">AND tbpostfile.tbpost_id = #{tbpostId}</if>
+		<if test = "content != null and content !=''">AND tbpostfile.content LIKE CONCAT('%', #{content}, '%')</if>
+		<if test = "type != null and type !=''">AND tbpostfile.type = #{type}</if>
+		<if test = "deleted != null and deleted !=''">AND tbpostfile.deleted = #{deleted}</if>
+	</select>
+
+</mapper>

@@ -11,6 +11,7 @@ import com.thc.sprapi.mapper.TbuserMapper;
 import com.thc.sprapi.repository.RoleTypeRepository;
 import com.thc.sprapi.repository.TbuserRepository;
 import com.thc.sprapi.repository.TbuserRoleTypeRepository;
+import com.thc.sprapi.security.ExternalProperties;
 import com.thc.sprapi.security.JwtTokenDto;
 import com.thc.sprapi.service.AuthService;
 import com.thc.sprapi.service.TbuserService;
@@ -39,6 +40,7 @@ public class TbuserServiceImpl implements TbuserService {
     private final TbuserMapper tbuserMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthService authService;
+    private final ExternalProperties externalProperties;
     public TbuserServiceImpl(
             TbuserRepository tbuserRepository
             , RoleTypeRepository roleTypeRepository
@@ -46,6 +48,7 @@ public class TbuserServiceImpl implements TbuserService {
             , TbuserMapper tbuserMapper
             , BCryptPasswordEncoder bCryptPasswordEncoder
             , AuthService authService
+            , ExternalProperties externalProperties
     ) {
         this.tbuserRepository = tbuserRepository;
         this.roleTypeRepository = roleTypeRepository;
@@ -53,6 +56,7 @@ public class TbuserServiceImpl implements TbuserService {
         this.tbuserMapper = tbuserMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authService = authService;
+        this.externalProperties = externalProperties;
     }
 
     public JwtTokenDto naver(String token){
@@ -68,6 +72,9 @@ public class TbuserServiceImpl implements TbuserService {
         }
         String refreshToken = authService.createRefreshToken(tbuser.getId());
         JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
+        jwtTokenDto.setRefreshToken(externalProperties.getTokenPrefix() + jwtTokenDto.getRefreshToken());
+        jwtTokenDto.setAccessToken(externalProperties.getTokenPrefix() + jwtTokenDto.getAccessToken());
+
         return jwtTokenDto;
     }
     public TbuserDto.TbuserAfterCreateDto signup(TbuserDto.TbuserCreateDto params){
