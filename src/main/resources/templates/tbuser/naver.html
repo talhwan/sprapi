@@ -48,7 +48,14 @@
                     data: naver_id_login.getAccessToken(),
                     cache: false,
                     success: (data, status, xhr)=>{
-                        alert("data : " + JSON.stringify(data));
+                        alert("refreshToken : " + JSON.stringify(data.refreshToken));
+                        alert("accessToken : " + JSON.stringify(data.accessToken));
+
+                        localStorage.setItem("refreshToken", data.refreshToken);
+                        localStorage.setItem("accessToken", data.accessToken);
+
+                        location.replace("/index");
+
                     },
                     error: (data)=>{
                     },

@@ -68,8 +68,6 @@ public class TbuserServiceImpl implements TbuserService {
         }
         String refreshToken = authService.createRefreshToken(tbuser.getId());
         JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
-        jwtTokenDto.setRefreshToken(refreshToken);
-        //JwtTokenDto jwtTokenDto = new JwtTokenDto();
         return jwtTokenDto;
     }
     public TbuserDto.TbuserAfterCreateDto signup(TbuserDto.TbuserCreateDto params){

@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
-
 </head>
 <body>
 로그인
 <br/>
-<div style="text-align:center;width:100%;margin-top:0px;" id="div_google_btn">
+<div>
     <div>
         <script src="https://accounts.google.com/gsi/client" async defer></script>
         <div id="g_id_onload"
@@ -41,8 +39,7 @@
     var temp_http_host = document.location.host;
     var temp_http_protocol = document.location.protocol;
     var temp_http = temp_http_protocol + "//" + temp_http_host;
-    //alert(temp_http);
-    //temp_http = "https://www.dalmada.co.kr";
+    alert(temp_http);
 </script>
 
 <!-- //네이버아이디로로그인 버튼 노출 영역 -->

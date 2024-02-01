@@ -37,7 +37,7 @@
                 console.log('Connected: ' + frame);
                 stompClient.subscribe('/topic/listener', function (_data) {
                     let tempMsg = _data.body;
-                    //alert(JSON.stringify(_data));
+                    alert(JSON.stringify(_data));
                     addMsg(tempMsg);
                 });
             });
@@ -47,9 +47,6 @@
                 console.log("webSocketChat closed");
                 connect();
             }
-        }
-        function onError() {
-            alert(1);
         }
 
         function disconnect() {
@@ -64,12 +61,13 @@
             sendMsg($("#ws_msg").val() + "");
         }
         function sendMsg(message) {
-            stompClient.send("/ws/send", {}, message);
-            //stompClient.send("/ws/send", {}, JSON.stringify({'name': $("#name").val()}));
+            let accessToken = localStorage.getItem("accessToken") + "";
+            //stompClient.send("/ws/send", {}, message);
+            stompClient.send("/ws/send", {}, JSON.stringify({'message': message, 'accessToken': accessToken}));
         }
 
         function addMsg(message) {
-            $("#tbody_msg").append("<tr><td>" + message + "</td></tr>");
+            $("#tbody_msg").append("<tr><td>" + JSON.stringify(message) + "</td></tr>");
         }
     </script>
 </head>

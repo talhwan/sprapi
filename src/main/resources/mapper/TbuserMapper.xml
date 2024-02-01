@@ -4,7 +4,7 @@
 
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
 		SELECT tbuser.id
-			,tbuser.uid
+			,tbuser.username
 			,tbuser.nick
 			,tbuser.sfrom
 			,tbuser.name
@@ -19,19 +19,9 @@
 	</select>
 	<select id="list" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserListDto" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
 		SELECT tbuser.id
-		,tbuser.uid
-		,tbuser.nick
-		,tbuser.sfrom
-		,tbuser.name
-		,tbuser.process
-		,tbuser.phone
-		,tbuser.mpic
-		,tbuser.deleted
-		,tbuser.created_at
-		,tbuser.modified_at
 		FROM tbuser
 		WHERE tbuser.id is not null
-		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+		<if test = "username != null and username !=''">AND tbuser.username LIKE CONCAT('%', #{uid}, '%')</if>
 		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
 		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
 		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
@@ -41,19 +31,8 @@
 
 	<select id="moreList" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserMoreListDto" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
 		SELECT tbuser.id
-		,,tbuser.uid
-		,tbuser.nick
-		,tbuser.sfrom
-		,tbuser.name
-		,tbuser.process
-		,tbuser.phone
-		,tbuser.mpic
-		,tbuser.deleted
-		,tbuser.created_at
-		,tbuser.modified_at
 		FROM tbuser
 		WHERE tbuser.id is not null
-		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
 		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
 		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
 		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
@@ -68,19 +47,8 @@
 
 	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbuserDto$TbuserPagedListDto" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
 		SELECT tbuser.id
-		,tbuser.uid
-		,tbuser.nick
-		,tbuser.sfrom
-		,tbuser.name
-		,tbuser.process
-		,tbuser.phone
-		,tbuser.mpic
-		,tbuser.deleted
-		,tbuser.created_at
-		,tbuser.modified_at
 		FROM tbuser
 		WHERE tbuser.id is not null
-		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
 		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
 		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
 		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>
@@ -97,7 +65,6 @@
 		SELECT count(tbuser.id) as listsize
 		FROM tbuser
 		WHERE tbuser.id is not null
-		<if test = "uid != null and uid !=''">AND tbuser.uid LIKE CONCAT('%', #{uid}, '%')</if>
 		<if test = "nick != null and nick !=''">AND tbuser.nick LIKE CONCAT('%', #{nick}, '%')</if>
 		<if test = "name != null and name !=''">AND tbuser.name LIKE CONCAT('%', #{name}, '%')</if>
 		<if test = "phone != null and phone !=''">AND tbuser.phone LIKE CONCAT('%', #{phone})</if>

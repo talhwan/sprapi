@@ -75,6 +75,7 @@ public class TbuserPageController {
             String userId = payload.getSubject();
             logger.info("payload ID: " + payload);
             String username = payload.get("email") + "";
+            // TO-DO Password 를 좀더 보안 신경써보자!!
             String password = payload.get("sub") + "";
             JwtTokenDto jwtTokenDto = tbuserService.sns(new TbuserDto.TbuserCreateDto(payload.get("email") + "", payload.get("sub") + "","","google","0"));
             model.addAttribute("token", jwtTokenDto);

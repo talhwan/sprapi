@@ -8,7 +8,7 @@
 <body>
 구글 로그인
 <br/>
-<div>
+<div style="display: none">
 =========================================
     <input type="hidden1" id="refreshToken" th:value="${token.refreshToken}" />
     <div th:text="${token.refreshToken}">-</div>
@@ -16,6 +16,15 @@
     <div th:text="${token.accessToken}">-</div>
 =========================================
 </div>
+
+<script>
+    let refreshToken = $("#refreshToken").val();
+    let accessToken = $("#accessToken").val();
+    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("accessToken", accessToken);
+
+    location.replace("/index");
+</script>
 
 </body>
 </html>
