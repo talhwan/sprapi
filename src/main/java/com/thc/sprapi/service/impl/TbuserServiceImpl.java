@@ -91,6 +91,12 @@ public class TbuserServiceImpl implements TbuserService {
         }
         return create(params);
     }
+    public TbuserDto.TbuserAfterUpdateDto logout(TbuserDto.TbuserUpdateDto params){
+        Tbuser tbuser = tbuserRepository.findById(params.getId())
+                .orElseThrow(() -> new NoMatchingDataException(""));
+        authService.revokeRefreshToken(params.getId());
+        return tbuser.toAfterUpdateDto();
+    }
 
     /**/
 

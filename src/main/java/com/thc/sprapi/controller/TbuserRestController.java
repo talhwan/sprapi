@@ -1,8 +1,10 @@
 package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.TbpicDto;
 import com.thc.sprapi.dto.TbuserDto;
 import com.thc.sprapi.security.JwtTokenDto;
+import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbuserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +45,7 @@ public class TbuserRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tbuserService.naver(token));
     }
     @Operation(summary = "회원 가입",
-            description = "회원 가입을 위한 컨트롤러 (누구나 접근 가능) <br />"
+            description = "회원 가입 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbuserCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbuserAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
@@ -51,6 +54,17 @@ public class TbuserRestController {
     @PostMapping("/signup")
     public ResponseEntity<TbuserDto.TbuserAfterCreateDto> signup(@Valid @RequestBody TbuserDto.TbuserCreateDto params) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tbuserService.signup(params));
+    }
+    @Operation(summary = "회원 로그아웃",
+            description = "회원 로그아웃 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param TbuserCreateDto <br />"
+                    + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbuserAfterCreateDto\\> <br />"
+                    + "@exception 중복 <br />"
+    )
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/logout")
+    public ResponseEntity<TbuserDto.TbuserAfterUpdateDto> logout(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tbuserService.logout(TbuserDto.TbuserUpdateDto.builder().id(principalDetails.getTbuser().getId()).build()));
     }
 
     /*

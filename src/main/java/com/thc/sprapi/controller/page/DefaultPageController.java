@@ -40,9 +40,9 @@ public class DefaultPageController {
     public String page(){
         return "/test";
     }
-    @GetMapping("/front")
-    public String front(){
-        return "/front";
+    @GetMapping("/admin")
+    public String admin(){
+        return "/admin";
     }
 
     @ResponseBody

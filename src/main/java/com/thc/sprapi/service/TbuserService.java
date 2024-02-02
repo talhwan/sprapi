@@ -11,6 +11,7 @@ public interface TbuserService {
     public JwtTokenDto naver(String param);
     public JwtTokenDto sns(TbuserDto.TbuserCreateDto params);
     public TbuserDto.TbuserAfterCreateDto signup(TbuserDto.TbuserCreateDto params);
+    public TbuserDto.TbuserAfterUpdateDto logout(TbuserDto.TbuserUpdateDto params);
     /**/
     public TbuserDto.TbuserAfterCreateDto create(TbuserDto.TbuserCreateDto params);
     public TbuserDto.TbuserAfterUpdateDto update(TbuserDto.TbuserUpdateDto params);

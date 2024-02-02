@@ -10,7 +10,8 @@ public interface AuthService {
 	String createAccessToken(String tbuserId);
 	String verifyAccessToken(String accessToken) throws JWTVerificationException;
 	String createRefreshToken(String tbuserId);
+	void revokeRefreshToken(String tbuserId);
 	String verifyRefreshToken(String refreshToken) throws JWTVerificationException;
 	JwtTokenDto issueAccessToken(String refreshToken) throws JWTVerificationException;
-	
+
 }

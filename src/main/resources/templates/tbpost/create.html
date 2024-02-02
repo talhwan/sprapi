@@ -39,7 +39,7 @@
 -->
 <button class="btn btn-warning me-2" onclick="$('#create_mpic').click();return false;">사진 추가</button>
 <div class="row" id="div_array_tbpostfile"></div>
-
+<body th:replace="~{@{includes/bottom}}"></body>
     <script>
         let limit_each_file_size = 10;
         function readURLFile(input) {
@@ -133,23 +133,51 @@
         return false;
         */
 
-        $.ajax({
-            url: "/api/tbpost",
-            type: "POST",
+        let _data = new Map();
+        _data.url = "/api/tbpost";
+        _data.type = "POST";
+        _data.param = {
+            'pics' : pics,
+            'types' : types,
+            'title' : $("#create_title").val(),
+            'cate' : $("#create_cate").val(),
+            'content' : $("#create_content").val()
+        };
+        _data.success = function(obj_data, obj_status, obj_xhr){
+            alert("고고쓰!");
+            alert(JSON.stringify(obj_data));
+            alert(JSON.stringify(obj_status));
+            alert(JSON.stringify(obj_xhr));
+        }
+        _data.error = function(obj_data, obj_status, obj_xhr){
+            alert("고고쓰!");
+            alert(JSON.stringify(obj_data));
+            alert(JSON.stringify(obj_status));
+            alert(JSON.stringify(obj_xhr));
+        }
 
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Content-type", "application/json");
-                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
-            },
-
-            contentType : 'application/json; charset=utf-8',
-            data: JSON.stringify({
+        func_ajax(_data);
+        return false;
+        //alert(_data.url);
+        /*
+        data: JSON.stringify({
                 'pics' : pics,
                 'types' : types,
                 'title' : $("#create_title").val(),
                 'cate' : $("#create_cate").val(),
                 'content' : $("#create_content").val()
             }),
+         */
+
+        $.ajax({
+            url: _data.url,
+            type: _data.type,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+            },
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify(_data.param),
             cache: false,
             success: (data, status, xhr)=>{
                 alert("data : " + JSON.stringify(data));
@@ -158,21 +186,29 @@
                 /*
                 let accessToken = xhr.getResponseHeader("Authorization");
                 alert(accessToken);
+                alert(xhr.status);
                  */
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    alert("성공");
+                }
+
+
+
             },
             error: (data, status, xhr)=>{
                 if(data.status == 401){
                     alert("access token expired!");
+                    console.log(data.responseText);
                 }
                 if(data.status == 403){
-                    alert("권한 없는듯..");
+                    alert("no auth!");
+                    console.log(data.responseText);
                 }
 
                 /*
                 alert("error : data : " + JSON.stringify(data));
-                alert("error : status : " + JSON.stringify(status));
                 alert("error : xhr : " + JSON.stringify(xhr));
-
+                alert("error : status : " + JSON.stringify(status));
                  */
             },
         });

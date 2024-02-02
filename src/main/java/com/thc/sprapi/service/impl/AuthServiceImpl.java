@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
 	public Algorithm getTokenAlgorithm() {
 		return Algorithm.HMAC512(externalProperties.getTokenSecretKey());
 	}
-	
+
 	/**
 	 * 	Access Token 생성을 위한 함수.
 	 *  Payload에 tbuser Id를 담는다. 
@@ -72,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
 	public String createRefreshToken(String tbuserId) {
 
 		// refreshToken 기존꺼 지우기 (로그인 하면 이전 리프레시 토큰 지우는 기능)
-		refreshTokenRepository.deleteAll(refreshTokenRepository.findByTbuserId(tbuserId));
+		revokeRefreshToken(tbuserId);
 
     	String refreshToken = JWT.create()
 			     				 .withSubject("refreshToken")
@@ -80,11 +80,19 @@ public class AuthServiceImpl implements AuthService {
 			     				 .withExpiresAt(new Date(System.currentTimeMillis()+externalProperties.getRefreshTokenExpirationTime()))
 			     				 .sign(getTokenAlgorithm());
 
-
-		//디비나 redis에 저장하는 과정 추가 가능!!
+		//디비 저장
 		refreshTokenRepository.save(new RefreshTokenDto.RefreshTokenCreateDto(refreshToken, tbuserId).toEntity());
 
 		return refreshToken;
+	}
+
+	/**
+	 * 	Refresh Token 삭제 위한 함수.
+	 *  tbuser Id로 조회해서 모두 지운다.
+	 */
+	@Override
+	public void revokeRefreshToken(String tbuserId) {
+		refreshTokenRepository.deleteAll(refreshTokenRepository.findByTbuserId(tbuserId));
 	}
 
     /**
