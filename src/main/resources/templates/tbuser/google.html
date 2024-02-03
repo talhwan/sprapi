@@ -1,30 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <head th:replace="~{@{includes/default/head}}"></head>
 </head>
 <body>
-구글 로그인
-<br/>
-<div style="display: none">
-=========================================
-    <input type="hidden1" id="refreshToken" th:value="${token.refreshToken}" />
-    <div th:text="${token.refreshToken}">-</div>
-    <input type="hidden1" id="accessToken" th:value="${token.accessToken}" />
-    <div th:text="${token.accessToken}">-</div>
-=========================================
-</div>
+<body th:replace="~{@{includes/default/header}}"></body>
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <ol>
+                <li><a href="/index">Home</a></li>
+                <li>LOGIN</li>
+            </ol>
+            <h2>SNS LOGIN</h2>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container">
+
+            <div style="display: none">
+                =========================================
+                <input type="hidden1" id="refreshToken" th:value="${token.refreshToken}" />
+                <div th:text="${token.refreshToken}">-</div>
+                <input type="hidden1" id="accessToken" th:value="${token.accessToken}" />
+                <div th:text="${token.accessToken}">-</div>
+                =========================================
+            </div>
+
+        </div>
+    </section><!-- End Portfolio Details Section -->
+</main><!-- End #main -->
+<body th:replace="~{@{includes/default/footer}}"></body>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<body th:replace="~{@{includes/default/bottom}}"></body>
 
 <script>
     let refreshToken = $("#refreshToken").val();
     let accessToken = $("#accessToken").val();
     localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("accessToken", accessToken);
-
-    location.replace("/index");
+    if(isNull(refreshToken) || isNull(accessToken)){
+        alert("정상적으로 로그인 되지 않았습니다.");
+        location.replace("/tbuser/snslogin");
+    } else {
+        location.replace("/index");
+    }
 </script>
-
 </body>
 </html>

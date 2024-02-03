@@ -1,6 +1,7 @@
 package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbpicDto;
 import com.thc.sprapi.dto.TbuserDto;
 import com.thc.sprapi.security.JwtTokenDto;
@@ -72,8 +73,8 @@ public class TbuserRestController {
      */
 
     /*
-    @Operation(summary = "회원 정보 등록",
-            description = "회원 신규 정보 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "회원 등록",
+            description = "회원 신규 등록 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbuserCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbuserAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
@@ -84,7 +85,7 @@ public class TbuserRestController {
     }
      */
     @Operation(summary = "회원 정보 수정",
-            description = "회원 기존 정보 수정을 위한 컨트롤러 (누구나 접근 가능) <br />"
+            description = "회원 정보 수정 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbuserUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
@@ -92,6 +93,18 @@ public class TbuserRestController {
     @PutMapping("")
     public ResponseEntity<TbuserDto.TbuserAfterUpdateDto> update(@Valid @RequestBody TbuserDto.TbuserUpdateDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.update(params));
+    }
+
+    @Operation(summary = "회원 일괄 삭제",
+            description = "회원 일괄 삭제 위한 컨트롤러 <br />"
+                    + "@param CommonDeleteListDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<CommonDeleteListDto\\> <br />"
+                    + "@exception 해당 자료 없음 <br />"
+    )
+    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("")
+    public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params) {
+        return ResponseEntity.status(HttpStatus.OK).body(tbuserService.deleteList(params));
     }
 
     @Operation(summary = "회원 정보 조회",

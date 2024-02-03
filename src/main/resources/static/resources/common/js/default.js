@@ -1,3 +1,4 @@
+/* ajax 관련 */
 function func_ajax(_data) {
 	$.ajax({
 		url: _data.url,
@@ -19,20 +20,21 @@ function func_ajax(_data) {
 		},
 		error: (data, status, xhr)=>{
 			// error
-			if(data.status == 401){
+			if(data.status === 401){
 				if(_data.retry == null || _data.retry == false){
 					//access token 만료되었을때 다시 시도
-					alert("access token expired!");
+					//alert("access token expired!");
 					_data.retry = true;
 					access_token(_data);
 				} else {
 					alert("login");
 					location.replace("/tbuser/snslogin");
 				}
-			} else if(data.status == 403){
-				//
+			} else if(data.status === 403){
 				alert("no access auth.");
 				location.replace("/tbuser/snslogin");
+			} else if(data.status === 409){
+				alert("중복된 정보입니다. 다시 시도해주세요.");
 			} else {
 				_data.error(data, status, xhr);
 			}
@@ -68,4 +70,137 @@ function access_token(_data){
 			}
 		},
 	});
+}
+let limit_each_file_size = 10;
+let _fileUpload = {};
+function _afterFileUplad(_fileUpload){
+}
+function readURLFile(input) {
+	let temp_id = $(input).attr("id") + "";
+	if (input.files && input.files[0]) {
+		let reader = new FileReader();
+		reader.readAsDataURL(input.files[0]);
+		reader.onload = function(e) {
+			let temp_each_file_size = input.files[0].size / (1024 * 1024);
+			if (temp_each_file_size > limit_each_file_size) {
+				alert("파일 1개 당 " + limit_each_file_size + "mb 용량 제한 초과 입니다!");
+				$(input).val("");
+				return false;
+			}
+			let file_type = "image";
+			if (!input.files[0].type.match('image.*')) {
+				file_type = "file";
+			} else {
+				file_type = "image";
+			}
+			listener_upload_file(input.files[0], file_type);
+		}
+	}
+}
+function listener_upload_file(obj_file, file_type) {
+	let fileData = new FormData();
+	fileData.append("file", obj_file);
+	alert(111);
+
+	$.ajax({
+		url: "/api/default/uploadFile",
+		type: "POST",
+		data: fileData ,
+		cache : false,
+		contentType : false,
+		processData : false,
+		success: (data, status, xhr)=>{
+			//alert(xhr.status);
+			switch(xhr.status){
+				case 201:
+					//alert(data);
+					_fileUpload[file_type] = file_type;
+					_fileUpload[url] = data;
+					_afterFileUplad(_fileUpload);
+					break;
+				default:
+					console.log("no matching status code");
+			}
+		},
+		error: (data)=>{
+			alert("error")
+		},
+	});
+}
+
+/* list관련 기능 */
+function listenerAfterList(){
+	let font_order = $(".font_order");
+	for (let t = 0; t < font_order.length; t++) {
+		$(font_order[t]).text((t+1));
+	}
+
+	let select_search_keyword = $(".select_search_keyword");
+	for (let t = 0; t < select_search_keyword.length; t++) {
+		let select_temp_name = $(select_search_keyword[t]).attr("keyword");
+		let option_temps = $(select_search_keyword[t]).find("option");
+		for(let i=0;i<option_temps.length;i++){
+			let a_html = $(option_temps[i]).html();
+			let a_value = $(option_temps[i]).attr("value");
+			$(".font_"+ select_temp_name +"_" + a_value).html(a_html);
+		}
+	}
+}
+/* js 추가 기능 */
+function isNull(x) {
+	let result_x = false;
+	x = x + "";
+	if(x == null || x == "null" || x == "" || x == "undefined"){
+		result_x = true;
+	} else {
+	}
+	return result_x;
+}
+function number2digit(x) {
+	var return_val = x + "";
+	if(Number(x) < 10){
+		return_val = "0" + return_val;
+	}
+	return return_val;
+}
+
+function getNextDay(date_string, days) {
+	let date = null;
+	if(date_string == null){
+		date = new Date();
+	} else {
+		date = new Date(date_string);
+	}
+	if(days == null){
+		days = 1;
+	}
+	date.setDate(date.getDate() + days);
+	let d = date.getDate();
+	let m = date.getMonth();
+	let y = date.getFullYear();
+	let temp_today = y + "-" + number2digit(m+1) + "-" + number2digit(d) + "";
+	return temp_today;
+}
+function dateToStringFormat(date) {
+	if(date == null){
+		date = new Date();
+	}
+	let d = date.getDate();
+	let m = date.getMonth();
+	let y = date.getFullYear();
+	let temp_today = y + "-" + number2digit(m+1) + "-" + number2digit(d) + "";
+	return temp_today;
+}
+function getIdFromUrl(obj){
+	let temp_url_with_idx = obj;
+	if(obj == null){
+		temp_url_with_idx = window.location.href;
+	}
+	let split_slash_temp_idx = temp_url_with_idx.split('/');
+	let temp_idx = split_slash_temp_idx[split_slash_temp_idx.length - 1];
+	let split_question_temp_idx = temp_idx.split('?');
+	if(split_question_temp_idx.length > 0){
+		temp_idx = split_question_temp_idx[0];
+	}
+	return temp_idx;
 }

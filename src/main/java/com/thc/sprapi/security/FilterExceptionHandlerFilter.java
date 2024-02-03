@@ -23,6 +23,8 @@ public class FilterExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
         	System.out.println("filter start!!!");
+        	System.out.println("filter request!!!" + request.getAttribute("credential"));
+
             filterChain.doFilter(request, response);
         }catch (TokenExpiredException e){
             System.out.println("filter UNAUTHORIZED!!!");

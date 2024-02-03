@@ -3,7 +3,8 @@ package com.thc.sprapi.service.impl;
 import com.thc.sprapi.domain.RoleType;
 import com.thc.sprapi.domain.Tbuser;
 import com.thc.sprapi.domain.TbuserRoleType;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.*;
+import com.thc.sprapi.dto.TbuserDto;
 import com.thc.sprapi.dto.TbuserDto;
 import com.thc.sprapi.exception.AlreadyExistDataException;
 import com.thc.sprapi.exception.NoMatchingDataException;
@@ -24,10 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TbuserServiceImpl implements TbuserService {
@@ -120,17 +118,22 @@ public class TbuserServiceImpl implements TbuserService {
     public TbuserDto.TbuserAfterUpdateDto update(TbuserDto.TbuserUpdateDto params){
         Tbuser tbuser = tbuserRepository.findById(params.getId())
                 .orElseThrow(() -> new NoMatchingDataException(""));
+        System.out.println("!!!!==========" + params.getDeleted() );
+        if(params.getDeleted() != null){
+            tbuser.setDeleted(params.getDeleted());
+        }
         if(params.getPassword() != null){
             tbuser.setPassword(params.getPassword());
         }
         if(params.getNick() != null){
+            tbuser = tbuserRepository.findByNick(params.getNick());
+            if(tbuser != null){
+                throw new AlreadyExistDataException("Unique Key Error");
+            }
             tbuser.setNick(params.getNick());
         }
         if(params.getSfrom() != null){
             tbuser.setSfrom(params.getSfrom());
-        }
-        if(params.getDeleted() != null){
-            tbuser.setDeleted(params.getDeleted());
         }
         if(params.getProcess() != null){
             tbuser.setProcess(params.getProcess());
@@ -148,18 +151,36 @@ public class TbuserServiceImpl implements TbuserService {
         return tbuser.toAfterUpdateDto();
     }
 
+    public TbuserDto.TbuserAfterUpdateDto delete(TbuserDto.TbuserUpdateDto params){
+        params.setDeleted("Y");
+        return update(params);
+    }
+    public CommonDeleteListDto deleteList(CommonDeleteListDto params){
+        for(String each : params.getIds()){
+            delete(TbuserDto.TbuserUpdateDto.builder().id(each).build());
+        }
+        return params;
+    }
     public TbuserDto.TbuserSelectDto detail(String id){
         return tbuserMapper.detail(id);
     }
     public List<TbuserDto.TbuserSelectDto> list(TbuserDto.TbuserListDto params){
-        return tbuserMapper.list(params);
+        return addListDetails(tbuserMapper.list(params));
     }
     public List<TbuserDto.TbuserSelectDto> moreList(TbuserDto.TbuserMoreListDto params){
         params.afterBuild();
-        return tbuserMapper.moreList(params);
+        return addListDetails(tbuserMapper.moreList(params));
     }
     public CommonAfterPagedListDto<TbuserDto.TbuserSelectDto> pagedList(TbuserDto.TbuserPagedListDto params){
-        return new CommonAfterPagedListDto<>(params.afterBuild(tbuserMapper.pagedListCount(params)), tbuserMapper.pagedList(params));
+        return new CommonAfterPagedListDto<>(params.afterBuild(tbuserMapper.pagedListCount(params)), addListDetails(tbuserMapper.pagedList(params)));
+    }
+
+    public List<TbuserDto.TbuserSelectDto> addListDetails(List<TbuserDto.TbuserSelectDto> a_list){
+        List<TbuserDto.TbuserSelectDto> result_list = new ArrayList<>();
+        for(TbuserDto.TbuserSelectDto a : a_list){
+            result_list.add(detail(a.getId()));
+        }
+        return result_list;
     }
 
 }

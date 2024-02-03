@@ -9,10 +9,10 @@
     {{#resultData_tbuser}}
     <tr class="gradeA">
         <td>
-            <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
+            <input class="c_chk_listbypage_tbuser_tbuser_idx_each" type="checkbox" id="chk_listbypage_tbuser_tbuser_idx_each_{{tbuser_idx}}" onclick="listener_chk_listbypage_tbuser_tbuser_idx_each()" />
         </td>
         <td><font class="font_order"></font></td>
-        <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
+        <td><font class="font_deleted_{{deleted}}">{{deleted}}</font></td>
         <td><font class="font_process_{{process}}">{{process}}</font></td>
         <td class="cursor_pointer" onclick="location.href='/tbuser/admin_detail/{{id}}';">{{nick}}</td>
         <td class="cursor_pointer" onclick="location.href='/tbuser/admin_detail/{{id}}';">{{username}}</td>
@@ -100,9 +100,9 @@
                                 <input id="search_nick" onchange="listener_keyword_changed();"
                                        class="hide form-control search_keyword_each search_keyword_each_20" type="text" placeholder="내용을 입력하세요"/>
                             </div>
-                            <label class="col-sm-2"></label>
+                            <label class="col-sm-6"></label>
                             <label class="col-sm-2 col-form-label">한번에 불러올 갯수</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select class="form-control" id="search_permore" onchange="listener_keyword_changed();">
                                     <option value="10" selected="selected">10</option>
                                     <option value="50">50</option>
@@ -126,9 +126,7 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>
-                            <input class="input_chk_delete_all" type="checkbox" keyword="all" id="input_chk_delete_all" onclick="listener_chk_delete(this)" />
-                        </th>
+                        <th>/</th>
                         <th>#</th>
                         <th>삭제여부</th>
                         <th>진행도</th>
@@ -143,91 +141,18 @@
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="delete_tbuser()">일괄삭제</button>
+                            <button class="btn btn-danger btn-sm" onclick="location.href='/tbuser/admin_insert'">일괄삭제</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbuser/admin_insert'">추가하기</button>
                         </td>
                         <td style="text-align: right;">
-                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbuser/admin_insert'">추가하기</button>
                             <button class="btn btn-primary btn-sm" onclick="search_tbuser()">더보기</button>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
-        <script>
-            function check_chk_delete(){
-                let all_checked = true;
-                let input_chk_delete_each = $(".input_chk_delete_each");
-                for(let i=0;i<input_chk_delete_each.length;i++){
-                    let each_checked = $(input_chk_delete_each[i]).prop("checked");
-                    if(each_checked){
-                    } else {
-                        all_checked = false;
-                    }
-                }
-                $(".input_chk_delete_all").prop("checked", all_checked);
-            }
-            function listener_chk_delete(obj){
-                let keyword = $(obj).attr("keyword");
-                let checked = $(obj).prop("checked");
-                //alert(checked);
-                switch(keyword){
-                    case "all" :
-                        if(checked){
-                            $(".input_chk_delete_each").prop("checked", true);
-                        } else {
-                            $(".input_chk_delete_each").prop("checked", false);
-                        }
-                        break;
-                    default :
-                        check_chk_delete();
-                        break;
-                }
-            }
-            function delete_tbuser(){
-
-                if (confirm("정말 삭제하시겠습니까?")) {
-                } else {
-                    alert("취소");
-                    return false;
-                }
-
-                let ids = [];
-                let input_chk_delete_each = $(".input_chk_delete_each");
-                for(let i=0;i<input_chk_delete_each.length;i++){
-                    let each_checked = $(input_chk_delete_each[i]).prop("checked");
-                    if(each_checked){
-                        ids.push($(input_chk_delete_each[i]).attr("keyword"));
-                    }
-                }
-
-                let _data = new Map();
-                _data.url = "/api/tbuser";
-                _data.type = "DELETE";
-                _data.param = {
-                    'ids' : ids
-                };
-                _data.success = function(obj_data, obj_status, obj_xhr){
-                    let resultlist = obj_data;
-                    if(resultlist.length == 0){
-                        alert("no data");
-                    } else {
-                        for(let i=0;i<ids.length;i++){
-                            if($(".chk_deleted_" + ids[i]).hasClass("font_deleted_N")){
-                                $(".chk_deleted_" + ids[i]).removeClass("font_deleted_N");
-                                $(".chk_deleted_" + ids[i]).addClass("font_deleted_Y");
-                            }
-                            $("#input_chk_delete_each_" + ids[i]).prop("checked", false);
-                        }
-                        listenerAfterList();
-                        check_chk_delete();
-                    }
-                }
-                _data.error = function(obj_data, obj_status, obj_xhr){
-                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
-                }
-                func_ajax(_data);
-            }
-        </script>
         <script>
             function listener_keyword_changed(){$("#input_keyword_changed").val("1");}
             function set_search_sdatefdate(obj){
@@ -272,6 +197,7 @@
                 console.log( "ready!" );
                 search_tbuser();
             });
+            let last_list_order = 0;
             function search_tbuser(){
                 let search_cway = $("#search_cway").val() + "";
                 let cdatetime = "";
@@ -305,9 +231,6 @@
                 };
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let resultlist = obj_data;
-                    if(resultlist.length == 0){
-                        alert("no data");
-                    }
                     for(let i=0;i<resultlist.length;i++){
                         let this_created_at = resultlist[i].createdAt + "";
                         //초기값 설정
@@ -333,7 +256,7 @@
                         } else {
                             $("#tbody_tbuser_list").append(list_info_tbuser_template({"resultData_tbuser":each_list}));
                         }
-                        listenerAfterList();
+                        listenerAfterList(last_list_order);
                     }
                 }
                 _data.error = function(obj_data, obj_status, obj_xhr){

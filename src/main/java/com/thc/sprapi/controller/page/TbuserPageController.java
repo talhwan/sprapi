@@ -35,14 +35,17 @@ public class TbuserPageController {
         this.tbuserService = tbuserService;
     }
 
-
     @GetMapping("/{page}")
     public String page(@PathVariable("page") String page){
         return "/tbuser/" + page;
     }
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") String id){
-        return "/tbboard/detail";
+        return "/tbuser/detail";
+    }
+    @GetMapping("/admin_detail/{id}")
+    public String adminDetail(@PathVariable("id") String id){
+        return "/tbuser/admin_detail";
     }
 
     @GetMapping("/login/naver")

@@ -1,7 +1,9 @@
 package com.thc.sprapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thc.sprapi.domain.Tbuser;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -109,6 +111,9 @@ public class TbuserDto {
 		@NotEmpty
 		@Size(max=32)
 		private String id;
+		@Schema(description = "삭제 여부", example="Y")
+		@Size(max=1)
+		private String deleted;
 
 		@Schema(description = "비밀번호", example="abcd1234!")
 		@Size(max=20)
@@ -122,7 +127,6 @@ public class TbuserDto {
 		@Schema(description = "단계", example="")
 		@Size(max=20)
 		private String process;
-
 		@Schema(description = "이름", example="1234")
 		@Size(max=20)
 		private String name;
@@ -132,9 +136,9 @@ public class TbuserDto {
 		@Schema(description = "대표사진", example="~~~~.png")
 		@Size(max=200)
 		private String mpic;
-		@Schema(description = "삭제 여부", example="Y")
-		@Size(max=1)
-		private String deleted;
+		@Schema(description = "content", example="content")
+		@Size(max=10000)
+		private String content;
 	}
 	@Schema
 	@Builder
@@ -156,32 +160,33 @@ public class TbuserDto {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class TbuserSelectDto {
-
 		@Schema(description = "id", example="id")
 		private String id;
+		@Schema(description = "삭제 여부", example="Y")
+		private String deleted;
+		@Schema(description = "createdAt", example="2024-01-01 00:00:00.000000")
+		private String createdAt;
+		@Schema(description = "modifiedAt", example="2024-01-01 00:00:00.000000")
+		private String modifiedAt;
+
 		@Schema(description = "E-mail(id)", example="id")
 		private String username;
 		@Schema(description = "비밀번호", example="abcd1234!")
 		private String password;
-		@Schema(description = "가입경로", example="")
-		private String sfrom;
 		@Schema(description = "닉네임", example="1234")
 		private String nick;
-		@Schema(description = "이름", example="1234")
-		private String name;
+		@Schema(description = "가입경로", example="")
+		private String sfrom;
 		@Schema(description = "단계", example="")
 		private String process;
+		@Schema(description = "이름", example="1234")
+		private String name;
 		@Schema(description = "전화번호", example="1234")
 		private String phone;
 		@Schema(description = "대표사진", example="~~~~.png")
 		private String mpic;
-		@Schema(description = "삭제 여부", example="Y")
-		private String deleted;
-		@Schema(description = "created_at", example="2024-01-01 00:00:00.000000")
-		private String created_at;
-		@Schema(description = "modified_at", example="2024-01-01 00:00:00.000000")
-		private String modified_at;
-
+		@Schema(description = "content", example="")
+		private String content;
 	}
 
 	@Schema
@@ -191,18 +196,19 @@ public class TbuserDto {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class TbuserListDto {
+		@Schema(description = "삭제 여부", example="Y")
+		private String deleted;
+
 		@Schema(description = "E-mail(id)", example="id")
 		private String username;
 		@Schema(description = "닉네임", example="1234")
 		private String nick;
-		@Schema(description = "단계", example="")
-		private String process;
 		@Schema(description = "이름", example="1234")
 		private String name;
+		@Schema(description = "단계", example="")
+		private String process;
 		@Schema(description = "전화번호", example="1234")
 		private String phone;
-		@Schema(description = "삭제 여부", example="Y")
-		private String deleted;
 	}
 
 	@Schema
@@ -211,18 +217,19 @@ public class TbuserDto {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class TbuserPagedListDto extends CommonPagedListDto {
+		@Schema(description = "삭제 여부", example="Y")
+		private String deleted;
+
 		@Schema(description = "E-mail(id)", example="id")
 		private String username;
 		@Schema(description = "닉네임", example="1234")
 		private String nick;
-		@Schema(description = "단계", example="")
-		private String process;
 		@Schema(description = "이름", example="1234")
 		private String name;
+		@Schema(description = "단계", example="")
+		private String process;
 		@Schema(description = "전화번호", example="1234")
 		private String phone;
-		@Schema(description = "삭제 여부", example="Y")
-		private String deleted;
 	}
 	@Schema
 	@Getter
@@ -230,18 +237,19 @@ public class TbuserDto {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class TbuserMoreListDto extends CommonMoreListDto {
+		@Schema(description = "삭제 여부", example="Y")
+		private String deleted;
+
 		@Schema(description = "E-mail(id)", example="id")
 		private String username;
 		@Schema(description = "닉네임", example="1234")
 		private String nick;
-		@Schema(description = "단계", example="")
-		private String process;
 		@Schema(description = "이름", example="1234")
 		private String name;
+		@Schema(description = "단계", example="")
+		private String process;
 		@Schema(description = "전화번호", example="1234")
 		private String phone;
-		@Schema(description = "삭제 여부", example="Y")
-		private String deleted;
 	}
 	
 	
