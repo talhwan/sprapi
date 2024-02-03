@@ -80,7 +80,7 @@
                             <label class="col-sm-2 col-form-label">메인사진</label>
                             <div class="col-sm-4">
                                 <img class="img-responsive cursor_pointer m-b" width="100px" id="img_tbuser_mpic"
-                                     onclick="$('#input_upload_file').click();return false;"
+                                     onclick="$('#input_upload_img').click();return false;"
                                      src="https://play-lh.googleusercontent.com/qlIDfFiFKSeoawoihQlWv-BtnWrGphURKx3EfrnrqfO5toLDDvERs38E7AMqkX_euA"/>
                                 <input type="hidden" class="form-control m-b" id="detail_tbuser_mpic" keyword="mpic" placeholder="내용을 입력하세요" onchange="update_tbuser(this)" />
                             </div>
@@ -88,6 +88,7 @@
                                 function listener_after_upload(file_type, data){
                                     $("#img_tbuser_mpic").attr("src", data);
                                     $("#detail_tbuser_mpic").val(data);
+                                    $('#input_upload_img').val(null);
                                     update_tbuser("#detail_tbuser_mpic");
                                 }
                             </script>
@@ -119,7 +120,9 @@
                     for (let eachKey of detailKeys){
                         $(".font_tbuser_" + eachKey).text(obj_data[eachKey]);
                         $("#detail_tbuser_" + eachKey).val(obj_data[eachKey]);
-                        $("#img_tbuser_" + eachKey).attr("src", obj_data[eachKey]);
+                        if(!isNull(obj_data["mpic"])){
+                            $("#img_tbuser_mpic").attr("src", obj_data["mpic"]);
+                        }
                     }
                 }
                 _data.error = function(obj_data, obj_status, obj_xhr){

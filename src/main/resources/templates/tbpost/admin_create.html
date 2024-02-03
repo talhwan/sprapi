@@ -3,22 +3,175 @@
 <head>
     <head th:replace="~{@{includes/admin/head}}"></head>
 </head>
-
 <body>
+
+<script id="list_info_tbpostfile" type="text/x-handlebars-template">
+    {{#resultData_tbpostfile}}
+    <div class="col-sm-2" style="text-align: center">
+        <input type="hidden" class="input_tbpostfile_id" value="{{id}}"/>
+        <input type="hidden" class="input_tbpostfile_content" value="{{content}}"/>
+        <input type="hidden" class="input_tbpostfile_type" value="{{type}}"/>
+        <img class="img_tbpostfile_{{type}} img-fluid" style="height:100px;" src="{{content}}"/>
+        <p class="p_tbpostfile_{{type}}" style="word-break:break-all;">{{data}}</p>
+        <div style="text-align: right" onclick="listener_remove(this)">삭제</div>
+    </div>
+    {{/resultData_tbpostfile}}
+</script>
+<script type="text/javascript">
+    var list_info_tbpostfile = $("#list_info_tbpostfile").html();
+    var list_info_tbpostfile_template = Handlebars.compile(list_info_tbpostfile);
+</script>
+
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
+    <script>
+        $(".sidemenu_li_tbpost").addClass("active");
+    </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="wrapper wrapper-content">
-                    <div class="row">
-                        admin
-                    </div>
-                </div>
-
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>게시글 신규</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/admin">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/tbpost/admin_list">USER</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/tbpost/admin_list">게시글 목록</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <strong>게시글 신규</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
             </div>
         </div>
+
+        <div class="animated fadeInRight" style="padding-top:12.5px;padding-bottom:0px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox-title">
+                        <h5>신규 등록</h5>
+                    </div>
+                    <div class="ibox-content" style="padding-bottom:0.1px;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">삭제여부</label>
+                            <div class="col-sm-4">
+                                <select class="form-control m-b" id="create_tbpost_deleted" keyword="deleted">
+                                    <option value="N">일반</option>
+                                    <option value="Y">삭제</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">구분</label>
+                            <div class="col-sm-4">
+                                <select class="form-control m-b" id="create_tbpost_cate" keyword="cate">
+                                    <option value="economy">경제</option>
+                                    <option value="politics">정치</option>
+                                </select>
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">*제목</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control m-b" id="create_tbpost_title" keyword="title" placeholder="내용을 입력하세요"/>
+                            </div>
+                            <label class="col-sm-6"></label>
+
+                            <label class="col-sm-2 col-form-label">내용</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control m-b" id="create_tbpost_content" keyword="content" onchange="listener_maxlength_check(this, 2000);" rows="4" placeholder="내용을 입력하세요"></textarea>
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">첨부(사진/파일)</label>
+                            <div class="col-sm-4">
+                                <button class="btn btn-warning btn-sm m-b" onclick="$('#input_upload_file').click();return false;">추가하기</button>
+                            </div>
+                            <script>
+                                function listener_after_upload(file_type, data) {
+                                    $("#img_tbpost_mpic").attr("src", data);
+                                    $("#create_tbpost_mpic").val(data);
+                                    $('#input_upload_file').val(null);
+                                    let _file = {};
+                                    _file["content"] = data;
+                                    _file["type"] = file_type;
+                                    let each_list = [];
+                                    each_list.push(_file);
+                                    if (file_type == "image") {
+                                        $("#div_array_pics").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
+                                    } else {
+                                        $("#div_array_files").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
+                                    }
+                                    $(".img_tbpostfile_file").remove();
+                                    $(".p_tbpostfile_image").remove();
+                                }
+                            </script>
+                            <label class="col-sm-6"></label>
+
+                            <div class="col-sm-12">
+                            <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10 row" id="div_array_pics">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10 row" id="div_array_files">
+                                    </div>
+                                </div>
+                                <script>
+                                    function listener_remove(obj){
+                                        $(obj).parent().remove();
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                        <div class="m-b" style="text-align: right;">
+                            <button class="btn btn-primary btn-sm" onclick="create_tbpost()">등록하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $( document ).ready(function() {
+                console.log( "ready!" );
+                //create_tbpost();
+            });
+            function create_tbpost(){
+                let pics = [];
+                let types = [];
+                let input_tbpostfile_content = $(".input_tbpostfile_content");
+                let input_tbpostfile_type = $(".input_tbpostfile_type");
+                for(let i=0;i<input_tbpostfile_content.length;i++){
+                    pics.push($(input_tbpostfile_content[i]).val());
+                    types.push($(input_tbpostfile_type[i]).val());
+                }
+
+                let _param = {
+                    'pics' : pics,
+                    'types' : types,
+                    'title' : $("#create_tbpost_title").val(),
+                    'cate' : $("#create_tbpost_cate").val(),
+                    'content' : $("#create_tbpost_content").val()
+                };
+
+                let _data = new Map();
+                _data.url = "/api/tbpost";
+                _data.type = "POST";
+                _data.param = _param;
+                _data.success = function(obj_data, obj_status, obj_xhr){
+                    alert("등록");
+                    location.reload();
+                }
+                _data.error = function(obj_data, obj_status, obj_xhr){
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+        </script>
         <body th:replace="~{@{includes/admin/footer}}"></body>
     </div>
     <body th:replace="~{@{includes/admin/right_sidebar}}"></body>

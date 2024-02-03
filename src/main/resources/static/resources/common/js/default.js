@@ -203,3 +203,11 @@ function getIdFromUrl(obj){
 	}
 	return temp_idx;
 }
+function listener_maxlength_check(obj, obj1){
+	let this_temp_val = $(obj).val();
+	let this_temp_max = Number(obj1);
+	if(this_temp_val.length > this_temp_max){
+		alert("최대 "+ this_temp_max +"자까지 입력 가능합니다.");
+		$(obj).val(this_temp_val.substring(0, this_temp_max));
+	}
+}

@@ -5,6 +5,23 @@
 </head>
 <body>
 
+<script id="list_info_tbpostfile" type="text/x-handlebars-template">
+    {{#resultData_tbpostfile}}
+    <div class="col-sm-2" style="text-align: center">
+        <input type="hidden1" class="input_tbpostfile_id" value="{{id}}"/>
+        <input type="hidden" class="input_tbpostfile_content" value="{{content}}"/>
+        <input type="hidden" class="input_tbpostfile_type" value="{{type}}"/>
+        <img class="img_tbpostfile_{{type}} img-fluid" style="height:100px;" src="{{content}}"/>
+        <p class="p_tbpostfile_{{type}}" style="word-break:break-all;">{{data}}</p>
+        <div style="text-align: right" onclick="listener_remove(this)">삭제</div>
+    </div>
+    {{/resultData_tbpostfile}}
+</script>
+<script type="text/javascript">
+    var list_info_tbpostfile = $("#list_info_tbpostfile").html();
+    var list_info_tbpostfile_template = Handlebars.compile(list_info_tbpostfile);
+</script>
+
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
@@ -62,28 +79,57 @@
                             <div class="col-sm-4">
                                 <input type="text" class="form-control m-b" id="detail_tbpost_title" keyword="title" placeholder="내용을 입력하세요" onchange="update_tbpost(this)" />
                             </div>
-                            <label class="col-sm-6"></label>
 
-                            <label class="col-sm-2 col-form-label">메인사진</label>
-                            <div class="col-sm-4">
-                                <img class="img-responsive cursor_pointer m-b" width="100px" id="img_tbpost_mpic"
-                                     onclick="$('#input_upload_file').click();return false;"
-                                     src="https://play-lh.googleusercontent.com/qlIDfFiFKSeoawoihQlWv-BtnWrGphURKx3EfrnrqfO5toLDDvERs38E7AMqkX_euA"/>
-                                <input type="hidden" class="form-control m-b" id="detail_tbpost_mpic" keyword="mpic" placeholder="내용을 입력하세요" onchange="update_tbpost(this)" />
-                            </div>
-                            <script>
-                                function listener_after_upload(file_type, data){
-                                    $("#img_tbpost_mpic").attr("src", data);
-                                    $("#detail_tbpost_mpic").val(data);
-                                    update_tbpost("#detail_tbpost_mpic");
-                                }
-                            </script>
                             <label class="col-sm-6"></label>
                             <label class="col-sm-2 col-form-label">내용</label>
                             <div class="col-sm-10">
-                                <!--<textarea class="form-control" id="detail_tbpost_content" keyword="content" onkeyup="listener_maxlength_check(this, 2000);" rows="4" placeholder="내용을 입력하세요"></textarea>
-                                -->
-                                <textarea class="form-control" id="detail_tbpost_content" keyword="content" onchange="update_tbpost(this)" rows="4" placeholder="내용을 입력하세요"></textarea>
+                                <textarea class="form-control m-b" id="detail_tbpost_content" keyword="content" onkeyup="listener_maxlength_check(this, 2000);" onchange="update_tbpost(this)" rows="4" placeholder="내용을 입력하세요"></textarea>
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">첨부(사진/파일)</label>
+                            <div class="col-sm-4">
+                                <button class="btn btn-warning btn-sm m-b" onclick="$('#input_upload_file').click();return false;">추가하기</button>
+                            </div>
+                            <script>
+                                function listener_after_upload(file_type, data) {
+                                    $("#img_tbpost_mpic").attr("src", data);
+                                    $("#create_tbpost_mpic").val(data);
+                                    $('#input_upload_file').val(null);
+                                    let _file = {};
+                                    _file["data"] = data;
+                                    _file["type"] = file_type;
+                                    let each_list = [];
+                                    each_list.push(_file);
+                                    if (file_type == "image") {
+                                        $("#div_array_pics").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
+                                    } else {
+                                        $("#div_array_files").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
+                                    }
+                                    $(".img_tbpostfile_file").remove();
+                                    $(".p_tbpostfile_image").remove();
+                                }
+                            </script>
+                            <label class="col-sm-6"></label>
+
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10 row" id="div_array_pics">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2"></label>
+                                    <div class="col-sm-10 row" id="div_array_files">
+                                    </div>
+                                </div>
+                                <script>
+                                    function listener_remove(obj){
+                                        let input_tbpostfile_id = $(obj).parent().find("input[class='input_tbpostfile_id']");
+                                        let delete_id = $(input_tbpostfile_id[0]).val();
+                                        //alert(delete_id);
+                                        delete_tbpostfile(delete_id, obj);
+                                    }
+                                </script>
                             </div>
 
                         </div>
@@ -108,6 +154,13 @@
                         $("#detail_tbpost_" + eachKey).val(obj_data[eachKey]);
                         $("#img_tbpost_" + eachKey).attr("src", obj_data[eachKey]);
                     }
+
+                    let pics = obj_data.pics;
+                    for(pic of pics){
+                        let each_list = [];
+                        each_list.push(pic);
+                        $("#div_array_pics").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
+                    }
                 }
                 _data.error = function(obj_data, obj_status, obj_xhr){
                     alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
@@ -126,6 +179,36 @@
                 _data.param = _param;
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     //alert("!!");
+                }
+                _data.error = function(obj_data, obj_status, obj_xhr){
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+            function delete_tbpostfile(delete_id, obj){
+
+                if (confirm("정말 삭제하시겠습니까?")) {
+                } else {
+                    alert("취소");
+                    return false;
+                }
+
+                let ids = [];
+                ids.push(delete_id);
+
+                let _data = new Map();
+                _data.url = "/api/tbpostfile";
+                _data.type = "DELETE";
+                _data.param = {
+                    'ids' : ids
+                };
+                _data.success = function(obj_data, obj_status, obj_xhr){
+                    let resultlist = obj_data;
+                    if(resultlist.length == 0){
+                        //alert("no data");
+                    } else {
+                        $(obj).parent().remove();
+                    }
                 }
                 _data.error = function(obj_data, obj_status, obj_xhr){
                     alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
