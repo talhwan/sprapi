@@ -4,12 +4,12 @@
 
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbpostfileDto$TbpostfileSelectDto">
 		SELECT tbpostfile.id
-			,tbpostfile.tbpost_id as tbpostId
-			,tbpostfile.content
-			,tbpostfile.type
 			,tbpostfile.deleted
 			,tbpostfile.created_at as createdAt
 			,tbpostfile.modified_at as modifiedAt
+			,tbpostfile.tbpost_id as tbpostId
+			,tbpostfile.content
+			,tbpostfile.type
 		FROM tbpostfile
 		WHERE tbpostfile.id = #{id}
 	</select>

@@ -4,12 +4,12 @@
 
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbpostcmtDto$TbpostcmtSelectDto">
 		SELECT tbpostcmt.id
-			,tbpostcmt.tbpost_id as tbpostId
-			,tbpostcmt.content
-			,tbpostcmt.deleted
 			,tbpostcmt.created_at as createdAt
 			,tbpostcmt.modified_at as modifiedAt
+			,tbpostcmt.tbpost_id as tbpostId
 			,tbpostcmt.tbuser_id as tbuserId
+			,tbpostcmt.content
+			,tbpostcmt.deleted
 			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
 			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
 		FROM tbpostcmt, tbuser

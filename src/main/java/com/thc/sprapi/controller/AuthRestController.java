@@ -50,8 +50,8 @@ public class AuthRestController {
 		String refreshToken = (String) request.getHeader(externalProperties.getRefreshKey());
 		System.out.println("refreshToken: " + refreshToken);
 		if(refreshToken == null || refreshToken.isEmpty() || !refreshToken.startsWith(externalProperties.getTokenPrefix())) {
-			// 쿠키에 Refresh Token 없으면 return 401(Unauthorized).
-			responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();	
+			// 쿠키에 Refresh Token 없으면 return 406
+			responseEntity = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 		} else {
 			try {
 				refreshToken = refreshToken.substring(12, refreshToken.length());

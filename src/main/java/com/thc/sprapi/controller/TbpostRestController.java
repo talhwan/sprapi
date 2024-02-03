@@ -50,7 +50,7 @@ public class TbpostRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbpostDto.TbpostAfterUpdateDto> update(@Valid @RequestBody TbpostDto.TbpostUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         //게시글에 담긴 사용자 정보가 아니라, 이거를 수정하고자 하는 사람의 정보가 필요합니다.(권한체크를 위해서)

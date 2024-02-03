@@ -21,6 +21,7 @@ function func_ajax(_data) {
 		error: (data, status, xhr)=>{
 			// error
 			if(data.status === 401){
+				//access token 만료
 				if(_data.retry == null || _data.retry == false){
 					//access token 만료되었을때 다시 시도
 					//alert("access token expired!");
@@ -31,7 +32,11 @@ function func_ajax(_data) {
 					location.replace("/tbuser/snslogin");
 				}
 			} else if(data.status === 403){
+				// 권한이 없음.
 				alert("no access auth.");
+			} else if(data.status === 406){
+				//refresh token 만료
+				alert("please login");
 				location.replace("/tbuser/snslogin");
 			} else if(data.status === 409){
 				alert("중복된 정보입니다. 다시 시도해주세요.");
@@ -72,10 +77,7 @@ function access_token(_data){
 	});
 }
 let limit_each_file_size = 10;
-let _fileUpload = {};
-function _afterFileUplad(_fileUpload){
-}
-function readURLFile(input) {
+function readURLFile(input, listener_after_upload) {
 	let temp_id = $(input).attr("id") + "";
 	if (input.files && input.files[0]) {
 		let reader = new FileReader();
@@ -93,14 +95,13 @@ function readURLFile(input) {
 			} else {
 				file_type = "image";
 			}
-			listener_upload_file(input.files[0], file_type);
+			listener_upload_file(input.files[0], file_type, listener_after_upload);
 		}
 	}
 }
-function listener_upload_file(obj_file, file_type) {
+function listener_upload_file(obj_file, file_type, listener_after_upload) {
 	let fileData = new FormData();
 	fileData.append("file", obj_file);
-	alert(111);
 
 	$.ajax({
 		url: "/api/default/uploadFile",
@@ -114,9 +115,7 @@ function listener_upload_file(obj_file, file_type) {
 			switch(xhr.status){
 				case 201:
 					//alert(data);
-					_fileUpload[file_type] = file_type;
-					_fileUpload[url] = data;
-					_afterFileUplad(_fileUpload);
+					listener_after_upload(file_type, data);
 					break;
 				default:
 					console.log("no matching status code");

@@ -4,16 +4,17 @@
 
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbuserDto$TbuserSelectDto">
 		SELECT tbuser.id
-			,tbuser.username
-			,tbuser.nick
-			,tbuser.sfrom
-			,tbuser.name
-			,tbuser.process
-			,tbuser.phone
-			,tbuser.mpic
 			,tbuser.deleted
 			,tbuser.created_at as createdAt
 			,tbuser.modified_at as modifiedAt
+			,tbuser.username
+			,tbuser.nick
+			,tbuser.sfrom
+			,tbuser.process
+			,tbuser.name
+			,tbuser.phone
+			,tbuser.mpic
+			,tbuser.content
 		FROM tbuser
 		WHERE tbuser.id = #{id}
 	</select>

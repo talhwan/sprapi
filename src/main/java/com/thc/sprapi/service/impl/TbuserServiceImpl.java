@@ -118,7 +118,7 @@ public class TbuserServiceImpl implements TbuserService {
     public TbuserDto.TbuserAfterUpdateDto update(TbuserDto.TbuserUpdateDto params){
         Tbuser tbuser = tbuserRepository.findById(params.getId())
                 .orElseThrow(() -> new NoMatchingDataException(""));
-        System.out.println("!!!!==========" + params.getDeleted() );
+        logger.info("!!!!!!!!!!!!!!!!" + params.getContent());
         if(params.getDeleted() != null){
             tbuser.setDeleted(params.getDeleted());
         }
@@ -146,6 +146,9 @@ public class TbuserServiceImpl implements TbuserService {
         }
         if(params.getMpic() != null){
             tbuser.setMpic(params.getMpic());
+        }
+        if(params.getContent() != null){
+            tbuser.setContent(params.getContent());
         }
         tbuserRepository.save(tbuser);
         return tbuser.toAfterUpdateDto();

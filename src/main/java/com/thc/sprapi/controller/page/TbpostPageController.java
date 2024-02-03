@@ -16,5 +16,9 @@ public class TbpostPageController {
     public String detail(@PathVariable("id") String id){
         return "/tbpost/detail";
     }
+    @GetMapping("/admin_detail/{id}")
+    public String adminDetail(@PathVariable("id") String id){
+        return "/tbpost/admin_detail";
+    }
 
 }

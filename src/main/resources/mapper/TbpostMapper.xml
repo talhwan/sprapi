@@ -4,13 +4,13 @@
 
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbpostDto$TbpostSelectDto">
 		SELECT tbpost.id
+			,tbpost.created_at as createdAt
+			,tbpost.modified_at as modifiedAt
+			,tbpost.deleted
+			,tbpost.tbuser_id as tbuserId
 			,tbpost.title
 			,tbpost.cate
 			,tbpost.content
-			,tbpost.deleted
-			,tbpost.created_at as createdAt
-			,tbpost.modified_at as modifiedAt
-			,tbpost.tbuser_id as tbuserId
 			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
 			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
 		FROM tbpost, tbuser
