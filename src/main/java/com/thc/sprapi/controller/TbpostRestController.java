@@ -1,6 +1,7 @@
 package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbpostDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbpostService;
@@ -64,12 +65,11 @@ public class TbpostRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
-    public ResponseEntity<TbpostDto.TbpostAfterUpdateDto> delete(@Valid @RequestBody TbpostDto.TbpostUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        //게시글에 담긴 사용자 정보가 아니라, 이거를 수정하고자 하는 사람의 정보가 필요합니다.(권한체크를 위해서)
-        params.setNowTbuserId(principalDetails.getTbuser().getId());
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.delete(params));
+    public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setTbuserId(principalDetails.getTbuser().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.deleteList(params));
     }
 
     @Operation(summary = "게시글 조회",

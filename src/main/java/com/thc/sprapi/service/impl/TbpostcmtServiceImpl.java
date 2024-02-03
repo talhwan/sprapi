@@ -2,6 +2,7 @@ package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbpostcmt;
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbpostcmtDto;
 import com.thc.sprapi.dto.TbpostcmtDto;
 import com.thc.sprapi.exception.NoMatchingDataException;
@@ -51,6 +52,12 @@ public class TbpostcmtServiceImpl implements TbpostcmtService {
     public TbpostcmtDto.TbpostcmtAfterUpdateDto delete(TbpostcmtDto.TbpostcmtUpdateDto params){
         params.setDeleted("Y");
         return update(params);
+    }
+    public CommonDeleteListDto deleteList(CommonDeleteListDto params){
+        for(String each : params.getIds()){
+            delete(TbpostcmtDto.TbpostcmtUpdateDto.builder().id(each).build());
+        }
+        return params;
     }
 
     public TbpostcmtDto.TbpostcmtSelectDto detail(String id){

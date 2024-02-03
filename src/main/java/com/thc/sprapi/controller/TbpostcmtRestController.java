@@ -1,6 +1,7 @@
 package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbpostcmtDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbpostcmtService;
@@ -51,7 +52,7 @@ public class TbpostcmtRestController {
                     + "@exception 해당 자료 없음 <br />"
     )
     @PutMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbpostcmtDto.TbpostcmtAfterUpdateDto> update(@Valid @RequestBody TbpostcmtDto.TbpostcmtUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.update(params));
     }
@@ -63,8 +64,9 @@ public class TbpostcmtRestController {
     )
     @DeleteMapping("")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<TbpostcmtDto.TbpostcmtAfterUpdateDto> delete(@Valid @RequestBody TbpostcmtDto.TbpostcmtUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.delete(params));
+    public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setTbuserId(principalDetails.getTbuser().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.deleteList(params));
     }
 
     @Operation(summary = "게시글 댓글 조회",
@@ -96,7 +98,7 @@ public class TbpostcmtRestController {
                     + "@exception (no Exception) <br />"
     )
     @PostMapping("/moreList")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TbpostcmtDto.TbpostcmtSelectDto>> moreList(@Valid @RequestBody TbpostcmtDto.TbpostcmtMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.moreList(params));
     }

@@ -1,10 +1,7 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbpost;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.TbboardDto;
-import com.thc.sprapi.dto.TbpostDto;
-import com.thc.sprapi.dto.TbpostfileDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbpostMapper;
 import com.thc.sprapi.repository.TbpostRepository;
@@ -63,11 +60,17 @@ public class TbpostServiceImpl implements TbpostService {
         params.setDeleted("Y");
         return update(params);
     }
+    public CommonDeleteListDto deleteList(CommonDeleteListDto params){
+        for(String each : params.getIds()){
+            delete(TbpostDto.TbpostUpdateDto.builder().id(each).build());
+        }
+        return params;
+    }
 
     public TbpostDto.TbpostSelectDto detail(String id){
         TbpostDto.TbpostSelectDto result = tbpostMapper.detail(id);
-        result.setPics(tbpostfileService.list(new TbpostfileDto.TbpostfileListDto(null, id,"image",null)));
-        result.setFiles(tbpostfileService.list(new TbpostfileDto.TbpostfileListDto(null, id,"file",null)));
+        result.setPics(tbpostfileService.list(new TbpostfileDto.TbpostfileListDto("N", id,"image",null)));
+        result.setFiles(tbpostfileService.list(new TbpostfileDto.TbpostfileListDto("N", id,"file",null)));
         return result;
     }
     public List<TbpostDto.TbpostSelectDto> list(TbpostDto.TbpostListDto params){

@@ -1,44 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <head th:replace="~{@{includes/default/head}}"></head>
 </head>
 <body>
-게시글 목록 조회
-<input id="list_title" />
-<input id="list_deleted" />
+<body th:replace="~{@{includes/default/header}}"></body>
 
-<div>
-    =========================================
-</div>
-
-
-<a onclick="list_tbboard()">list</a>
-<script>
-    function list_tbboard(){
-        $.ajax({
-            url: "/api/tbboard/list",
-            type: "POST",
-            contentType : 'application/json; charset=utf-8',
-            data: JSON.stringify({
-                'title' : $("#list_title").val(),
-                'deleted' : $("#list_deleted").val()
-            }),
-            cache: false,
-            success: (data, status, xhr)=>{
-                alert("data : " + JSON.stringify(data));
-                alert("data length : " + JSON.stringify(data.length));
-                //alert("status : " + JSON.stringify(status));
-                //alert("xhr : " + JSON.stringify(xhr));
-            },
-            error: (data)=>{
-            },
-        });
-    }
-
-
+<script id="list_info_tbpost" type="text/x-handlebars-template">
+    {{#resultData_tbpost}}
+    <div class="col-lg-4">
+        <div class="post-box">
+            <div class="">[<font class="font_cate_{{cate}}">{{cate}}</font>]</div>
+            <h3 class="post-title">{{title}}</h3>
+            <a href="/tbpost/detail/{{id}}" class="readmore stretched-link mt-auto"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    {{/resultData_tbpost}}
 </script>
+<script type="text/javascript">
+    var list_info_tbpost = $("#list_info_tbpost").html();
+    var list_info_tbpost_template = Handlebars.compile(list_info_tbpost);
+</script>
+
+<main id="main">
+    <section class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="/index">Home</a></li>
+                <li>게시글 목록</li>
+            </ol>
+            <h2>Blog Single</h2>
+        </div>
+    </section>
+
+    <!-- ======= Recent Blog Posts Section ======= -->
+    <section id="recent-blog-posts" class="recent-blog-posts">
+        <div class="container" data-aos="fade-up">
+            <div class="hide ibox-content" style="padding-bottom:0.1px;">
+                <input type="hidden" id="input_keyword_changed" value="0" />
+                <input type="hidden" id="search_sdatetime" value="" />
+                <input type="hidden" id="search_fdatetime" value="" />
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">삭제여부</label>
+                    <div class="col-sm-4">
+                        <select class="select_search_keyword form-control m-b" keyword="deleted" id="search_deleted" onchange="listener_keyword_changed()">
+                            <option value="">전체</option>
+                            <option value="N" selected="selected">일반</option>
+                            <option value="Y">삭제</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-2 col-form-label">종류</label>
+                    <div class="col-sm-4">
+                        <select class="select_search_keyword form-control m-b" keyword="cate" id="search_cate" onchange="listener_keyword_changed()">
+                            <option value="" selected="selected">전체</option>
+                            <option value="economy">경제</option>
+                            <option value="politics">정치</option>
+                        </select>
+                    </div>
+                    <!--<label class="col-sm-6 col-form-label"></label>-->
+                    <label class="col-sm-2 col-form-label">등록 시기</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" id="search_sdate" type="date" onchange="listener_keyword_changed()"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" id="search_fdate" type="date" onchange="listener_keyword_changed()"/>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('null'); return false;">초기화</button>
+                        <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('today'); return false;">오늘</button>
+                        <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('week'); return false;">1주</button>
+                        <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('month'); return false;">1개월</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">키워드</label>
+                    <div class="col-sm-4">
+                        <select class="form-control m-b" id="search_keyword" onchange="set_search_keyword()">
+                            <option value="10" selected="selected">제목</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <input id="search_title" onchange="listener_keyword_changed();"
+                               class="form-control search_keyword_each search_keyword_each_10" type="text" placeholder="내용을 입력하세요"/>
+                    </div>
+                    <label class="col-sm-2"></label>
+                    <label class="col-sm-2 col-form-label">한번에 불러올 갯수</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="search_permore" onchange="listener_keyword_changed();">
+                            <option value="12" selected="selected">12</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-2 col-form-label">조회방향</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="search_cway" onchange="listener_tbcrew_list_by_page();">
+                            <option value="before" selected="selected">이전글</option>
+                            <option value="recent">최신글</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="tbody_tbpost_list">
+            </div>
+            <div style="margin-top:10px;text-align: right">
+                <button class="btn btn-primary btn-sm" onclick="search_tbpost()">더보기</button>
+            </div>
+        </div>
+
+    </section><!-- End Recent Blog Posts Section -->
+
+</main><!-- End #main -->
+
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        search_tbpost();
+    });
+    function search_tbpost(){
+        let search_cway = $("#search_cway").val() + "";
+        let cdatetime = "";
+        if(search_cway == "recent"){
+            cdatetime = $("#search_fdatetime").val() + "";
+        } else {
+            cdatetime = $("#search_sdatetime").val() + "";
+        }
+        let input_keyword_changed = $("#input_keyword_changed").val() + "";
+        if(input_keyword_changed == "1"){
+            search_cway = "before";
+            $("#search_cway").val(search_cway);
+            cdatetime = "";
+            $("#search_sdatetime").val("");
+            $("#search_fdatetime").val("");
+            $("#tbody_tbpost_list").html("");
+            $("#input_keyword_changed").val("0");
+        }
+
+        let _data = new Map();
+        _data.url = "/api/tbpost/moreList";
+        _data.type = "POST";
+        _data.param = {
+            'sdate' : $("#search_sdate").val(),
+            'fdate' : $("#search_fdate").val(),
+            'cdatetime' : cdatetime,
+            'cway' : search_cway,
+            'permore' : $("#search_permore").val()
+            ,'deleted' : $("#search_deleted").val()
+            ,'cate' : $("#search_cate").val()
+            ,'title' : $("#search_title").val()
+        };
+        _data.success = function(obj_data, obj_status, obj_xhr){
+            let resultlist = obj_data;
+            if(resultlist.length == 0){
+                alert("no data");
+            }
+            for(let i=0;i<resultlist.length;i++){
+                let this_created_at = resultlist[i].createdAt + "";
+                //초기값 설정
+                let search_sdatetime = $("#search_sdatetime").val() + "";
+                if(search_sdatetime == ""){
+                    $("#search_sdatetime").val(this_created_at);
+                }
+                let search_fdatetime = $("#search_fdatetime").val() + "";
+                if(search_fdatetime == ""){
+                    $("#search_fdatetime").val(this_created_at);
+                }
+                if(search_sdatetime > this_created_at){
+                    $("#search_sdatetime").val(this_created_at);
+                }
+                if(search_fdatetime < this_created_at){
+                    $("#search_fdatetime").val(this_created_at);
+                }
+
+                let each_list = [];
+                each_list.push(resultlist[i]);
+                if(search_cway == "recent"){
+                    $("#tbody_tbpost_list").prepend(list_info_tbpost_template({"resultData_tbpost":each_list}));
+                } else {
+                    $("#tbody_tbpost_list").append(list_info_tbpost_template({"resultData_tbpost":each_list}));
+                }
+                listenerAfterList();
+            }
+        }
+        _data.error = function(obj_data, obj_status, obj_xhr){
+            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+        }
+        func_ajax(_data);
+    }
+</script>
+
+
+<body th:replace="~{@{includes/default/footer}}"></body>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<body th:replace="~{@{includes/default/bottom}}"></body>
 </body>
 </html>

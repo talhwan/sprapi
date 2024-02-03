@@ -12,7 +12,7 @@
         <input type="hidden" class="input_tbpostfile_content" value="{{content}}"/>
         <input type="hidden" class="input_tbpostfile_type" value="{{type}}"/>
         <img class="img_tbpostfile_{{type}} img-fluid" style="height:100px;" src="{{content}}"/>
-        <p class="p_tbpostfile_{{type}}" style="word-break:break-all;">{{data}}</p>
+        <p class="p_tbpostfile_{{type}}" style="word-break:break-all;">{{content}}</p>
         <div style="text-align: right" onclick="listener_remove(this)">삭제</div>
     </div>
     {{/resultData_tbpostfile}}
@@ -109,17 +109,11 @@
                                 }
                             </script>
                             <label class="col-sm-6"></label>
-
-                            <div class="col-sm-12">
-                            <div class="row">
-                                    <label class="col-sm-2"></label>
-                                    <div class="col-sm-10 row" id="div_array_pics">
-                                    </div>
+                            <label class="col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <div class="row m-b" id="div_array_pics">
                                 </div>
-                                <div class="row">
-                                    <label class="col-sm-2"></label>
-                                    <div class="col-sm-10 row" id="div_array_files">
-                                    </div>
+                                <div class="row" id="div_array_files">
                                 </div>
                                 <script>
                                     function listener_remove(obj){

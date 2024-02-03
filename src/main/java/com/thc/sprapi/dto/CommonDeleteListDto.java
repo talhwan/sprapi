@@ -14,4 +14,6 @@ import lombok.Setter;
 public class CommonDeleteListDto {
 	@Schema(description = "ids", example="ids")
 	private String[] ids;
+	@Schema(description = "tbuserId", example="tbuserId")
+	private String tbuserId;
 }

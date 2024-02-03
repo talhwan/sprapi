@@ -2,6 +2,7 @@ package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbpostfile;
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbpostfileDto;
 import com.thc.sprapi.dto.TbpostfileDto;
 import com.thc.sprapi.exception.NoMatchingDataException;
@@ -51,6 +52,12 @@ public class TbpostfileServiceImpl implements TbpostfileService {
     public TbpostfileDto.TbpostfileAfterUpdateDto delete(TbpostfileDto.TbpostfileUpdateDto params){
         params.setDeleted("Y");
         return update(params);
+    }
+    public CommonDeleteListDto deleteList(CommonDeleteListDto params){
+        for(String each : params.getIds()){
+            delete(TbpostfileDto.TbpostfileUpdateDto.builder().id(each).build());
+        }
+        return params;
     }
 
     public TbpostfileDto.TbpostfileSelectDto detail(String id){

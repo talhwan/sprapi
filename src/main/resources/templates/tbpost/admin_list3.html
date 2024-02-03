@@ -5,8 +5,8 @@
 </head>
 <body>
 
-<script id="list_info_tbpost" type="text/x-handlebars-template">
-    {{#resultData_tbpost}}
+<script id="list_info_tbpostcmt" type="text/x-handlebars-template">
+    {{#resultData_tbpostcmt}}
     <tr class="gradeA">
         <td>
             <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
@@ -15,20 +15,20 @@
         <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
         <td><font class="font_cate_{{cate}}">{{cate}}</font></td>
         <td>{{tbuserNick}}</td>
-        <td class="cursor_pointer" onclick="location.href='/tbpost/admin_detail/{{id}}';">{{title}}</td>
+        <td class="cursor_pointer" onclick="location.href='/tbpostcmt/admin_detail/{{id}}';">{{title}}</td>
         <td>{{createdAt}} / {{modifiedAt}}</td>
     </tr>
-    {{/resultData_tbpost}}
+    {{/resultData_tbpostcmt}}
 </script>
 <script type="text/javascript">
-    var list_info_tbpost = $("#list_info_tbpost").html();
-    var list_info_tbpost_template = Handlebars.compile(list_info_tbpost);
+    var list_info_tbpostcmt = $("#list_info_tbpostcmt").html();
+    var list_info_tbpostcmt_template = Handlebars.compile(list_info_tbpostcmt);
 </script>
 
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_tbpost").addClass("active");
+        $(".sidemenu_li_tbpostcmt").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
@@ -40,7 +40,7 @@
                         <a href="/admin">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/tbpost/admin_list">게시글</a>
+                        <a href="/tbpostcmt/admin_list">게시글</a>
                     </li>
                     <li class="breadcrumb-item active">
                         <strong>게시글 목록</strong>
@@ -138,17 +138,17 @@
                         <th>입력일시/수정일시</th>
                     </tr>
                     </thead>
-                    <tbody id="tbody_tbpost_list">
+                    <tbody id="tbody_tbpostcmt_list">
                     </tbody>
                 </table>
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="delete_tbpost()">일괄삭제</button>
+                            <button class="btn btn-danger btn-sm" onclick="delete_tbpostcmt()">일괄삭제</button>
                         </td>
                         <td style="text-align: right;">
-                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbpost/admin_create'">추가하기</button>
-                            <button class="btn btn-primary btn-sm" onclick="search_tbpost()">더보기</button>
+                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbpostcmt/admin_create'">추가하기</button>
+                            <button class="btn btn-primary btn-sm" onclick="search_tbpostcmt()">더보기</button>
                         </td>
                     </tr>
                 </table>
@@ -184,7 +184,7 @@
                         break;
                 }
             }
-            function delete_tbpost(){
+            function delete_tbpostcmt(){
 
                 if (confirm("정말 삭제하시겠습니까?")) {
                 } else {
@@ -202,7 +202,7 @@
                 }
 
                 let _data = new Map();
-                _data.url = "/api/tbpost";
+                _data.url = "/api/tbpostcmt";
                 _data.type = "DELETE";
                 _data.param = {
                     'ids' : ids
@@ -271,45 +271,19 @@
         <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
-                search_tbpost();
+                search_tbpostcmt();
             });
-            function search_tbpost(){
-                let search_cway = $("#search_cway").val() + "";
-                let cdatetime = "";
-                if(search_cway == "recent"){
-                    cdatetime = $("#search_fdatetime").val() + "";
-                } else {
-                    cdatetime = $("#search_sdatetime").val() + "";
-                }
-                let input_keyword_changed = $("#input_keyword_changed").val() + "";
-                if(input_keyword_changed == "1"){
-                    search_cway = "before";
-                    $("#search_cway").val(search_cway);
-                    cdatetime = "";
-                    $("#search_sdatetime").val("");
-                    $("#search_fdatetime").val("");
-                    $("#tbody_tbpost_list").html("");
-                    $("#input_keyword_changed").val("0");
-                }
-
+            function search_tbpostcmt(){
                 let _data = new Map();
-                _data.url = "/api/tbpost/moreList";
+                _data.url = "/api/tbpostcmt/moreList";
                 _data.type = "POST";
                 _data.param = {
-                    'sdate' : $("#search_sdate").val(),
-                    'fdate' : $("#search_fdate").val(),
-                    'cdatetime' : cdatetime,
-                    'cway' : search_cway,
-                    'permore' : $("#search_permore").val()
-                    ,'deleted' : $("#search_deleted").val()
-                    ,'cate' : $("#search_cate").val()
-                    ,'title' : $("#search_title").val()
+                    'cdatetime' : $("#search_sdatetime").val(),
+                    'cway' : "before",
+                    'permore' : "10"
                 };
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let resultlist = obj_data;
-                    if(resultlist.length == 0){
-                        alert("no data");
-                    }
                     for(let i=0;i<resultlist.length;i++){
                         let this_created_at = resultlist[i].createdAt + "";
                         //초기값 설정
@@ -331,9 +305,9 @@
                         let each_list = [];
                         each_list.push(resultlist[i]);
                         if(search_cway == "recent"){
-                            $("#tbody_tbpost_list").prepend(list_info_tbpost_template({"resultData_tbpost":each_list}));
+                            $("#tbody_tbpostcmt_list").prepend(list_info_tbpostcmt_template({"resultData_tbpostcmt":each_list}));
                         } else {
-                            $("#tbody_tbpost_list").append(list_info_tbpost_template({"resultData_tbpost":each_list}));
+                            $("#tbody_tbpostcmt_list").append(list_info_tbpostcmt_template({"resultData_tbpostcmt":each_list}));
                         }
                         listenerAfterList();
                     }

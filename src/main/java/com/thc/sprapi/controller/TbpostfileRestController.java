@@ -1,6 +1,7 @@
 package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
+import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbpostfileDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbpostfileService;
@@ -61,9 +62,9 @@ public class TbpostfileRestController {
                     + "@exception 해당 자료 없음 <br />"
     )
     @DeleteMapping("")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<TbpostfileDto.TbpostfileAfterUpdateDto> delete(@Valid @RequestBody TbpostfileDto.TbpostfileUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostfileService.delete(params));
+    public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setTbuserId(principalDetails.getTbuser().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostfileService.deleteList(params));
     }
 
     @Operation(summary = "게시글 파일 조회",
