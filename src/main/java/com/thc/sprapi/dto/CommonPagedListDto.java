@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommonPagedListDto {
+public class CommonPagedListDto extends CommonGrantDto{
 	@Schema(description = "검색 기준일(시작)", example="1970-01-01")
 	private String sdate;
 	@Schema(description = "검색 기준일(종료)", example="1970-01-01")

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommonMoreListDto {
+public class CommonMoreListDto extends CommonGrantDto{
 	@Schema(description = "검색 기준일(시작)", example="1970-01-01")
 	private String sdate;
 	@Schema(description = "검색 기준일(종료)", example="1970-01-01")

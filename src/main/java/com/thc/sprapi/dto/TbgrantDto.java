@@ -1,6 +1,6 @@
 package com.thc.sprapi.dto;
 
-import com.thc.sprapi.domain.Tbpost;
+import com.thc.sprapi.domain.Tbgrant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import lombok.*;
 
 import java.util.List;
 
-public class TbpostDto {
+public class TbgrantDto {
 	
 	@Schema
 	@Builder
@@ -17,7 +17,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostCreateDto {
+	public static class TbgrantCreateDto extends CommonGrantDto{
 		@Schema(description = "title", example="title")
 		@NotNull
 		@NotEmpty
@@ -36,16 +36,8 @@ public class TbpostDto {
 		@Size(max=10000)
 		private String content;
 
-		@Schema(description = "tbuserId", example="tbuserId")
-		private String tbuserId;
-
-		@Schema(description = "pics", example="pics")
-		private String[] pics;
-		@Schema(description = "types", example="types")
-		private String[] types;
-
-		public Tbpost toEntity() {
-			return Tbpost.of(title, cate, content, tbuserId);
+		public Tbgrant toEntity() {
+			return Tbgrant.of(title, cate, content);
 		}
 	}
 	@Schema
@@ -54,7 +46,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostAfterCreateDto {
+	public static class TbgrantAfterCreateDto {
 		@Schema(description = "id", example="length32textnumber")
 		private String id;
 	}
@@ -65,7 +57,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostUpdateDto {
+	public static class TbgrantUpdateDto extends CommonGrantDto{
 		@Schema(description = "id", example="length32textnumber")
 		@NotNull
 		@NotEmpty
@@ -84,12 +76,6 @@ public class TbpostDto {
 		@Schema(description = "content", example="content")
 		@Size(max=10000)
 		private String content;
-
-		@Schema(description = "tbuserId", example="tbuserId")
-		private String tbuserId;
-		@Schema(description = "nowTbuserId", example="tbusnowTbuserIderId")
-		private String nowTbuserId;
-
 	}
 	@Schema
 	@Builder
@@ -97,7 +83,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostAfterUpdateDto {
+	public static class TbgrantAfterUpdateDto {
 		@Schema(description = "id", example="length32textnumber")
 		private String id;
 		@Schema(description = "deleted", example="Y")
@@ -120,7 +106,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostSelectDto extends CommonSelectDto{
+	public static class TbgrantSelectDto extends CommonSelectDto{
 		@Schema(description = "title", example="title")
 		private String title;
 		@Schema(description = "cate", example="cate")
@@ -135,10 +121,16 @@ public class TbpostDto {
 		@Schema(description = "tbuserMpic", example="")
 		private String tbuserMpic;
 
+		private String[][] types = TbgrantpartDto.types;
+		@Schema(description = "tbgrantparts", example="tbgrantparts")
+		private List<TbgrantpartDto.TbgrantpartSelectDto> tbgrantparts;
+/*
 		@Schema(description = "pics", example="pics")
-		private List<TbpostfileDto.TbpostfileSelectDto> pics;
+		private List<TbgrantfileDto.TbgrantfileSelectDto> pics;
 		@Schema(description = "files", example="files")
-		private List<TbpostfileDto.TbpostfileSelectDto> files;
+		private List<TbgrantfileDto.TbgrantfileSelectDto> files;
+
+ */
 
 	}
 
@@ -148,7 +140,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostListDto {
+	public static class TbgrantListDto extends CommonGrantDto{
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -170,7 +162,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostPagedListDto extends CommonPagedListDto {
+	public static class TbgrantPagedListDto extends CommonPagedListDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -191,7 +183,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostMoreListDto extends CommonMoreListDto {
+	public static class TbgrantMoreListDto extends CommonMoreListDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 

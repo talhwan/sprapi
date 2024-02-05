@@ -66,6 +66,7 @@
 		WHERE tbpostcmt.id is not null
 		<if test = "sdate != null and sdate !=''">AND tbpostcmt.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpostcmt.created_at</if>
+		<if test = "tbpostId != null and tbpostId !=''">AND tbpostcmt.tbpost_id = #{tbpostId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbpostcmt.tbuser_id = #{tbuserId}</if>
 		<if test = "content != null and content !=''">AND tbpostcmt.content LIKE CONCAT('%', #{content}, '%')</if>
 		<if test = "deleted != null and deleted !=''">AND tbpostcmt.deleted = #{deleted}</if>

@@ -130,6 +130,136 @@ function listener_upload_file(obj_file, file_type, listener_after_upload) {
 }
 
 /* list관련 기능 */
+function listener_keyword_changed(){$("#input_keyword_changed").val("1");}
+function set_search_sdatefdate(obj){
+	var temp_d = new Date();
+	$("#search_fdate").val(dateToStringFormat(temp_d));
+
+	switch(obj){
+		case 'null':
+			$("#search_fdate").val("");
+			$("#search_sdate").val("");
+			break;
+		case 'today':
+			$("#search_sdate").val(dateToStringFormat(temp_d));
+			break;
+		case 'week':
+			temp_d.setDate(temp_d.getDate() - 7);
+			$("#search_sdate").val(dateToStringFormat(temp_d));
+			break;
+		case 'month':
+			temp_d.setMonth(temp_d.getMonth() - 1);
+			$("#search_sdate").val(dateToStringFormat(temp_d));
+			break;
+	}
+	listener_keyword_changed();
+}
+function set_search_keyword(){
+	let search_keyword = $("#search_keyword").val();
+	let search_keyword_each = $(".search_keyword_each");
+	for (let i = 0; i < search_keyword_each.length; i++) {
+		let t_name = $(search_keyword_each[i]).attr("name") + "";
+		$(search_keyword_each[i]).val("");
+	}
+	listener_keyword_changed();
+
+	$(".search_keyword_each").removeClass("hide");
+	$(".search_keyword_each").addClass("hide");
+	$(".search_keyword_each_" + search_keyword).removeClass("hide");
+}
+function check_chk(obj_class){
+	let all_checked = true;
+	let input_each = $("." + obj_class + "_each");
+	for(let i=0;i<input_each.length;i++){
+		let each_checked = $(input_each[i]).prop("checked");
+		if(each_checked){
+		} else {
+			all_checked = false;
+		}
+	}
+	$("." + obj_class + "_all").prop("checked", all_checked);
+}
+function check_chk_delete(){
+	check_chk("input_chk_delete");
+}
+function listener_chk(obj, obj_class){
+	let keyword = $(obj).attr("keyword");
+	let checked = $(obj).prop("checked");
+	//alert(checked);
+	switch(keyword){
+		case "all" :
+			if(checked){
+				$("."+obj_class+"_each").prop("checked", true);
+			} else {
+				$("."+obj_class+"_each").prop("checked", false);
+			}
+			break;
+		default :
+			check_chk(obj_class);
+			break;
+	}
+}
+function listener_chk_delete(obj){
+	listener_chk(obj, "input_chk_delete");
+}
+
+function listenerGetDeleteIds(){
+	let ids = [];
+	let input_chk_delete_each = $(".input_chk_delete_each");
+	for(let i=0;i<input_chk_delete_each.length;i++){
+		let each_checked = $(input_chk_delete_each[i]).prop("checked");
+		if(each_checked){
+			ids.push($(input_chk_delete_each[i]).attr("keyword"));
+		}
+	}
+	return ids;
+}
+function listenerBeforeList(){
+	let search_cway = $("#search_cway").val() + "";
+	let cdatetime = "";
+	if(search_cway == "recent"){
+		cdatetime = $("#search_fdatetime").val() + "";
+	} else {
+		cdatetime = $("#search_sdatetime").val() + "";
+	}
+	let input_keyword_changed = $("#input_keyword_changed").val() + "";
+	if(input_keyword_changed == "1"){
+		search_cway = "before";
+		$("#search_cway").val(search_cway);
+		cdatetime = "";
+		$("#search_sdatetime").val("");
+		$("#search_fdatetime").val("");
+		$("#tbody_tbgrant_list").html("");
+		$("#input_keyword_changed").val("0");
+	}
+	let returnVal = {
+		'sdate' : $("#search_sdate").val(),
+		'fdate' : $("#search_fdate").val(),
+		'cdatetime' : cdatetime,
+		'cway' : search_cway,
+		'permore' : $("#search_permore").val()
+		,'deleted' : $("#search_deleted").val()
+	};
+
+	return returnVal;
+}
+function listenerAfterListEach(this_created_at){
+	//초기값 설정
+	let search_sdatetime = $("#search_sdatetime").val() + "";
+	if(search_sdatetime == ""){
+		$("#search_sdatetime").val(this_created_at);
+	}
+	let search_fdatetime = $("#search_fdatetime").val() + "";
+	if(search_fdatetime == ""){
+		$("#search_fdatetime").val(this_created_at);
+	}
+	if(search_sdatetime > this_created_at){
+		$("#search_sdatetime").val(this_created_at);
+	}
+	if(search_fdatetime < this_created_at){
+		$("#search_fdatetime").val(this_created_at);
+	}
+}
 function listenerAfterList(){
 	let font_order = $(".font_order");
 	for (let t = 0; t < font_order.length; t++) {

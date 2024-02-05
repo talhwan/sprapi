@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommonDeleteListDto extends CommonGrantDto{
-	@Schema(description = "ids", example="ids")
-	private String[] ids;
+public class CommonGrantDto {
+	@Schema(description = "nowTbuserId", example="nowTbuserId")
+	private String nowTbuserId;
 }
