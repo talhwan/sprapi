@@ -25,6 +25,11 @@
 		<if test = "deleted != null and deleted !=''">AND tbpost.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbpost.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "cate != null and cate !=''">AND tbpost.cate = #{cate}</if>
+		<if test = "tbuserId != null and tbuserId !=''">AND tbpost.tbuser_id = #{tbuserId}</if>
+		<if test = "tbuserUsername != null and tbuserUsername !=''">AND tbuser.username = #{tbuserUsername}</if>
+		<if test = "tbuserNick != null and tbuserNick !=''">AND tbuser.nick LIKE CONCAT('%', #{tbuserNick}, '%')</if>
+		<if test = "sdate != null and sdate !=''">AND tbpost.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpost.created_at</if>
 	</select>
 
 	<select id="moreList" parameterType="com.thc.sprapi.dto.TbpostDto$TbpostMoreListDto" resultType="com.thc.sprapi.dto.TbpostDto$TbpostSelectDto">

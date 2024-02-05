@@ -60,6 +60,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			String value = request.getHeader(name);
 			logger.info("0-1: REQUEST [{}][{}]", name, value);
 		}
+		Enumeration headerNames = request.getParameterNames();
+		while(headerNames.hasMoreElements()) {
+			String name = (String)headerNames.nextElement();
+			String value = request.getParameter(name);
+			logger.info("0-1: REQUEST [{}][{}]", name, value);
+		}
 		 */
 
 		String jwtHeader = request.getHeader(externalProperties.getAccessKey());

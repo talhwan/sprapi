@@ -59,9 +59,10 @@
                     </div>
                     <div class="ibox-content" style="padding-bottom:0.1px;">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">삭제여부</label>
+                            <label class="col-sm-2 col-form-label">*삭제여부</label>
                             <div class="col-sm-4">
-                                <select class="form-control m-b" id="create_tbpost_deleted" keyword="deleted">
+                                <select class="input_required form-control m-b" id="create_tbpost_deleted" keyword="deleted" errormsg="필수값입니다!.">
+                                    <!--<option value="">&#45;&#45;선택하세요&#45;&#45;</option>-->
                                     <option value="N">일반</option>
                                     <option value="Y">삭제</option>
                                 </select>
@@ -76,7 +77,7 @@
 
                             <label class="col-sm-2 col-form-label">*제목</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control m-b" id="create_tbpost_title" keyword="title" placeholder="내용을 입력하세요"/>
+                                <input type="text" class="input_required form-control m-b" id="create_tbpost_title" keyword="title" placeholder="내용을 입력하세요" errormsg="필수값입니다."/>
                             </div>
                             <label class="col-sm-6"></label>
 
@@ -142,6 +143,10 @@
                 for(let i=0;i<input_tbpostfile_content.length;i++){
                     pics.push($(input_tbpostfile_content[i]).val());
                     types.push($(input_tbpostfile_type[i]).val());
+                }
+
+                if(!listenerBeforeCreate()){
+                    return false;
                 }
 
                 let _param = {

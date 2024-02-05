@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head th:replace="~{@{includes/admin/head}}"></head>
+</head>
+<body>
+
+<div id="wrapper">
+    <body th:replace="~{@{includes/admin/nav}}"></body>
+    <script>
+        $(".sidemenu_li_roletype").addClass("active");
+    </script>
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <body th:replace="~{@{includes/admin/navbar_top}}"></body>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>사용자 상세 : <font class="font_roletype_typeName"></font></h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/admin">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/roletype/admin_list">USER</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/roletype/admin_list">사용자 목록</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <strong>사용자 상세</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
+        <div class="animated fadeInRight" style="padding-top:12.5px;padding-bottom:0px;">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <ul class="nav nav-tabs">
+                        <li><a class="nav-link active" data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i>권한 사용자</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#tab-2"><i class="fa fa-briefcase"></i>권한 상세</a></li>
+                    </ul>
+                    <div class="tab-content" style="padding-bottom:5px;">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="ibox-content">
+                            111111
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="ibox-content">
+                            222222
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            $( document ).ready(function() {
+                console.log( "ready!" );
+                detail_roletype();
+            });
+            function detail_roletype(){
+                let roletypeId = getIdFromUrl(null);
+                let _data = new Map();
+                _data.url = "/api/roletype/" + roletypeId;
+                _data.type = "GET";
+                _data.success = function(obj_data, obj_status, obj_xhr){
+                    let detailKeys = Object.keys(obj_data)
+                    for (let eachKey of detailKeys){
+                        $(".font_roletype_" + eachKey).text(obj_data[eachKey]);
+                        $("#detail_roletype_" + eachKey).val(obj_data[eachKey]);
+                        if(!isNull(obj_data["mpic"])){
+                            $("#img_roletype_mpic").attr("src", obj_data["mpic"]);
+                        }
+                    }
+                    let t_list = detailKeys.listTbuserRoleType;
+                    alert(t_list.length);
+                }
+                _data.error = function(obj_data, obj_status, obj_xhr){
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+            function delete_roletype(obj){
+                let _param = {};
+                _param["id"] = $("#detail_roletype_id").val();
+                //alert(_param[$(obj).attr("keyword")]);
+
+                let _data = new Map();
+                _data.url = "/api/roletype";
+                _data.type = "DELETE";
+                _data.param = _param;
+                _data.success = function(obj_data, obj_status, obj_xhr){
+                    //alert("!!");
+                }
+                _data.error = function(obj_data, obj_status, obj_xhr){
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+        </script>
+        <body th:replace="~{@{includes/admin/footer}}"></body>
+    </div>
+    <body th:replace="~{@{includes/admin/right_sidebar}}"></body>
+</div>
+<body th:replace="~{@{includes/admin/bottom}}"></body>
+</body>
+</html>

@@ -28,8 +28,8 @@ function func_ajax(_data) {
 					_data.retry = true;
 					access_token(_data);
 				} else {
-					alert("login");
-					location.replace("/tbuser/snslogin");
+					alert("please login");
+					//location.replace("/tbuser/snslogin");
 				}
 			} else if(data.status === 403){
 				// 권한이 없음.
@@ -37,7 +37,7 @@ function func_ajax(_data) {
 			} else if(data.status === 406){
 				//refresh token 만료
 				alert("please login");
-				location.replace("/tbuser/snslogin");
+				//location.replace("/tbuser/snslogin");
 			} else if(data.status === 409){
 				alert("중복된 정보입니다. 다시 시도해주세요.");
 			} else {
@@ -63,6 +63,7 @@ function access_token(_data){
 					func_ajax(_data);
 					break;
 				default:
+					alert("error occured. try again");
 					console.log("no matching status code");
 			}
 		},
@@ -71,6 +72,7 @@ function access_token(_data){
 			switch(data.status){
 				case 401:
 					alert("expired refresh token. login please");
+					//location.replace("/tbuser/snslogin");
 					break;
 			}
 		},
@@ -144,6 +146,19 @@ function listenerAfterList(){
 			$(".font_"+ select_temp_name +"_" + a_value).html(a_html);
 		}
 	}
+}
+
+/* create관련 기능 */
+function listenerBeforeCreate(){
+	let input_required = $(".input_required");
+	for(let i=0;i<input_required.length;i++){
+		if ($.trim($(input_required[i]).val()) == "") {
+			alert($(input_required[i]).attr("errormsg"));
+			$(input_required[i]).focus();
+			return false;
+		}
+	}
+	return true;
 }
 /* js 추가 기능 */
 function isNull(x) {

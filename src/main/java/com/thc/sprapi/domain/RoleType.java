@@ -3,6 +3,7 @@ package com.thc.sprapi.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.thc.sprapi.dto.RoletypeDto;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -29,5 +30,16 @@ public class RoleType{
 	
 	@OneToMany(mappedBy = "roleType", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<TbuserRoleType> tbuserRoleType = new ArrayList<>();
+
+	public static RoleType of(String id, String typeName) {
+		return new RoleType(id, typeName, null);
+	}
+
+	public RoletypeDto.RoletypeSelectDto toRoletypeSelectDto() {
+		return RoletypeDto.RoletypeSelectDto.builder()
+				.id(id)
+				.typeName(typeName)
+				.build();
+	}
 
 }

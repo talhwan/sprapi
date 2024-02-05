@@ -62,6 +62,11 @@ public class TbpostServiceImpl implements TbpostService {
     }
     public CommonDeleteListDto deleteList(CommonDeleteListDto params){
         for(String each : params.getIds()){
+            /*
+            TbpostDto.TbpostUpdateDto aa = new TbpostDto.TbpostUpdateDto();
+            aa.setId(each);
+            delete(aa);
+             */
             delete(TbpostDto.TbpostUpdateDto.builder().id(each).build());
         }
         return params;
