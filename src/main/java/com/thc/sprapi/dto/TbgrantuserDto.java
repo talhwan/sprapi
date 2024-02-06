@@ -95,6 +95,9 @@ public class TbgrantuserDto {
 		private String tbuserNick;
 		@Schema(description = "tbuserMpic", example="tbuserMpic")
 		private String tbuserMpic;
+
+		@Schema(description = "created", example="created")
+		private String created;
 	}
 
 	@Schema
@@ -111,8 +114,6 @@ public class TbgrantuserDto {
 		private String tbgrantId;
 		@Schema(description = "tbuserId", example="tbgrantId")
 		private String tbuserId;
-		@Schema(description = "content", example="content")
-		private String content;
 	}
 
 	@Schema
@@ -128,8 +129,6 @@ public class TbgrantuserDto {
 		private String tbgrantId;
 		@Schema(description = "tbuserId", example="tbgrantId")
 		private String tbuserId;
-		@Schema(description = "content", example="content")
-		private String content;
 	}
 	@Schema
 	@Getter
@@ -144,7 +143,8 @@ public class TbgrantuserDto {
 		private String tbgrantId;
 		@Schema(description = "tbuserId", example="tbgrantId")
 		private String tbuserId;
-		@Schema(description = "content", example="content")
-		private String content;
+
+		@Schema(description = "created", example="created")
+		private String created;
 	}
 }

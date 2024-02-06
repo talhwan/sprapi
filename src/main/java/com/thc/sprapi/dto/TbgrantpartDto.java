@@ -12,6 +12,7 @@ public class TbgrantpartDto {
 	public static String[][] types = {
 		{"tbgrant","접근권한"}
 		,{"tbuser", "사용자"}
+		,{"tbpost", "게시글"}
 	};
 
 	@Schema

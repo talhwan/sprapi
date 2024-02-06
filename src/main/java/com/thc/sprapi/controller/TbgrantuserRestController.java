@@ -33,6 +33,20 @@ public class TbgrantuserRestController {
         this.tbgrantuserService = tbgrantuserService;
     }
 
+    @Operation(summary = "게시글 댓글 목록 조회 - 스크롤 (검색 기능 포함)",
+            description = "게시글 댓글 목록 조회 - 스크롤 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param TbgrantuserMoreListDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
+                    + "@exception (no Exception) <br />"
+    )
+    @PostMapping("/moreListByTbgrantId")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> moreListByTbgrantId(@Valid @RequestBody TbgrantuserDto.TbgrantuserMoreListDto params) {
+        return ResponseEntity.status(HttpStatus.OK).body(tbgrantuserService.moreListByTbgrantId(params));
+    }
+
+    /**/
+
     @Operation(summary = "게시글 댓글 등록",
             description = "게시글 댓글 신규 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgrantuserCreateDto <br />"

@@ -2,13 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thc.sprapi.mapper.TbgrantuserMapper">
 
+	<select id="moreListByTbgrantId" parameterType="com.thc.sprapi.dto.TbgrantuserDto$TbgrantuserMoreListDto" resultType="com.thc.sprapi.dto.TbgrantuserDto$TbgrantuserSelectDto">
+		SELECT
+		tbuser.id as tbuserId
+		,IF(l_tbgrantuser.id is null, '', l_tbgrantuser.id) as id
+		,IF(l_tbgrantuser.deleted is null, 'N', l_tbgrantuser.deleted) as deleted
+		,IF(l_tbgrantuser.tbgrant_id is null, '', l_tbgrantuser.tbgrant_id) as tbgrantId
+		,tbuser.created_at as createdAt
+		,tbuser.modified_at as modifiedAt
+		,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
+		,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
+		,IF(l_tbgrantuser.id is null, 'N', 'Y') as created
+		FROM tbuser
+		LEFT JOIN (
+		    SELECT * FROM tbgrantuser
+			WHERE tbgrantuser.tbgrant_id = #{tbgrantId}
+		) as l_tbgrantuser
+		ON tbuser.id = l_tbgrantuser.tbuser_id
+		WHERE tbuser.id is not null
+		<if test = "created =='1'">AND l_tbgrantuser.id is null</if>
+		<if test = "sdate != null and sdate !=''">AND tbuser.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbuser.created_at</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbuser.created_at ORDER BY tbuser.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbuser.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbuser.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbgrantuserDto$TbgrantuserSelectDto">
 		SELECT tbgrantuser.id
 			,tbgrantuser.created_at as createdAt
 			,tbgrantuser.modified_at as modifiedAt
 			,tbgrantuser.tbgrant_id as tbgrantId
 			,tbgrantuser.tbuser_id as tbuserId
-			,tbgrantuser.content
 			,tbgrantuser.deleted
 			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
 			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
@@ -22,7 +49,6 @@
 		WHERE tbgrantuser.id is not null
 		<if test = "tbgrantId != null and tbgrantId !=''">AND tbgrantuser.tbgrant_id = #{tbgrantId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbgrantuser.tbuser_id = #{tbuserId}</if>
-		<if test = "content != null and content !=''">AND tbgrantuser.content LIKE CONCAT('%', #{content}, '%')</if>
 		<if test = "deleted != null and deleted !=''">AND tbgrantuser.deleted = #{deleted}</if>
 		ORDER BY tbgrantuser.created_at ASC
 	</select>
@@ -35,7 +61,6 @@
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbgrantuser.created_at</if>
 		<if test = "tbgrantId != null and tbgrantId !=''">AND tbgrantuser.tbgrant_id = #{tbgrantId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbgrantuser.tbuser_id = #{tbuserId}</if>
-		<if test = "content != null and content !=''">AND tbgrantuser.content LIKE CONCAT('%', #{content}, '%')</if>
 		<if test = "deleted != null and deleted !=''">AND tbgrantuser.deleted = #{deleted}</if>
 		<if test = "cdatetime != null and cdatetime !=''">
 			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbgrantuser.created_at ORDER BY tbgrantuser.created_at DESC</if>
@@ -52,7 +77,6 @@
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbgrantuser.created_at</if>
 		<if test = "tbgrantId != null and tbgrantId !=''">AND tbgrantuser.tbgrant_id = #{tbgrantId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbgrantuser.tbuser_id = #{tbuserId}</if>
-		<if test = "content != null and content !=''">AND tbgrantuser.content LIKE CONCAT('%', #{content}, '%')</if>
 		<if test = "deleted != null and deleted !=''">AND tbgrantuser.deleted = #{deleted}</if>
 		<if test = "orderby =='created_at'">ORDER BY tbgrantuser.created_at </if>
 		<if test = "orderway =='asc'">ASC</if>
@@ -68,7 +92,6 @@
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbgrantuser.created_at</if>
 		<if test = "tbgrantId != null and tbgrantId !=''">AND tbgrantuser.tbgrant_id = #{tbgrantId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbgrantuser.tbuser_id = #{tbuserId}</if>
-		<if test = "content != null and content !=''">AND tbgrantuser.content LIKE CONCAT('%', #{content}, '%')</if>
 		<if test = "deleted != null and deleted !=''">AND tbgrantuser.deleted = #{deleted}</if>
 	</select>
 

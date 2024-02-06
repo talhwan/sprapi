@@ -29,7 +29,11 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
         this.tbgrantuserRepository = tbgrantuserRepository;
         this.tbgrantuserMapper = tbgrantuserMapper;
     }
-
+    public List<TbgrantuserDto.TbgrantuserSelectDto> moreListByTbgrantId(TbgrantuserDto.TbgrantuserMoreListDto params){
+        params.afterBuild();
+        return tbgrantuserMapper.moreListByTbgrantId(params);
+    }
+    /**/
     public TbgrantuserDto.TbgrantuserAfterCreateDto create(TbgrantuserDto.TbgrantuserCreateDto params){
         return tbgrantuserRepository.save(params.toEntity()).toAfterCreateDto();
     }

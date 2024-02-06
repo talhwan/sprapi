@@ -356,3 +356,6 @@ function listener_maxlength_check(obj, obj1){
 		$(obj).val(this_temp_val.substring(0, this_temp_max));
 	}
 }
+function location_href_path_param(obj_param, obj_add_path){
+	location.href = obj_param + "" + obj_add_path;
+}

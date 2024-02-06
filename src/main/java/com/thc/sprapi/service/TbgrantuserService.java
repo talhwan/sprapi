@@ -7,6 +7,8 @@ import com.thc.sprapi.dto.TbgrantuserDto;
 import java.util.List;
 
 public interface TbgrantuserService {
+    public List<TbgrantuserDto.TbgrantuserSelectDto> moreListByTbgrantId(TbgrantuserDto.TbgrantuserMoreListDto params);
+    /**/
     public TbgrantuserDto.TbgrantuserAfterCreateDto create(TbgrantuserDto.TbgrantuserCreateDto params);
     public TbgrantuserDto.TbgrantuserAfterUpdateDto update(TbgrantuserDto.TbgrantuserUpdateDto params);
     public TbgrantuserDto.TbgrantuserAfterUpdateDto delete(TbgrantuserDto.TbgrantuserUpdateDto params);
