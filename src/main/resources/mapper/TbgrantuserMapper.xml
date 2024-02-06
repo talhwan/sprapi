@@ -10,9 +10,10 @@
 		,IF(l_tbgrantuser.tbgrant_id is null, '', l_tbgrantuser.tbgrant_id) as tbgrantId
 		,tbuser.created_at as createdAt
 		,tbuser.modified_at as modifiedAt
+		,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.username) as tbuserUsername
 		,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
 		,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
-		,IF(l_tbgrantuser.id is null, 'N', 'Y') as created
+		,IF(l_tbgrantuser.id is null, 'yet', 'done') as hasgrant
 		FROM tbuser
 		LEFT JOIN (
 		    SELECT * FROM tbgrantuser
@@ -20,7 +21,12 @@
 		) as l_tbgrantuser
 		ON tbuser.id = l_tbgrantuser.tbuser_id
 		WHERE tbuser.id is not null
-		<if test = "created =='1'">AND l_tbgrantuser.id is null</if>
+		<if test = "tbuserNick != null and tbuserNick !=''">AND tbuser.nick LIKE CONCAT('%', #{tbuserNick}, '%')</if>
+		<if test = "tbuserUsername != null and tbuserUsername !=''">AND tbuser.username = #{tbuserUsername}</if>
+		<if test = "hasgrant != null and hasgrant !=''">
+			<if test = "hasgrant =='yet'">AND l_tbgrantuser.id is null</if>
+			<if test = "hasgrant =='done'">AND l_tbgrantuser.id is not null</if>
+		</if>
 		<if test = "sdate != null and sdate !=''">AND tbuser.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbuser.created_at</if>
 		<if test = "cdatetime != null and cdatetime !=''">

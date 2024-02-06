@@ -13,14 +13,8 @@
         </td>
         <td><font class="font_order"></font></td>
         <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
-        <td>
-            <select class="form-control m-b" keyword="hasgrant" id="input_tbgrantuser_{{tbuserId}}" onchange="toggle_tbgrantuser(this, '{{tbuserId}}')">
-                <option value="done">완료</option>
-                <option value="yet">미등록</option>
-            </select>
-        </td>
-        <td>{{tbuserUsername}}</td>
-        <td>{{tbuserNick}}</td>
+        <td><font class="font_hasgrant_{{hasgrant}}">{{hasgrant}}</font></td>
+        <td class="cursor_pointer" onclick="location.href='/tbgrantuser/admin_detail/{{id}}';">{{title}}</td>
         <td>{{createdAt}} / {{modifiedAt}}</td>
     </tr>
     {{/resultData_tbgrantuser}}
@@ -29,34 +23,11 @@
     var list_info_tbgrantuser = $("#list_info_tbgrantuser").html();
     var list_info_tbgrantuser_template = Handlebars.compile(list_info_tbgrantuser);
 </script>
-<script>
-    function toggle_tbgrantuser(obj, tbuserId){
-        let _param = {};
-        _param["tbgrantId"] = getIdFromUrl(null);
-        _param["tbuserId"] = tbuserId;
-        let tempWay = false;
-        if($(obj).val() == "done"){tempWay = true;}
-        _param["way"] = tempWay;
-        //alert(JSON.stringify(_param));
-
-        let _data = {};
-        _data.url = "/api/tbgrantuser/toggle";
-        _data.type = "POST";
-        _data.param = _param;
-        _data.success = function(obj_data, obj_status, obj_xhr){
-            //alert(1);
-        }
-        _data.error = function(obj_data, obj_status, obj_xhr){
-            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
-        }
-        func_ajax(_data);
-    }
-</script>
 
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_tbgrantuser").addClass("active");
+        $(".sidemenu_li_tbgrant").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
@@ -68,16 +39,10 @@
                         <a href="/admin">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/tbgrant/admin_list">권한 관련</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="/tbgrant/admin_list">접근권한 목록</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="javascript:location_href_path_param('/tbgrant/admin_detail/', getIdFromUrl(null))">접근권한 상세</a>
+                        <a href="/tbgrantuser/admin_list">권한 관련</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>접근권한 사용자 목록</strong>
+                        <strong>접근권한 목록</strong>
                     </li>
                 </ol>
             </div>
@@ -103,13 +68,12 @@
                             </div>
                             <label class="col-sm-2 col-form-label">등록여부</label>
                             <div class="col-sm-4">
-                                <select class="select_search_keyword form-control m-b" keyword="hasgrant" id="search_hasgrant" onchange="listener_keyword_changed()">
+                                <select class="select_search_keyword form-control m-b" keyword="created" id="search_created" onchange="listener_keyword_changed()">
                                     <option value="" selected="selected">전체</option>
-                                    <option value="done">완료</option>
-                                    <option value="yet">미등록</option>
+                                    <option value="1">O</option>
+                                    <option value="0">X</option>
                                 </select>
                             </div>
-                            <!--<label class="col-sm-6 col-form-label"></label>-->
                             <label class="col-sm-2 col-form-label">등록 시기</label>
                             <div class="col-sm-3">
                                 <input class="form-control" id="search_sdate" type="date" onchange="listener_keyword_changed()"/>
@@ -128,15 +92,12 @@
                             <label class="col-sm-2 col-form-label">키워드</label>
                             <div class="col-sm-4">
                                 <select class="form-control m-b" id="search_keyword" onchange="set_search_keyword()">
-                                    <option value="10" selected="selected">아이디</option>
-                                    <option value="20">닉네임</option>
+                                    <option value="10" selected="selected">제목</option>
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <input id="search_tbuserUsername" onchange="listener_keyword_changed();"
+                                <input id="search_title" onchange="listener_keyword_changed();"
                                        class="form-control search_keyword_each search_keyword_each_10" type="text" placeholder="내용을 입력하세요"/>
-                                <input id="search_tbuserNick" onchange="listener_keyword_changed();"
-                                       class="hide form-control search_keyword_each search_keyword_each_20" type="text" placeholder="내용을 입력하세요"/>
                             </div>
                             <label class="col-sm-2"></label>
                             <label class="col-sm-2 col-form-label">한번에 불러올 갯수</label>
@@ -169,9 +130,8 @@
                         </th>
                         <th>#</th>
                         <th>삭제여부</th>
-                        <th>등록여부</th>
-                        <th>아이디</th>
-                        <th>닉네임</th>
+                        <th>구분</th>
+                        <th>제목</th>
                         <th>입력일시/수정일시</th>
                     </tr>
                     </thead>
@@ -184,9 +144,7 @@
                             <button class="btn btn-danger btn-sm" onclick="delete_tbgrantuser()">일괄삭제</button>
                         </td>
                         <td style="text-align: right;">
-                            <!--
                             <button class="btn btn-secondary btn-sm" onclick="location.href='/tbgrantuser/admin_create'">추가하기</button>
-                            -->
                             <button class="btn btn-primary btn-sm" onclick="search_tbgrantuser()">더보기</button>
                         </td>
                     </tr>
@@ -254,11 +212,9 @@
                 func_ajax(_data);
             }
             function search_tbgrantuser(){
-                let beforeListParam = listenerBeforeList("tbody_tbgrantuser_list");
+                let beforeListParam = listenerBeforeList();
+                beforeListParam['created'] = $("#search_created").val();
                 beforeListParam['tbgrantId'] = getIdFromUrl(null);
-                beforeListParam['hasgrant'] = $("#search_hasgrant").val();
-                beforeListParam['tbuserUsername'] = $("#search_tbuserUsername").val();
-                beforeListParam['tbuserNick'] = $("#search_tbuserNick").val();
 
                 let _data = {};
                 _data.url = "/api/tbgrantuser/moreListByTbgrantId";
@@ -278,8 +234,6 @@
                         } else {
                             $("#tbody_tbgrantuser_list").append(list_info_tbgrantuser_template({"resultData_tbgrantuser":each_list}));
                         }
-                        $("#input_tbgrantuser_" + resultlist[i].tbuserId).val(resultlist[i].hasgrant);
-
                         listenerAfterList();
                     }
                 }

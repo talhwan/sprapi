@@ -1,6 +1,8 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbgrantuser;
+import com.thc.sprapi.domain.Tbgrantuser;
+import com.thc.sprapi.domain.Tbgrantuser;
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbgrantuserDto;
@@ -29,6 +31,27 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
         this.tbgrantuserRepository = tbgrantuserRepository;
         this.tbgrantuserMapper = tbgrantuserMapper;
     }
+
+    public TbgrantuserDto.TbgrantuserAfterCreateDto toggle(TbgrantuserDto.TbgrantuserToggleDto params){
+        TbgrantuserDto.TbgrantuserAfterCreateDto returnVal = null;
+        Tbgrantuser tbgrantuser = tbgrantuserRepository.findByTbgrantIdAndTbuserId(params.getTbgrantId(), params.getTbuserId());
+
+        if("true".equals(params.getWay())){
+            if(tbgrantuser == null){
+                returnVal = tbgrantuserRepository.save(params.toEntity()).toAfterCreateDto();
+            } else {
+                returnVal = tbgrantuser.toAfterCreateDto();
+            }
+        } else {
+            if(tbgrantuser == null){
+            } else {
+                delete(TbgrantuserDto.TbgrantuserUpdateDto.builder().id(tbgrantuser.getId()).build());
+                returnVal = tbgrantuser.toAfterCreateDto();
+            }
+
+        }
+        return returnVal;
+    }
     public List<TbgrantuserDto.TbgrantuserSelectDto> moreListByTbgrantId(TbgrantuserDto.TbgrantuserMoreListDto params){
         params.afterBuild();
         return tbgrantuserMapper.moreListByTbgrantId(params);
@@ -47,8 +70,12 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
         return tbgrantuser.toAfterUpdateDto();
     }
     public TbgrantuserDto.TbgrantuserAfterUpdateDto delete(TbgrantuserDto.TbgrantuserUpdateDto params){
-        params.setDeleted("Y");
-        return update(params);
+        /*params.setDeleted("Y");
+        return update(params);*/
+        Tbgrantuser tbgrantuser = tbgrantuserRepository.findById(params.getId())
+                .orElseThrow(() -> new NoMatchingDataException(""));
+        tbgrantuserRepository.delete(tbgrantuser);
+        return tbgrantuser.toAfterUpdateDto();
     }
     public CommonDeleteListDto deleteList(CommonDeleteListDto params){
         for(String each : params.getIds()){

@@ -1,5 +1,6 @@
 package com.thc.sprapi.dto;
 
+import com.thc.sprapi.domain.Tbgrantpart;
 import com.thc.sprapi.domain.Tbgrantuser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,6 +9,22 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 public class TbgrantuserDto {
+
+	@Schema
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class TbgrantuserToggleDto extends TbgrantuserDto.TbgrantuserCreateDto {
+		@Schema(description = "way", example="way")
+		@NotNull
+		@NotEmpty
+		private String way;
+		public Tbgrantuser toEntity() {
+			return Tbgrantuser.of(super.tbgrantId, super.tbuserId);
+		}
+	}
+
 	@Schema
 	@Builder
 	@Getter
@@ -91,13 +108,15 @@ public class TbgrantuserDto {
 		private String tbgrantId;
 		@Schema(description = "tbuserId", example="tbgrantId")
 		private String tbuserId;
+		@Schema(description = "tbuserUsername", example="tbuserUsername")
+		private String tbuserUsername;
 		@Schema(description = "tbuserNick", example="tbuserNick")
 		private String tbuserNick;
 		@Schema(description = "tbuserMpic", example="tbuserMpic")
 		private String tbuserMpic;
 
-		@Schema(description = "created", example="created")
-		private String created;
+		@Schema(description = "hasgrant", example="hasgrant")
+		private String hasgrant;
 	}
 
 	@Schema
@@ -144,7 +163,11 @@ public class TbgrantuserDto {
 		@Schema(description = "tbuserId", example="tbgrantId")
 		private String tbuserId;
 
-		@Schema(description = "created", example="created")
-		private String created;
+		@Schema(description = "hasgrant", example="")
+		private String hasgrant;
+		@Schema(description = "tbuserUsername", example="")
+		private String tbuserUsername;
+		@Schema(description = "tbuserNick", example="")
+		private String tbuserNick;
 	}
 }

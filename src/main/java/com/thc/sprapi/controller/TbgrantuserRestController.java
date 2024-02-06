@@ -2,6 +2,7 @@ package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
+import com.thc.sprapi.dto.TbgrantpartDto;
 import com.thc.sprapi.dto.TbgrantuserDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbgrantuserService;
@@ -33,6 +34,17 @@ public class TbgrantuserRestController {
         this.tbgrantuserService = tbgrantuserService;
     }
 
+    @Operation(summary = "게시글 댓글 토글",
+            description = "게시글 댓글 토글 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param TbgrantuserCreateDto <br />"
+                    + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbgrantuserAfterCreateDto\\> <br />"
+                    + "@exception 중복 <br />"
+    )
+    @PostMapping("/toggle")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<TbgrantuserDto.TbgrantuserAfterCreateDto> save(@Valid @RequestBody TbgrantuserDto.TbgrantuserToggleDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tbgrantuserService.toggle(params));
+    }
     @Operation(summary = "게시글 댓글 목록 조회 - 스크롤 (검색 기능 포함)",
             description = "게시글 댓글 목록 조회 - 스크롤 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgrantuserMoreListDto <br />"

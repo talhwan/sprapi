@@ -214,7 +214,7 @@ function listenerGetDeleteIds(){
 	}
 	return ids;
 }
-function listenerBeforeList(){
+function listenerBeforeList(tbody_id){
 	let search_cway = $("#search_cway").val() + "";
 	let cdatetime = "";
 	if(search_cway == "recent"){
@@ -229,7 +229,7 @@ function listenerBeforeList(){
 		cdatetime = "";
 		$("#search_sdatetime").val("");
 		$("#search_fdatetime").val("");
-		$("#tbody_tbgrant_list").html("");
+		$("#" + tbody_id).html("");
 		$("#input_keyword_changed").val("0");
 	}
 	let returnVal = {

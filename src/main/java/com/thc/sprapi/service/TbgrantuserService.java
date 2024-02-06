@@ -3,10 +3,12 @@ package com.thc.sprapi.service;
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbgrantuserDto;
+import com.thc.sprapi.dto.TbgrantuserDto;
 
 import java.util.List;
 
 public interface TbgrantuserService {
+    public TbgrantuserDto.TbgrantuserAfterCreateDto toggle(TbgrantuserDto.TbgrantuserToggleDto params);
     public List<TbgrantuserDto.TbgrantuserSelectDto> moreListByTbgrantId(TbgrantuserDto.TbgrantuserMoreListDto params);
     /**/
     public TbgrantuserDto.TbgrantuserAfterCreateDto create(TbgrantuserDto.TbgrantuserCreateDto params);
