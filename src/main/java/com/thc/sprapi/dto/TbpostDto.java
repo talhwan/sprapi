@@ -17,7 +17,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostCreateDto {
+	public static class TbpostCreateDto extends CommonGrantDto{
 		@Schema(description = "title", example="title")
 		@NotNull
 		@NotEmpty
@@ -65,7 +65,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostUpdateDto {
+	public static class TbpostUpdateDto extends CommonGrantDto{
 		@Schema(description = "id", example="length32textnumber")
 		@NotNull
 		@NotEmpty
@@ -148,7 +148,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostListDto {
+	public static class TbpostListDto extends CommonGrantDto{
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 

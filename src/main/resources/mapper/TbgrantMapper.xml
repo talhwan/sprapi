@@ -10,6 +10,8 @@
 		  AND tbgrantuser.tbuser_id = #{tbuserId}
 		  AND tbgrantpart.type = #{t}
 		  AND tbgrantpart.content = #{c}
+		ORDER BY tbgrantuser.created_at DESC
+		LIMIT 0,1
 	</select>
 
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbgrantDto$TbgrantSelectDto">

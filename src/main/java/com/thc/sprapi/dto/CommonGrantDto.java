@@ -12,6 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommonGrantDto {
-	@Schema(description = "nowTbuserId", example="nowTbuserId")
 	private String nowTbuserId;
+	private boolean nowGrant;
 }

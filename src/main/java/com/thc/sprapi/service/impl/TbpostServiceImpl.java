@@ -2,6 +2,7 @@ package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbpost;
 import com.thc.sprapi.dto.*;
+import com.thc.sprapi.exception.NoAccessGrantException;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbpostMapper;
 import com.thc.sprapi.repository.TbpostRepository;
@@ -33,6 +34,10 @@ public class TbpostServiceImpl implements TbpostService {
     }
 
     public TbpostDto.TbpostAfterCreateDto create(TbpostDto.TbpostCreateDto params){
+        //혹시 tbuserId가 비어있으면 현재 접속한 사람의 정보 집어넣기
+        if(params.getTbuserId() == null){
+            params.setTbuserId(params.getNowTbuserId());
+        }
         TbpostDto.TbpostAfterCreateDto result = tbpostRepository.save(params.toEntity()).toAfterCreateDto();
         String[] pics = params.getPics();
         String[] types = params.getTypes();
@@ -44,6 +49,11 @@ public class TbpostServiceImpl implements TbpostService {
     public TbpostDto.TbpostAfterUpdateDto update(TbpostDto.TbpostUpdateDto params){
         Tbpost tbpost = tbpostRepository.findById(params.getId())
                 .orElseThrow(() -> new NoMatchingDataException(""));
+        if(!params.isNowGrant() && !tbpost.getTbuserId().equals(params.getNowTbuserId())){
+            //관리자도 아니고, 본인 것도 아닌 경우 권한 없음
+            throw new NoAccessGrantException("");
+        }
+
         if(params.getTitle() != null){
             tbpost.setTitle(params.getTitle());
         }

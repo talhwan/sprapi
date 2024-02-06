@@ -43,7 +43,7 @@ public class TbgrantServiceImpl implements TbgrantService {
                 throw new NoAccessGrantException("");
             }
         }
-        return false;
+        return params.isBeAdmin();
     }
     public TbgrantDto.TbgrantAfterCreateDto create(TbgrantDto.TbgrantCreateDto params){
         TbgrantDto.TbgrantAfterCreateDto result = tbgrantRepository.save(params.toEntity()).toAfterCreateDto();

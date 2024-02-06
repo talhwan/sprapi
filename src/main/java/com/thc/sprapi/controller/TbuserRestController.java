@@ -1,11 +1,9 @@
 package com.thc.sprapi.controller;
 
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbpicDto;
-import com.thc.sprapi.dto.TbuserDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.security.JwtTokenDto;
 import com.thc.sprapi.security.PrincipalDetails;
+import com.thc.sprapi.service.TbgrantService;
 import com.thc.sprapi.service.TbuserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +26,10 @@ public class TbuserRestController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final TbgrantService tbgrantService;
     private final TbuserService tbuserService;
-    public TbuserRestController(TbuserService tbuserService) {
+    public TbuserRestController(TbgrantService tbgrantService, TbuserService tbuserService) {
+        this.tbgrantService = tbgrantService;
         this.tbuserService = tbuserService;
     }
 
@@ -72,18 +72,19 @@ public class TbuserRestController {
     이 아래는 기본기능입니다!!!
      */
 
-    /*
     @Operation(summary = "회원 등록",
             description = "회원 신규 등록 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbuserCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbuserAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("")
-    public ResponseEntity<TbuserDto.TbuserAfterCreateDto> save(@Valid @RequestBody TbuserDto.TbuserCreateDto params) {
+    public ResponseEntity<TbuserDto.TbuserAfterCreateDto> save(@Valid @RequestBody TbuserDto.TbuserCreateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "create",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(tbuserService.create(params));
     }
-     */
+
     @Operation(summary = "회원 정보 수정",
             description = "회원 정보 수정 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbuserUpdateDto <br />"
@@ -91,7 +92,8 @@ public class TbuserRestController {
                     + "@exception 해당 자료 없음 <br />"
     )
     @PutMapping("")
-    public ResponseEntity<TbuserDto.TbuserAfterUpdateDto> update(@Valid @RequestBody TbuserDto.TbuserUpdateDto params) {
+    public ResponseEntity<TbuserDto.TbuserAfterUpdateDto> update(@Valid @RequestBody TbuserDto.TbuserUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "update",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.update(params));
     }
 
@@ -103,7 +105,8 @@ public class TbuserRestController {
     )
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
-    public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params) {
+    public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "update",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.deleteList(params));
     }
 
@@ -114,7 +117,8 @@ public class TbuserRestController {
                     + "@exception 정보 없음 <br />"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<TbuserDto.TbuserSelectDto> detail(@PathVariable("id") String id) {
+    public ResponseEntity<TbuserDto.TbuserSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "detail",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(id));
     }
     @Operation(summary = "회원 정보 목록 조회(검색 기능 포함)",
@@ -124,7 +128,8 @@ public class TbuserRestController {
                     + "@exception (no Exception) <br />"
     )
     @PostMapping("/list")
-    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> list(@Valid @RequestBody TbuserDto.TbuserListDto params) {
+    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> list(@Valid @RequestBody TbuserDto.TbuserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "detail",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.list(params));
     }
     @Operation(summary = "회원 정보 추가조회 목록 조회(검색 기능 포함)",
@@ -134,7 +139,8 @@ public class TbuserRestController {
                     + "@exception (no Exception) <br />"
     )
     @PostMapping("/moreList")
-    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> moreList(@Valid @RequestBody TbuserDto.TbuserMoreListDto params) {
+    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> moreList(@Valid @RequestBody TbuserDto.TbuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "detail",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.moreList(params));
     }
 
@@ -145,7 +151,8 @@ public class TbuserRestController {
                     + "@exception (no Exception) <br />"
     )
     @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbuserDto.TbuserSelectDto>> pagedList(@Valid @RequestBody TbuserDto.TbuserPagedListDto params) {
+    public ResponseEntity<CommonAfterPagedListDto<TbuserDto.TbuserSelectDto>> pagedList(@Valid @RequestBody TbuserDto.TbuserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbuser", "detail",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.pagedList(params));
     }
 
