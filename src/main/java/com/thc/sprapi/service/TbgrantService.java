@@ -7,6 +7,7 @@ import com.thc.sprapi.dto.TbgrantDto;
 import java.util.List;
 
 public interface TbgrantService {
+    public boolean access(TbgrantDto.TbgrantAccessDto params);
     public TbgrantDto.TbgrantAfterCreateDto create(TbgrantDto.TbgrantCreateDto params);
     public TbgrantDto.TbgrantAfterUpdateDto update(TbgrantDto.TbgrantUpdateDto params);
     public TbgrantDto.TbgrantAfterUpdateDto delete(TbgrantDto.TbgrantUpdateDto params);

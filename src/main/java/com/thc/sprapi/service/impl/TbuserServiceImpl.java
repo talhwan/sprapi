@@ -126,8 +126,8 @@ public class TbuserServiceImpl implements TbuserService {
             tbuser.setPassword(params.getPassword());
         }
         if(params.getNick() != null){
-            tbuser = tbuserRepository.findByNick(params.getNick());
-            if(tbuser != null){
+            Tbuser tbuserTemp = tbuserRepository.findByNick(params.getNick());
+            if(tbuserTemp != null){
                 throw new AlreadyExistDataException("Unique Key Error");
             }
             tbuser.setNick(params.getNick());

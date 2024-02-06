@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TbgrantpartServiceImpl implements TbgrantpartService {
@@ -33,8 +34,7 @@ public class TbgrantpartServiceImpl implements TbgrantpartService {
     public TbgrantpartDto.TbgrantpartAfterCreateDto toggle(TbgrantpartDto.TbgrantpartToggleDto params){
         TbgrantpartDto.TbgrantpartAfterCreateDto returnVal = null;
         Tbgrantpart tbgrantpart = tbgrantpartRepository.findByTbgrantIdAndTypeAndContent(params.getTbgrantId(), params.getType(), params.getContent());
-
-        if("true".equals(params.getWay())){
+        if(params.isWay()){
             if(tbgrantpart == null){
                 returnVal = tbgrantpartRepository.save(params.toEntity()).toAfterCreateDto();
             } else {

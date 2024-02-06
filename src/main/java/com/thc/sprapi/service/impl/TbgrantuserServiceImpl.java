@@ -1,10 +1,12 @@
 package com.thc.sprapi.service.impl;
 
+import com.thc.sprapi.domain.Tbgrantpart;
 import com.thc.sprapi.domain.Tbgrantuser;
 import com.thc.sprapi.domain.Tbgrantuser;
 import com.thc.sprapi.domain.Tbgrantuser;
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
+import com.thc.sprapi.dto.TbgrantpartDto;
 import com.thc.sprapi.dto.TbgrantuserDto;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbgrantuserMapper;
@@ -36,7 +38,7 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
         TbgrantuserDto.TbgrantuserAfterCreateDto returnVal = null;
         Tbgrantuser tbgrantuser = tbgrantuserRepository.findByTbgrantIdAndTbuserId(params.getTbgrantId(), params.getTbuserId());
 
-        if("true".equals(params.getWay())){
+        if(params.isWay()){
             if(tbgrantuser == null){
                 returnVal = tbgrantuserRepository.save(params.toEntity()).toAfterCreateDto();
             } else {
@@ -48,7 +50,6 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
                 delete(TbgrantuserDto.TbgrantuserUpdateDto.builder().id(tbgrantuser.getId()).build());
                 returnVal = tbgrantuser.toAfterCreateDto();
             }
-
         }
         return returnVal;
     }

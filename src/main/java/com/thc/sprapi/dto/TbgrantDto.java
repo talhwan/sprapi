@@ -10,7 +10,19 @@ import lombok.*;
 import java.util.List;
 
 public class TbgrantDto {
-	
+	@Schema
+	@Builder
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class TbgrantAccessDto extends CommonGrantDto{
+		private String t;
+		private String c;
+		private boolean beAdmin;
+		private String tbuserId;
+	}
+	/**/
 	@Schema
 	@Builder
 	@Getter

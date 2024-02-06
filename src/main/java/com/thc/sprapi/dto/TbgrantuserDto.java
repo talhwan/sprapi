@@ -19,7 +19,7 @@ public class TbgrantuserDto {
 		@Schema(description = "way", example="way")
 		@NotNull
 		@NotEmpty
-		private String way;
+		private boolean way;
 		public Tbgrantuser toEntity() {
 			return Tbgrantuser.of(super.tbgrantId, super.tbuserId);
 		}

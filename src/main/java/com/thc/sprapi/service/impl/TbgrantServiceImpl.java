@@ -5,6 +5,7 @@ import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.TbgrantDto;
 import com.thc.sprapi.dto.TbgrantpartDto;
+import com.thc.sprapi.exception.NoAccessGrantException;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbgrantMapper;
 import com.thc.sprapi.repository.TbgrantRepository;
@@ -35,6 +36,15 @@ public class TbgrantServiceImpl implements TbgrantService {
         this.tbgrantpartService = tbgrantpartService;
     }
 
+    public boolean access(TbgrantDto.TbgrantAccessDto params){
+        TbgrantDto.TbgrantSelectDto result = tbgrantMapper.access(params);
+        if(result == null){
+            if(params.isBeAdmin()){
+                throw new NoAccessGrantException("");
+            }
+        }
+        return false;
+    }
     public TbgrantDto.TbgrantAfterCreateDto create(TbgrantDto.TbgrantCreateDto params){
         TbgrantDto.TbgrantAfterCreateDto result = tbgrantRepository.save(params.toEntity()).toAfterCreateDto();
         return result;

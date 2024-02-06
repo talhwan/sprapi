@@ -24,7 +24,7 @@ public class TbgrantpartDto {
 		@Schema(description = "way", example="way")
 		@NotNull
 		@NotEmpty
-		private String way;
+		private boolean way;
 		public Tbgrantpart toEntity() {
 			return Tbgrantpart.of(super.tbgrantId, super.type, super.content);
 		}
