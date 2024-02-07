@@ -52,7 +52,7 @@ public class TbgsquidServiceImpl implements TbgsquidService {
         List<TbgsquidushotDto.TbgsquidushotSelectDto> nextList = tbgsquidushotService.next(TbgsquidushotDto.TbgsquidushotListDto.builder().level(nowInt + "").build());
         //tbgsquiduserService.listByUnderProcess(TbgsquiduserDto.TbgsquiduserListDto.builder().process(nextInt + "").build());
         for(TbgsquidushotDto.TbgsquidushotSelectDto each : nextList){
-            tbgsquiduserService.update(TbgsquiduserDto.TbgsquiduserUpdateDto.builder().id(each.getTbgsquiduserId()).process(nextInt + "").build());
+            tbgsquiduserService.update(TbgsquiduserDto.TbgsquiduserUpdateDto.builder().id(each.getTbgsquiduserId()).process(nextInt + "").content("0").build());
         }
 
         try{
