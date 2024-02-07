@@ -17,7 +17,6 @@ import java.io.IOException;
 @RequestMapping("/api/default")
 @RestController
 public class DefaultRestController {
-
     @Operation(summary = "파일업로드",
             description = "파일을 서버에 업로드(일반) \n"
                     + "@param MultipartFile multipartFile \n"
@@ -33,5 +32,10 @@ public class DefaultRestController {
         } catch (IOException e) {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
+    }
+
+    @GetMapping("/test")
+    public String test() throws Exception {
+        return "";
     }
 }

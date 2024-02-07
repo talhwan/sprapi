@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hello WebSocket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+</head>
+<body>
+
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="btn_connect">Is ON??<p id="p_ws_status">off</p></label>
+                <button id="btn_connect" class="btn btn-default" onclick="listener_connect();">Connect</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="ws_msg">Message</label>
+                <input type="text" id="ws_msg" class="form-control" placeholder="text..">
+            </div>
+            <button class="btn btn-default" onclick="listener_send()">Send</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                </thead>
+                <tbody id="tbody_msg">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function(){
+        listener_tbbcmarket_socket();
+    });
+    let websocket = null;
+    function listener_tbbcmarket_socket(){
+        let hreforigin_for_socket = document.location.origin;
+        let hrefprotocol_for_socket = document.location.protocol;
+        let final_for_socket = "";
+
+        final_for_socket = hreforigin_for_socket.replace(hrefprotocol_for_socket, "");
+
+        let http_add_value = "";
+        if(hreforigin_for_socket.indexOf("https") == 0){
+            http_add_value = "s";
+        };
+
+        websocket = new WebSocket("ws"+http_add_value+":"+final_for_socket+"/tbbcmarketws?tbbcmarket_idx=" + $(".input_tbbcmarket_idx").val());
+        //websocket = new WebSocket("ws"+http_add_value+":"+final_for_socket+"/tbbcmarketws");
+
+        websocket.onmessage = onMessage;
+        /*
+        websocket.onopen = onOpen;
+        */
+        websocket.onclose = onClose;
+    }
+    function onMessage(msg) {
+        let msg_data = JSON.parse(msg.data);
+        //alert(msg_data.ws_type);
+
+        if(msg_data.ws_type + "" == "tbbcorderbook"){
+            if(msg_data.tbbcmarket_idx + "" == $(".input_tbbcmarket_idx").val() + ""){
+                if(msg_data.tbuser_idx == $("#tbuser_idx_header").val() + ""){
+                    reset_listener_tbbcorderbook_list_by_scroll();
+                }
+                //listener_nowByTbbctoken("unit", map_tbbcmarket.map_unit_tbbctoken);
+                //listener_nowByTbbctoken("target", map_tbbcmarket.map_target_tbbctoken);
+
+                $("#ul_list_tbbcorderbook_buy").html("");
+                $("#ul_list_tbbcorderbook_sell").html("");
+
+                listener_tbbcorderbook_listbygroupprice_handler("seller", msg_data.map_tbbcorderbookbygroup_seller.list_tbbcorderbook_bygroupprice);
+                listener_tbbcorderbook_listbygroupprice_handler("buyer", msg_data.map_tbbcorderbookbygroup_buyer.list_tbbcorderbook_bygroupprice);
+            }
+        }
+
+        if(msg_data.ws_type + "" == "tbbctransection"){
+            /*
+            alert(msg_data.ws_type);
+            alert(msg_data.tbbcmarket_idx);
+            */
+            let map_tbbcmarket = msg_data.map_tbbcmarket;
+            let tbbcmarket_idx = map_tbbcmarket.tbbcmarket_idx;
+            $(".input_tbbcmarket_price_current_" + tbbcmarket_idx).val(map_tbbcmarket.tbbcmarket_price_current);
+            $(".input_tbbcmarket_price_percent_" + tbbcmarket_idx).val(map_tbbcmarket.tbbcmarket_price_percent);
+            $(".input_tbbctransection_amount_sum_" + tbbcmarket_idx).val(map_tbbcmarket.tbbctransection_amount_sum);
+            listener_tbbcmarket_info_update(tbbcmarket_idx);
+
+            if(tbbcmarket_idx + "" == $(".input_tbbcmarket_idx").val() + ""){
+                listener_tbbctransection_list_by_scroll("before");
+
+                $(".font_target_tbbctoken_totalcap_comma").text(calcAfterCommas(numberWithCommas(map_tbbcmarket.target_tbbctoken_totalcap + "") + "", 2));
+
+                $(".input_tbbctransection_price_max").val(map_tbbcmarket.tbbctransection_price_max);
+                $(".input_tbbctransection_price_min").val(map_tbbcmarket.tbbctransection_price_min);
+                $(".input_tbbctransection_price_amount_sum").val(map_tbbcmarket.tbbctransection_price_amount_sum);
+                $(".input_tbbctransection_amount_sum").val(map_tbbcmarket.tbbctransection_amount_sum);
+                $(".input_tbbcmarket_price_yesterday").val(map_tbbcmarket.tbbcmarket_price_yesterday);
+                $(".input_tbbcmarket_price_current").val(map_tbbcmarket.tbbcmarket_price_current);
+
+                let boolean_reset_info = false;
+                let list_tbbcorderbook_match = msg_data.list_tbbcorderbook_match;
+                for (var t = 0; t < list_tbbcorderbook_match.length; t++) {
+                    //alert(JSON.stringify(list_tbbcorderbook_match));
+                    let match_tbuser_idx = list_tbbcorderbook_match[t].tbuser_idx;
+                    if(match_tbuser_idx == $("#tbuser_idx_header").val() + ""){
+                        boolean_reset_info = true;
+                    }
+                }
+
+                if(boolean_reset_info){
+                    listener_tbbcwire_nowByTbbctoken("unit", $(".input_unit_tbbctoken_idx").val() + "");
+                    listener_tbbcwire_nowByTbbctoken("target", $(".input_target_tbbctoken_idx").val() + "");
+                    reset_listener_tbbcorderbook_list_by_scroll();
+                }
+
+                /*
+                let updateBar = {
+                        time: map_tbbcmarket.tbbcmarket_today,
+                        open: Number(map_tbbcmarket.tbbctransection_price_first + ""),
+                        high: Number(map_tbbcmarket.tbbctransection_price_max + ""),
+                        low: Number(map_tbbcmarket.tbbctransection_price_min + ""),
+                        close: Number(map_tbbcmarket.tbbctransection_price_last + ""),
+                        };
+                */
+                //candleSeries.update(updateBar);
+                listener_redraw_candlestick_graph(
+                    map_tbbcmarket.tbbcmarket_today,
+                    map_tbbcmarket.tbbctransection_price_first,
+                    map_tbbcmarket.tbbctransection_price_last,
+                    map_tbbcmarket.tbbctransection_price_min,
+                    map_tbbcmarket.tbbctransection_price_max,
+                    map_tbbcmarket.tbbctransection_amount_sum,
+                    "1"
+                );
+
+
+                listener_tbbcmarket_price_change(map_tbbcmarket.tbbcmarket_price_current, map_tbbcmarket.tbbcmarket_price_yesterday, map_tbbcmarket.tbbctransection_price_max, map_tbbcmarket.tbbctransection_price_min, null, null);
+            }
+        }
+
+        if(msg_data.ws_type + "" == "rejected"){
+            alert("too many connections. try again please.");
+        }
+        if(msg_data.ws_type + "" == "tbbcchat"){
+            listener_tbbcchat_list_by_scroll('before');
+        }
+    }
+    function onClose() {
+        console.log("disconnect websocket!");
+        listener_tbbcmarket_socket();
+    }
+</script>
+
+</html>

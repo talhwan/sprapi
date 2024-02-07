@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head th:replace="~{@{includes/default/head}}"></head>
+</head>
+<body>
+
+<script id="list_info_tbgsquiduser" type="text/x-handlebars-template">
+    {{#resultData_tbgsquiduser}}
+    <tr class="gradeA">
+        <td><font class="font_order"></font></td>
+        <td><font class="font_process_{{process}}">{{process}}</font></td>
+        <td><font class="font_tbgsquiduser_content_{{id}}">{{content}}</font></td>
+        <td>{{alive}}</td>
+        <td>{{tbuserNick}}</td>
+    </tr>
+    {{/resultData_tbgsquiduser}}
+</script>
+<script type="text/javascript">
+    var list_info_tbgsquiduser = $("#list_info_tbgsquiduser").html();
+    var list_info_tbgsquiduser_template = Handlebars.compile(list_info_tbgsquiduser);
+</script>
+
+<body th:replace="~{@{includes/default/header}}"></body>
+
+<main id="main">
+    <section class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/tbgsquid/list">오징어게임 목록</a></li>
+                <li>오징어게임 참여</li>
+            </ol>
+            <h2><font class="font_tbgsquiduser_tbgsquidTitle">-</font></h2>
+        </div>
+    </section>
+
+    <section id="blog" class="blog">
+        <div class="container" data-aos="fade-up">
+            <div class="row">
+                <div class="col-lg-12 entries">
+                    <article class="entry entry-single">
+                        <input type="hidden" id="detail_tbgsquiduser_tbgsquidProcess" value="" />
+                        <input type="hidden" id="detail_tbgsquiduser_tbgsquidId" value="" />
+                        <input type="hidden" id="detail_tbgsquiduser_id" value="" />
+                        <input type="hidden" id="input_keyword_changed" value="0" />
+                        <input type="hidden" id="search_sdatetime" value="" />
+                        <input type="hidden" id="search_fdatetime" value="" />
+                        <h2 class="entry-title">
+                            현재 단계 : <font class="font_tbgsquiduser_tbgsquidProcess">-</font>
+                        </h2>
+                        <h2 class="entry-title">
+                            현재 접속자 수 : <font class="font_current_listSize">-</font>
+                        </h2>
+                        <h2 class="entry-title">
+                            현재 생존자 수 : <font class="font_alive_listSize">-</font>
+                        </h2>
+                        <div class="entry-meta">
+                            <ul>
+                                <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-single.html"><font class="font_tbgsquiduser_tbuserNick">-</font></a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"><time><font class="font_tbgsquiduser_createdAt">-</font></time></a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-single.html">12 Comments</a></li>
+                            </ul>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>단계</th>
+                                <th>선택</th>
+                                <th>생존여부</th>
+                                <th>닉네임</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_tbgsquiduser_list">
+                            </tbody>
+                        </table>
+                    </article>
+                    <div class="blog-comments">
+                        <div class="reply-form">
+                            <h2 class="entry-title">
+                                1~<font class="font_tbgsquiduser_tbgsquidGoal">-</font>까지 숫자를 입력하세요!
+                            </h2>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <input class="form-control" type="number" id="create_tbgsquidushot_content" placeholder="내용을 입력하세요" />
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="create_tbgsquidushot()">제출하기</button>
+                        </div>
+                    </div><!-- End blog comments -->
+                </div><!-- End blog entries list -->
+            </div>
+        </div>
+    </section><!-- End Blog Single Section -->
+
+
+</main><!-- End #main -->
+
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        detail_tbgsquiduser();
+    });
+    function detail_tbgsquiduser(){
+        let tbgsquiduserId = getIdFromUrl(null);
+        let _data = new Map();
+        _data.url = "/api/tbgsquiduser/" + tbgsquiduserId;
+        _data.type = "GET";
+        _data.success = function(obj_data, obj_status, obj_xhr){
+            let detailKeys = Object.keys(obj_data)
+            for (let eachKey of detailKeys){
+                $(".font_tbgsquiduser_" + eachKey).text(obj_data[eachKey]);
+                $("#detail_tbgsquiduser_" + eachKey).val(obj_data[eachKey]);
+                $("#img_tbgsquiduser_" + eachKey).attr("src", obj_data[eachKey]);
+            }
+            listener_tbgsquid_socket();
+        }
+        _data.error = function(obj_data, obj_status, obj_xhr){
+            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+        }
+        func_ajax(_data);
+    }
+</script>
+<body th:replace="~{@{includes/default/footer}}"></body>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<body th:replace="~{@{includes/default/bottom}}"></body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script>
+    function search_tbgsquiduser(){
+        $("#input_keyword_changed").val("1");
+        let beforeListParam = listenerBeforeList("tbody_tbgsquiduser_list");
+        beforeListParam['tbgsquidId'] = $("#detail_tbgsquiduser_tbgsquidId").val();
+        beforeListParam['process'] = $("#detail_tbgsquiduser_tbgsquidProcess").val();
+
+        let _data = {};
+        _data.url = "/api/tbgsquiduser/list";
+        _data.type = "POST";
+        _data.param = beforeListParam;
+        _data.success = function(obj_data, obj_status, obj_xhr){
+            let resultlist = obj_data;
+            if(resultlist.length == 0){
+                alert("no data");
+            }
+            $("#tbody_tbgsquiduser_list").html("");
+            for(let i=0;i<resultlist.length;i++){
+                listenerAfterListEach(resultlist[i].createdAt + "")
+                let each_list = [];
+                each_list.push(resultlist[i]);
+                $("#tbody_tbgsquiduser_list").append(list_info_tbgsquiduser_template({"resultData_tbgsquiduser":each_list}));
+                listenerAfterList();
+            }
+            $(".font_alive_listSize").text(resultlist.length);
+        }
+        _data.error = function(obj_data, obj_status, obj_xhr){
+            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+        }
+        func_ajax(_data);
+    }
+    function create_tbgsquidushot(){
+        let _param = {
+            'tbgsquiduserId' : getIdFromUrl(null),
+            'level' : $("#detail_tbgsquiduser_tbgsquidProcess").val(),
+            'content' : $("#create_tbgsquidushot_content").val()
+        };
+
+        let _data = new Map();
+        _data.url = "/api/tbgsquidushot/join";
+        _data.type = "POST";
+        _data.param = _param;
+        _data.success = function(obj_data, obj_status, obj_xhr){
+            //alert("등록");
+            //location.reload();
+        }
+        _data.error = function(obj_data, obj_status, obj_xhr){
+            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+        }
+        func_ajax(_data);
+    }
+</script>
+<script>
+    $(document).ready(function(){
+
+    });
+    let websocket = null;
+    function listener_tbgsquid_socket(){
+        let hreforigin_for_socket = document.location.origin;
+        let hrefprotocol_for_socket = document.location.protocol;
+        let final_for_socket = "";
+
+        final_for_socket = hreforigin_for_socket.replace(hrefprotocol_for_socket, "");
+
+        let http_add_value = "";
+        if(hreforigin_for_socket.indexOf("https") == 0){
+            http_add_value = "s";
+        }
+        //alert($("#detail_tbgsquiduser_tbgsquidId").val());
+        websocket = new WebSocket("ws"+http_add_value+":"+final_for_socket+"/tbgsquidws?tbgsquidId=" + $("#detail_tbgsquiduser_tbgsquidId").val());
+
+        websocket.onmessage = onMessage;
+        /*
+        websocket.onopen = onOpen;
+        */
+        websocket.onclose = onClose;
+    }
+    function onMessage(msg) {
+        let msg_data = JSON.parse(msg.data);
+        //alert(JSON.stringify(msg_data));
+        if(msg_data.ws_type + "" == "listSize"){
+            $(".font_current_listSize").text(msg_data["listSize"]);
+            search_tbgsquiduser();
+        }
+        if(msg_data.ws_type + "" == "level"){
+            search_tbgsquiduser();
+        }
+        if(msg_data.ws_type + "" == "next"){
+            alert(msg_data["nextList"] + "명 살아남았습니다.");
+            $("#detail_tbgsquiduser_tbgsquidProcess").val(msg_data["tbgsquidProcess"]);
+
+            search_tbgsquiduser();
+        }
+        if(msg_data.ws_type + "" == "selected"){
+            if($("#detail_tbgsquiduser_id").val() == msg_data["tbgsquiduserId"]){
+            } else {
+                alert("누군가 " +msg_data["tbgsquiduserContent"]+"로 바꿨습니다.");
+            }
+            $(".font_tbgsquiduser_content_" + msg_data["tbgsquiduserId"]).text(msg_data["tbgsquiduserContent"]);
+        }
+        if(msg_data.ws_type + "" == "rejected"){
+            alert("too many connections. try again please.");
+        }
+    }
+    function onClose() {
+        console.log("disconnect websocket!");
+        listener_tbgsquid_socket();
+    }
+</script>
+</body>
+</html>

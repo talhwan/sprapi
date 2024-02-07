@@ -38,6 +38,9 @@ public class TbgrantServiceImpl implements TbgrantService {
 
     public boolean access(TbgrantDto.TbgrantAccessDto params){
         TbgrantDto.TbgrantSelectDto result = tbgrantMapper.access(params);
+        /*
+        return false;
+         */
         if(result == null){
             if(params.isBeAdmin()){
                 throw new NoAccessGrantException("");

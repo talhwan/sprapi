@@ -40,6 +40,10 @@ public class DefaultPageController {
     public String page(){
         return "/test";
     }
+    @GetMapping("/socket")
+    public String socket(){
+        return "/socket";
+    }
     @GetMapping("/admin")
     public String admin(){
         return "/admin";

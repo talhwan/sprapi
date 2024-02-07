@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbgsquidushotMapper">
+
+	<select id="next" parameterType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotListDto" resultType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotSelectDto">
+		SELECT tbgsquiduser_id as tbgsquiduserId
+		FROM(
+			SELECT count(*) as listsize, tbgsquiduser_id, content FROM tbgsquidushot
+			WHERE tbgsquidushot.level = #{level}
+			AND tbgsquidushot.content > 0
+			GROUP BY content
+			) as tbgsquidushot_broup_by_content
+		WHERE tbgsquidushot_broup_by_content.listsize = 1
+	</select>
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotSelectDto">
+		SELECT tbgsquidushot.id
+			 ,tbgsquidushot.deleted
+			,tbgsquidushot.created_at as createdAt
+			,tbgsquidushot.modified_at as modifiedAt
+			,tbgsquidushot.tbgsquiduser_id as tbgsquiduserId
+			,tbgsquidushot.level
+			,tbgsquidushot.content
+			,tbuser.tbuser_id as tbuserId
+			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.username) as tbuserUsername
+			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
+			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
+		FROM tbgsquidushot, tbgsquiduser, tbuser
+		WHERE tbgsquidushot.tbgsquiduser_id = tbgsquiduser.id
+		  AND tbgsquiduser.tbuser_id = tbuser.id
+		  AND tbgsquidushot.id = #{id}
+	</select>
+
+	<select id="list" parameterType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotListDto" resultType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotSelectDto">
+		SELECT tbgsquidushot.id
+		FROM tbgsquidushot, tbgsquiduser
+		WHERE tbgsquidushot.tbgsquiduser_id = tbgsquiduser.id
+		<if test = "deleted != null and deleted !=''">AND tbgsquidushot.deleted = #{deleted}</if>
+		<if test = "tbgsquiduserId != null and tbgsquiduserId !=''">AND tbgsquidushot.tbgsquiduser_id = #{tbgsquiduserId}</if>
+		<if test = "level != null and level !=''">AND tbgsquidushot.level = #{level}</if>
+		<if test = "content != null and content !=''">AND tbgsquidushot.content = #{content}</if>
+		<if test = "tbgsquidId != null and tbgsquidId !=''">AND tbgsquiduser.tbgsquid_id = #{tbgsquidId}</if>
+		ORDER BY tbgsquidushot.created_at ASC
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotMoreListDto" resultType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotSelectDto">
+		SELECT tbgsquidushot.id
+		FROM tbgsquidushot
+		WHERE tbgsquidushot.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbgsquidushot.deleted = #{deleted}</if>
+		<if test = "tbgsquidId != null and tbgsquidId !=''">AND tbgsquiduser.tbgsquid_id = #{tbgsquidId}</if>
+		<if test = "tbgsquiduserId != null and tbgsquiduserId !=''">AND tbgsquidushot.tbgsquiduser_id = #{tbgsquiduserId}</if>
+		<if test = "level != null and level !=''">AND tbgsquidushot.level = #{level}</if>
+		<if test = "content != null and content !=''">AND tbgsquidushot.content = #{content}</if>
+		<if test = "sdate != null and sdate !=''">AND tbgsquidushot.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbgsquidushot.created_at</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbgsquidushot.created_at ORDER BY tbgsquidushot.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbgsquidushot.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbgsquidushot.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotPagedListDto" resultType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotSelectDto">
+		SELECT tbgsquidushot.id
+		FROM tbgsquidushot
+		WHERE tbgsquidushot.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbgsquidushot.deleted = #{deleted}</if>
+		<if test = "tbgsquidId != null and tbgsquidId !=''">AND tbgsquiduser.tbgsquid_id = #{tbgsquidId}</if>
+		<if test = "tbgsquiduserId != null and tbgsquiduserId !=''">AND tbgsquidushot.tbgsquiduser_id = #{tbgsquiduserId}</if>
+		<if test = "level != null and level !=''">AND tbgsquidushot.level = #{level}</if>
+		<if test = "content != null and content !=''">AND tbgsquidushot.content = #{content}</if>
+		<if test = "sdate != null and sdate !=''">AND tbgsquidushot.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbgsquidushot.created_at</if>
+		<if test = "orderby =='created_at'">ORDER BY tbgsquidushot.created_at </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbgsquidushotDto$TbgsquidushotPagedListDto" resultType="Integer">
+		SELECT count(tbgsquidushot.id) as listsize
+		FROM tbgsquidushot
+		WHERE tbgsquidushot.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbgsquidushot.deleted = #{deleted}</if>
+		<if test = "tbgsquidId != null and tbgsquidId !=''">AND tbgsquiduser.tbgsquid_id = #{tbgsquidId}</if>
+		<if test = "tbgsquiduserId != null and tbgsquiduserId !=''">AND tbgsquidushot.tbgsquiduser_id = #{tbgsquiduserId}</if>
+		<if test = "level != null and level !=''">AND tbgsquiduser.level = #{level}</if>
+		<if test = "content != null and content !=''">AND tbgsquiduser.content = #{content}</if>
+		<if test = "sdate != null and sdate !=''">AND tbgsquidushot.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbgsquidushot.created_at</if>
+		<if test = "deleted != null and deleted !=''">AND tbgsquidushot.deleted = #{deleted}</if>
+	</select>
+
+</mapper>
