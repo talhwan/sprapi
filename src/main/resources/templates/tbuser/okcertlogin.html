@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head th:replace="~{@{includes/default/head}}"></head>
+</head>
+<body>
+<body th:replace="~{@{includes/default/header}}"></body>
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <ol>
+                <li><a href="/index">Home</a></li>
+                <li>LOGIN</li>
+            </ol>
+            <h2>OKCERT LOGIN</h2>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-6">
+                    <div class="portfolio-info">
+                        <h3>본인인증</h3>
+                        <!--<div class="regist_btn cursor_pointer" onclick="call_okcert();">
+                            <p></p>
+                        </div>-->
+                        <ul>
+                            <li>
+                                <div>
+                                    <form class="hide" id="form_okcert">
+                                        <input type="hidden" id="tc" name="tc" value="kcb.oknm.online.safehscert.popup.cmd.P931_CertChoiceCmd"/>	<!-- 변경불가-->
+                                        <input type="hidden" id="cp_cd" name="cp_cd" value="${CP_CD}">	<!-- 회원사코드 -->
+                                        <input type="hidden" id="mdl_tkn" name="mdl_tkn" value="${MDL_TKN}">	<!-- 토큰 -->
+                                        <input type="hidden" id="target_id" name="target_id" value="">
+                                    </form>
+
+                                    <script>
+                                        function listener_okcert(){
+                                            let form_okcert = document.form_okcert;
+                                            form_okcert.action = '${POPUP_URL}';
+                                            form_okcert.method = "post";
+                                            form_okcert.submit();
+                                        }
+                                    </script>
+
+                                    <button class="btn btn-primary" onclick="abc();">토큰 확인</button>
+                                    <button class="btn btn-primary" onclick="listener_okcert();">인증하기</button>
+
+                                    <script>
+                                        function abc(){
+                                            alert(2);
+                                            $.ajax({
+                                                url: "/api/tbuser/okcert",
+                                                type: "POST",
+                                                contentType : 'application/json; charset=utf-8',
+                                                data: JSON.stringify({
+                                                    'tc' : $("#tc").val()
+                                                    ,'cp_cd' : $("#cp_cd").val()
+                                                    ,'mdl_tkn' : $("#mdl_tkn").val()
+                                                    ,'target_id' : $("#target_id").val()
+                                                }),
+                                                cache: false,
+                                                success: (data, status, xhr)=>{
+                                                    alert("data : " + JSON.stringify(data));
+                                                },
+                                                error: (data)=>{
+                                                },
+                                            });
+
+                                        }
+                                    </script>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Portfolio Details Section -->
+</main><!-- End #main -->
+<body th:replace="~{@{includes/default/footer}}"></body>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<body th:replace="~{@{includes/default/bottom}}"></body>
+</body>
+</html>

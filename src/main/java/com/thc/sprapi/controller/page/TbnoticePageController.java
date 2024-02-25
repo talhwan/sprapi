@@ -5,16 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/tbboard")
+@RequestMapping("/tbnotice")
 @Controller
-public class TbboardPageController {
+public class TbnoticePageController {
     @GetMapping("/{page}")
     public String page(@PathVariable("page") String page){
-        return "/tbboard/" + page;
+        return "/tbnotice/" + page;
     }
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") String id){
-        return "/tbboard/detail";
+        return "/tbnotice/detail";
+    }
+    @GetMapping("/admin_detail/{id}")
+    public String adminDetail(@PathVariable("id") String id){
+        return "/tbnotice/admin_detail";
     }
 
 }

@@ -30,7 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new DefaultInterceptor())
                 .addPathPatterns("/api/**") //인터셉터가 실행되야 하는 url 패턴 설정
-                .excludePathPatterns("/resources/**"); //인터셉터가 실행되지 않아야 하는 url 패턴
+                .excludePathPatterns("/resources/**", "/api/tbuser/logout"); //인터셉터가 실행되지 않아야 하는 url 패턴
     }
 
 }

@@ -19,6 +19,8 @@ function func_ajax(_data) {
 			}
 		},
 		error: (data, status, xhr)=>{
+			alert(data.status);
+			alert(JSON.stringify(data));
 			// error
 			if(data.status === 401){
 				//access token 만료
@@ -40,6 +42,9 @@ function func_ajax(_data) {
 				//location.replace("/tbuser/snslogin");
 			} else if(data.status === 409){
 				alert("중복된 정보입니다. 다시 시도해주세요.");
+			} else if(data.status === 423){
+				alert("회원 등급에 문제가 있음.");
+				location.replace("/tbuser/process");
 			} else {
 				_data.error(data, status, xhr);
 			}

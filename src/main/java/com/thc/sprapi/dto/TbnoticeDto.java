@@ -1,15 +1,13 @@
 package com.thc.sprapi.dto;
 
-import com.thc.sprapi.domain.Tbpost;
+import com.thc.sprapi.domain.Tbnotice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.List;
-
-public class TbpostDto {
+public class TbnoticeDto {
 	
 	@Schema
 	@Builder
@@ -17,35 +15,29 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostCreateDto extends CommonGrantDto{
+	public static class TbnoticeCreateDto extends CommonGrantDto{
 		@Schema(description = "title", example="title")
 		@NotNull
 		@NotEmpty
 		@Size(max=100)
 		private String title;
-
 		@Schema(description = "cate", example="cate")
 		@NotNull
 		@NotEmpty
 		@Size(max=100)
 		private String cate;
-
+		@Schema(description = "mpic", example="mpic")
+		@NotNull
+		@NotEmpty
+		@Size(max=200)
+		private String mpic;
 		@Schema(description = "content", example="content")
 		@NotNull
 		@NotEmpty
-		@Size(max=10000)
 		private String content;
 
-		@Schema(description = "tbuserId", example="tbuserId")
-		private String tbuserId;
-
-		@Schema(description = "pics", example="pics")
-		private String[] pics;
-		@Schema(description = "types", example="types")
-		private String[] types;
-
-		public Tbpost toEntity() {
-			return Tbpost.of(title, cate, content, tbuserId);
+		public Tbnotice toEntity() {
+			return Tbnotice.of(title, cate, mpic, content);
 		}
 	}
 	@Schema
@@ -54,7 +46,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostAfterCreateDto {
+	public static class TbnoticeAfterCreateDto {
 		@Schema(description = "id", example="length32textnumber")
 		private String id;
 	}
@@ -65,7 +57,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostUpdateDto extends CommonGrantDto{
+	public static class TbnoticeUpdateDto extends CommonGrantDto{
 		@Schema(description = "id", example="length32textnumber")
 		@NotNull
 		@NotEmpty
@@ -81,12 +73,12 @@ public class TbpostDto {
 		@Schema(description = "cate", example="cate")
 		@Size(max=100)
 		private String cate;
+		@Schema(description = "mpic", example="mpic")
+		@Size(max=200)
+		private String mpic;
 		@Schema(description = "content", example="content")
-		@Size(max=10000)
 		private String content;
 
-		@Schema(description = "tbuserId", example="tbuserId")
-		private String tbuserId;
 		@Schema(description = "nowTbuserId", example="nowTbuserId")
 		private String nowTbuserId;
 
@@ -97,7 +89,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostAfterUpdateDto {
+	public static class TbnoticeAfterUpdateDto {
 		@Schema(description = "id", example="length32textnumber")
 		private String id;
 		@Schema(description = "deleted", example="Y")
@@ -109,37 +101,11 @@ public class TbpostDto {
 		@Schema(description = "cate", example="cate")
 		@Size(max=100)
 		private String cate;
-		@Schema(description = "content", example="content")
+		@Schema(description = "mpic", example="mpic")
 		@Size(max=200)
-		private String content;
-	}
-
-	@Schema
-	@Builder
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class TbpostSelectDto extends CommonSelectDto{
-		@Schema(description = "title", example="title")
-		private String title;
-		@Schema(description = "cate", example="cate")
-		private String cate;
+		private String mpic;
 		@Schema(description = "content", example="content")
 		private String content;
-
-		@Schema(description = "tbuserId", example="")
-		private String tbuserId;
-		@Schema(description = "tbuserNick", example="")
-		private String tbuserNick;
-		@Schema(description = "tbuserMpic", example="")
-		private String tbuserMpic;
-
-		@Schema(description = "pics", example="pics")
-		private List<TbpostfileDto.TbpostfileSelectDto> pics;
-		@Schema(description = "files", example="files")
-		private List<TbpostfileDto.TbpostfileSelectDto> files;
-
 	}
 
 	@Schema
@@ -148,7 +114,24 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostListDto extends CommonGrantDto{
+	public static class TbnoticeSelectDto extends CommonSelectDto{
+		@Schema(description = "title", example="title")
+		private String title;
+		@Schema(description = "cate", example="cate")
+		private String cate;
+		@Schema(description = "mpic", example="mpic")
+		private String mpic;
+		@Schema(description = "content", example="content")
+		private String content;
+	}
+
+	@Schema
+	@Builder
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class TbnoticeListDto extends CommonGrantDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -156,13 +139,6 @@ public class TbpostDto {
 		private String title;
 		@Schema(description = "cate", example="cate")
 		private String cate;
-
-		@Schema(description = "tbuserId", example="")
-		private String tbuserId;
-		@Schema(description = "tbuserUsername", example="")
-		private String tbuserUsername;
-		@Schema(description = "tbuserNick", example="")
-		private String tbuserNick;
 	}
 
 	@Schema
@@ -170,7 +146,7 @@ public class TbpostDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostPagedListDto extends CommonPagedListDto {
+	public static class TbnoticePagedListDto extends CommonPagedListDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -178,20 +154,13 @@ public class TbpostDto {
 		private String title;
 		@Schema(description = "cate", example="cate")
 		private String cate;
-
-		@Schema(description = "tbuserId", example="")
-		private String tbuserId;
-		@Schema(description = "tbuserUsername", example="")
-		private String tbuserUsername;
-		@Schema(description = "tbuserNick", example="")
-		private String tbuserNick;
 	}
 	@Schema
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbpostMoreListDto extends CommonMoreListDto {
+	public static class TbnoticeMoreListDto extends CommonMoreListDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -199,13 +168,6 @@ public class TbpostDto {
 		private String title;
 		@Schema(description = "cate", example="cate")
 		private String cate;
-
-		@Schema(description = "tbuserId", example="")
-		private String tbuserId;
-		@Schema(description = "tbuserUsername", example="")
-		private String tbuserUsername;
-		@Schema(description = "tbuserNick", example="")
-		private String tbuserNick;
 	}
 
 }

@@ -88,16 +88,20 @@ public class FileUpload {
 		}
 		return returnValue;
 	}
-	public static String path(HttpServletRequest request) throws IOException {
+	public static String rootPath(HttpServletRequest request){
 		String root_path = request.getSession().getServletContext().getRealPath("/");
+		//역슬레시 넘어오는 경우, /로 바꿔준다.
+		root_path = root_path.replace("\\", "/");
+		return root_path;
+	}
+	public static String path(HttpServletRequest request) throws IOException {
+		String root_path = rootPath(request);
+		//String root_path = request.getSession().getServletContext().getRealPath("/");
 
 		//서버 업로드 이후를 위한 코드
 		// /home/centos/apache-tomcat-8.5.72/webapps/abc
 		root_path = root_path.replace("wtpwebapps", "uploadfiles");
 		root_path = root_path.replace("webapps", "uploadfiles");
-
-		//역슬레시 넘어오는 경우, /로 바꿔준다.
-		root_path = root_path.replace("\\", "/");
 
 		//로컬 서버를 위한 코드
 		if(root_path.indexOf("C:/") == 0) {

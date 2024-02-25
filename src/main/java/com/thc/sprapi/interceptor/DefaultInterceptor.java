@@ -1,5 +1,6 @@
 package com.thc.sprapi.interceptor;
 
+import com.thc.sprapi.exception.TbuserProcessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -17,6 +18,14 @@ public class DefaultInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         String requestMethod = request.getMethod();
 
+        //logger.info("0-1: REQUEST [{}]", request.getHeaderNames());
+        String tbuserProcess = response.getHeader("tbuserProcess");
+        //logger.info("0-1: tbuserProcess [{}]", response.getHeader("tbuserProcess"));
+        /*
+        if(tbuserProcess != null && tbuserProcess.equals("0")){
+            throw new TbuserProcessException("tbuserProcess : " + tbuserProcess);
+        }
+        */
         /*
         logger.info("1-1: REQUEST [{}][{}][{}]", requestMethod, requestURI, handler);
         logger.info("1-2: RESPONSE [{}][{}]", response.getStatus(), response.getHeaderNames());

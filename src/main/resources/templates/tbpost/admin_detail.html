@@ -198,9 +198,11 @@
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let detailKeys = Object.keys(obj_data)
                     for (let eachKey of detailKeys){
-                        $(".font_tbpost_" + eachKey).text(obj_data[eachKey]);
-                        $("#detail_tbpost_" + eachKey).val(obj_data[eachKey]);
-                        $("#img_tbpost_" + eachKey).attr("src", obj_data[eachKey]);
+                        if(!isNull(obj_data[eachKey])){
+                            $(".font_tbpost_" + eachKey).text(obj_data[eachKey]);
+                            $("#detail_tbpost_" + eachKey).val(obj_data[eachKey]);
+                            $("#img_tbpost_" + eachKey).attr("src", obj_data[eachKey]);
+                        }
                     }
 
                     let pics = obj_data.pics;

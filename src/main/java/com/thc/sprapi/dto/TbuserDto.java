@@ -18,6 +18,19 @@ public class TbuserDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class TbuserOkcertTokenDto {
+		private String RSLT_CD;
+		private String RSLT_MSG;
+		private String CP_CD;
+		private String POPUP_URL;
+		private String MDL_TKN;
+	}
+
+	@Builder
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class TbuserSnsDto {
 		private String username;
 		private String password;

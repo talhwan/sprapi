@@ -6,9 +6,11 @@ import com.thc.sprapi.dto.TbuserDto;
 import com.thc.sprapi.security.JwtTokenDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbuserService {
 
+    public TbuserDto.TbuserOkcertTokenDto okcert(String rootPath) throws Exception;
     public JwtTokenDto naver(String param);
     public JwtTokenDto sns(TbuserDto.TbuserCreateDto params);
     public TbuserDto.TbuserAfterCreateDto signup(TbuserDto.TbuserCreateDto params);

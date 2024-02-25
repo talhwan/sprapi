@@ -35,19 +35,11 @@ public class TbuserPageController {
         this.tbuserService = tbuserService;
     }
 
-    @GetMapping("/{page}")
-    public String page(@PathVariable("page") String page){
-        return "/tbuser/" + page;
+    @GetMapping("/okcert/result")
+    public String okcert() throws Exception {
+        logger.info("okcert");
+        return "/tbuser/okcert";
     }
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable("id") String id){
-        return "/tbuser/detail";
-    }
-    @GetMapping("/admin_detail/{id}")
-    public String adminDetail(@PathVariable("id") String id){
-        return "/tbuser/admin_detail";
-    }
-
     @GetMapping("/login/naver")
     public String naverLogin(HttpServletRequest request) throws Exception {
         return "/tbuser/naver";
@@ -87,4 +79,18 @@ public class TbuserPageController {
         }
         return "/tbuser/google";
     }
+
+    @GetMapping("/{page}")
+    public String page(@PathVariable("page") String page){
+        return "/tbuser/" + page;
+    }
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") String id){
+        return "/tbuser/detail";
+    }
+    @GetMapping("/admin_detail/{id}")
+    public String adminDetail(@PathVariable("id") String id){
+        return "/tbuser/admin_detail";
+    }
+
 }

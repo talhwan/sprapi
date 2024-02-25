@@ -44,6 +44,9 @@ dependencies {
     // 구글 로그인을 위함
     implementation 'com.google.api-client:google-api-client:2.0.0'
 
+    //implementation files('libs/OkCert3-java1.5-2.2.3.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     /*
     */
     compileOnly 'org.projectlombok:lombok'

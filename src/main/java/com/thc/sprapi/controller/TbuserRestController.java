@@ -5,8 +5,10 @@ import com.thc.sprapi.security.JwtTokenDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbgrantService;
 import com.thc.sprapi.service.TbuserService;
+import com.thc.sprapi.util.FileUpload;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "1. 회원 API 안내",
         description = "회원 관련 기능 정의한 RestController.")
@@ -33,6 +36,20 @@ public class TbuserRestController {
         this.tbuserService = tbuserService;
     }
 
+    @Operation(summary = "본인인증 토큰 발급",
+            description = "본인인증 토큰 발급 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param String token <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<JwtTokenDto\\> <br />"
+                    + "@exception 중복 <br />"
+    )
+    @PreAuthorize("permitAll()")
+    @PostMapping("/okcert")
+    public ResponseEntity<TbuserDto.TbuserOkcertTokenDto> okcert(HttpServletRequest request) throws Exception {
+        logger.info("okcert");
+        return ResponseEntity.status(HttpStatus.OK).body(
+                tbuserService.okcert(FileUpload.rootPath(request))
+        );
+    }
     @Operation(summary = "회원 NAVER 로그인",
             description = "회원 NAVER 로그인 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param String token <br />"

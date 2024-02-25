@@ -16,6 +16,7 @@ import com.thc.sprapi.security.ExternalProperties;
 import com.thc.sprapi.security.JwtTokenDto;
 import com.thc.sprapi.service.AuthService;
 import com.thc.sprapi.service.TbuserService;
+import com.thc.sprapi.util.OknameCert;
 import com.thc.sprapi.util.SnsLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,42 @@ public class TbuserServiceImpl implements TbuserService {
         this.externalProperties = externalProperties;
     }
 
+    public TbuserDto.TbuserOkcertTokenDto okcert(String rootPath) throws Exception {
+        //OknameCert oc = new OknameCert(request, "와이엘컴퍼니", NaverWorksMailUtil.host_name, NaverWorksMailUtil.host_name+"/app/tbuser/insert_result");
+        OknameCert oc;
+        TbuserDto.TbuserOkcertTokenDto result = null;
+        //String baseUrl = "https://home.muincaps.com";
+        String baseUrl = "http://localhost:8080";
+
+        oc = new OknameCert(rootPath, "와이엘컴퍼니",
+                baseUrl,
+                baseUrl
+                        //+ "/tbuser/okcert/result"
+                        +"/app/tbuser/insert_result"
+        );
+        result = oc.getToken();
+
+        /*
+        try{
+            oc = new OknameCert(rootPath, "와이엘컴퍼니",
+                    baseUrl,
+                    baseUrl
+                            //+ "/tbuser/okcert/result"
+                            +"/app/tbuser/insert_result"
+            );
+            try{
+                result = oc.getToken();
+                logger.info("result : " + result);
+            } catch (Exception e){
+                logger.info("error2");
+            }
+        } catch (Exception e){
+            logger.info("error1");
+        }
+         */
+
+        return result;
+    }
     public JwtTokenDto naver(String token){
         return sns(SnsLogin.naver(token));
     }

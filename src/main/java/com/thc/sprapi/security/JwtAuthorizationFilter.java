@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import com.thc.sprapi.domain.Tbuser;
 import com.thc.sprapi.exception.NoMatchingDataException;
+import com.thc.sprapi.exception.TbuserProcessException;
 import com.thc.sprapi.repository.TbuserRepository;
 import com.thc.sprapi.service.AuthService;
 import org.slf4j.Logger;
@@ -104,7 +105,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		System.out.println("tbuserId!!! : " + tbuserId);
 		*/
 
+
+		/*
+		사용자 단계에 따른 판단
+		*/
+		String tbuserProcess = tbuserEntity.getProcess();
+		System.out.println("tbuserProcess!!! : " + tbuserProcess);
+		response.setHeader("tbuserProcess", tbuserProcess);
+
 		chain.doFilter(request, response);
+
 	}
 
 }
