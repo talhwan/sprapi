@@ -3,6 +3,7 @@ package com.thc.sprapi.service.impl;
 import com.thc.sprapi.domain.Tbgsquiduser;
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
+import com.thc.sprapi.dto.CommonDetailDto;
 import com.thc.sprapi.dto.TbgsquiduserDto;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbgsquiduserMapper;
@@ -75,7 +76,10 @@ public class TbgsquiduserServiceImpl implements TbgsquiduserService {
         return params;
     }
 
-    public TbgsquiduserDto.TbgsquiduserSelectDto detail(String id){
+    public TbgsquiduserDto.TbgsquiduserSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbgsquiduserDto.TbgsquiduserSelectDto get(String id){
         return tbgsquiduserMapper.detail(id);
     }
     public List<TbgsquiduserDto.TbgsquiduserSelectDto> list(TbgsquiduserDto.TbgsquiduserListDto params){
@@ -92,7 +96,7 @@ public class TbgsquiduserServiceImpl implements TbgsquiduserService {
     public List<TbgsquiduserDto.TbgsquiduserSelectDto> addListDetails(List<TbgsquiduserDto.TbgsquiduserSelectDto> a_list){
         List<TbgsquiduserDto.TbgsquiduserSelectDto> result_list = new ArrayList<>();
         for(TbgsquiduserDto.TbgsquiduserSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

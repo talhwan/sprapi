@@ -201,7 +201,10 @@ public class TbuserServiceImpl implements TbuserService {
         }
         return params;
     }
-    public TbuserDto.TbuserSelectDto detail(String id){
+    public TbuserDto.TbuserSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbuserDto.TbuserSelectDto get(String id){
         return tbuserMapper.detail(id);
     }
     public List<TbuserDto.TbuserSelectDto> list(TbuserDto.TbuserListDto params){
@@ -218,7 +221,7 @@ public class TbuserServiceImpl implements TbuserService {
     public List<TbuserDto.TbuserSelectDto> addListDetails(List<TbuserDto.TbuserSelectDto> a_list){
         List<TbuserDto.TbuserSelectDto> result_list = new ArrayList<>();
         for(TbuserDto.TbuserSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

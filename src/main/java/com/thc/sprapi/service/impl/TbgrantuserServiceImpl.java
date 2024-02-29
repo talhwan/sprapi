@@ -4,10 +4,7 @@ import com.thc.sprapi.domain.Tbgrantpart;
 import com.thc.sprapi.domain.Tbgrantuser;
 import com.thc.sprapi.domain.Tbgrantuser;
 import com.thc.sprapi.domain.Tbgrantuser;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbgrantpartDto;
-import com.thc.sprapi.dto.TbgrantuserDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbgrantuserMapper;
 import com.thc.sprapi.repository.TbgrantuserRepository;
@@ -85,7 +82,10 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
         return params;
     }
 
-    public TbgrantuserDto.TbgrantuserSelectDto detail(String id){
+    public TbgrantuserDto.TbgrantuserSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbgrantuserDto.TbgrantuserSelectDto get(String id){
         return tbgrantuserMapper.detail(id);
     }
     public List<TbgrantuserDto.TbgrantuserSelectDto> list(TbgrantuserDto.TbgrantuserListDto params){
@@ -102,7 +102,7 @@ public class TbgrantuserServiceImpl implements TbgrantuserService {
     public List<TbgrantuserDto.TbgrantuserSelectDto> addListDetails(List<TbgrantuserDto.TbgrantuserSelectDto> a_list){
         List<TbgrantuserDto.TbgrantuserSelectDto> result_list = new ArrayList<>();
         for(TbgrantuserDto.TbgrantuserSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

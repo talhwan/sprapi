@@ -2,6 +2,7 @@ package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
+import com.thc.sprapi.dto.CommonDetailDto;
 import com.thc.sprapi.dto.TbpostcmtDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbpostcmtService;
@@ -77,7 +78,8 @@ public class TbpostcmtRestController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TbpostcmtDto.TbpostcmtSelectDto> detail(@PathVariable("id") String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.detail(id));
+        CommonDetailDto params = CommonDetailDto.builder().id(id).build();
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.detail(params));
     }
     @Operation(summary = "게시글 댓글 목록 조회(검색 기능 포함)",
             description = "게시글 댓글 목록 조회를 위한 컨트롤러 (모두 접근 가능) <br />"

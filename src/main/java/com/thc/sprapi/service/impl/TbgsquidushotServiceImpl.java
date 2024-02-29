@@ -48,8 +48,7 @@ public class TbgsquidushotServiceImpl implements TbgsquidushotService {
         return tbgsquidushotMapper.next(params);
     }
     public TbgsquidushotDto.TbgsquidushotAfterCreateDto join(TbgsquidushotDto.TbgsquidushotCreateDto params){
-
-        TbgsquiduserDto.TbgsquiduserSelectDto tbgsquiduser = tbgsquiduserService.detail(params.getTbgsquiduserId());
+        TbgsquiduserDto.TbgsquiduserSelectDto tbgsquiduser = tbgsquiduserService.detail(CommonDetailDto.builder().id(params.getTbgsquiduserId()).build());
         TbgsquidDto.TbgsquidSelectDto tbgsquid = tbgsquidMapper.detail(tbgsquiduser.getTbgsquidId());
         if(tbgsquiduser.getProcess().equals(tbgsquid.getProcess())){
         } else {
@@ -106,7 +105,10 @@ public class TbgsquidushotServiceImpl implements TbgsquidushotService {
         return params;
     }
 
-    public TbgsquidushotDto.TbgsquidushotSelectDto detail(String id){
+    public TbgsquidushotDto.TbgsquidushotSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbgsquidushotDto.TbgsquidushotSelectDto get(String id){
         return tbgsquidushotMapper.detail(id);
     }
     public List<TbgsquidushotDto.TbgsquidushotSelectDto> list(TbgsquidushotDto.TbgsquidushotListDto params){
@@ -123,7 +125,7 @@ public class TbgsquidushotServiceImpl implements TbgsquidushotService {
     public List<TbgsquidushotDto.TbgsquidushotSelectDto> addListDetails(List<TbgsquidushotDto.TbgsquidushotSelectDto> a_list){
         List<TbgsquidushotDto.TbgsquidushotSelectDto> result_list = new ArrayList<>();
         for(TbgsquidushotDto.TbgsquidushotSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

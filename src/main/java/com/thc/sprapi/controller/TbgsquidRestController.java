@@ -1,9 +1,6 @@
 package com.thc.sprapi.controller;
 
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbgsquidDto;
-import com.thc.sprapi.dto.TbgrantDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbgrantService;
 import com.thc.sprapi.service.TbgsquidService;
@@ -46,7 +43,7 @@ public class TbgsquidRestController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/next")
     public ResponseEntity<TbgsquidDto.TbgsquidAfterUpdateDto> next(@Valid @RequestBody TbgsquidDto.TbgsquidUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.next(params));
     }
@@ -60,7 +57,7 @@ public class TbgsquidRestController {
     @PostMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbgsquidDto.TbgsquidAfterCreateDto> save(@Valid @RequestBody TbgsquidDto.TbgsquidCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "create",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "create",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbgsquidService.create(params));
     }
@@ -73,7 +70,7 @@ public class TbgsquidRestController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbgsquidDto.TbgsquidAfterUpdateDto> update(@Valid @RequestBody TbgsquidDto.TbgsquidUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.update(params));
     }
@@ -87,7 +84,7 @@ public class TbgsquidRestController {
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
     public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.deleteList(params));
     }
@@ -101,8 +98,9 @@ public class TbgsquidRestController {
     @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ResponseEntity<TbgsquidDto.TbgsquidSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",true, principalDetails.getTbuser().getId()));
-        return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.detail(id));
+        CommonDetailDto params = CommonDetailDto.builder().id(id).build();
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",true, principalDetails.getTbuser().getId()));
+        return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.detail(params));
     }
     @Operation(summary = "오징어게임 목록 조회(검색 기능 포함)",
             description = "오징어게임 목록 조회 위한 컨트롤러 (모두 접근 가능) <br />"
@@ -113,7 +111,7 @@ public class TbgsquidRestController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/list")
     public ResponseEntity<List<TbgsquidDto.TbgsquidSelectDto>> list(@Valid @RequestBody TbgsquidDto.TbgsquidListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.list(params));
     }
@@ -126,7 +124,7 @@ public class TbgsquidRestController {
     @PreAuthorize("permitAll()")
     @PostMapping("/moreList")
     public ResponseEntity<List<TbgsquidDto.TbgsquidSelectDto>> moreList(@Valid @RequestBody TbgsquidDto.TbgsquidMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.moreList(params));
     }
@@ -140,7 +138,7 @@ public class TbgsquidRestController {
     @PreAuthorize("permitAll()")
     @PostMapping("/pagedList")
     public ResponseEntity<CommonAfterPagedListDto<TbgsquidDto.TbgsquidSelectDto>> pagedList(@Valid @RequestBody TbgsquidDto.TbgsquidPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidService.pagedList(params));
     }

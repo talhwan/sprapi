@@ -1,9 +1,7 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbnotice;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbnoticeDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbnoticeMapper;
 import com.thc.sprapi.repository.TbnoticeRepository;
@@ -65,9 +63,11 @@ public class TbnoticeServiceImpl implements TbnoticeService {
         return params;
     }
 
-    public TbnoticeDto.TbnoticeSelectDto detail(String id){
-        TbnoticeDto.TbnoticeSelectDto result = tbnoticeMapper.detail(id);
-        return result;
+    public TbnoticeDto.TbnoticeSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbnoticeDto.TbnoticeSelectDto get(String id){
+        return tbnoticeMapper.detail(id);
     }
     public List<TbnoticeDto.TbnoticeSelectDto> list(TbnoticeDto.TbnoticeListDto params){
         return addListDetails(tbnoticeMapper.list(params));
@@ -83,7 +83,7 @@ public class TbnoticeServiceImpl implements TbnoticeService {
     public List<TbnoticeDto.TbnoticeSelectDto> addListDetails(List<TbnoticeDto.TbnoticeSelectDto> a_list){
         List<TbnoticeDto.TbnoticeSelectDto> result_list = new ArrayList<>();
         for(TbnoticeDto.TbnoticeSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

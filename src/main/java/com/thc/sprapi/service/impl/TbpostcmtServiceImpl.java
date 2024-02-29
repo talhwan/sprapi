@@ -1,9 +1,7 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbpostcmt;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbpostcmtDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.dto.TbpostcmtDto;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbpostcmtMapper;
@@ -60,7 +58,10 @@ public class TbpostcmtServiceImpl implements TbpostcmtService {
         return params;
     }
 
-    public TbpostcmtDto.TbpostcmtSelectDto detail(String id){
+    public TbpostcmtDto.TbpostcmtSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbpostcmtDto.TbpostcmtSelectDto get(String id){
         return tbpostcmtMapper.detail(id);
     }
     public List<TbpostcmtDto.TbpostcmtSelectDto> list(TbpostcmtDto.TbpostcmtListDto params){
@@ -77,7 +78,7 @@ public class TbpostcmtServiceImpl implements TbpostcmtService {
     public List<TbpostcmtDto.TbpostcmtSelectDto> addListDetails(List<TbpostcmtDto.TbpostcmtSelectDto> a_list){
         List<TbpostcmtDto.TbpostcmtSelectDto> result_list = new ArrayList<>();
         for(TbpostcmtDto.TbpostcmtSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

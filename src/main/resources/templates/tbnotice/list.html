@@ -6,20 +6,20 @@
 <body>
 <body th:replace="~{@{includes/default/header}}"></body>
 
-<script id="list_info_tbpost" type="text/x-handlebars-template">
-    {{#resultData_tbpost}}
+<script id="list_info_tbnotice" type="text/x-handlebars-template">
+    {{#resultData_tbnotice}}
     <div class="col-lg-4">
         <div class="post-box">
             <div class="">[<font class="font_cate_{{cate}}">{{cate}}</font>]</div>
             <h3 class="post-title">{{title}}</h3>
-            <a href="/tbpost/detail/{{id}}" class="readmore stretched-link mt-auto"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+            <a href="/tbnotice/detail/{{id}}" class="readmore stretched-link mt-auto"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
         </div>
     </div>
-    {{/resultData_tbpost}}
+    {{/resultData_tbnotice}}
 </script>
 <script type="text/javascript">
-    var list_info_tbpost = $("#list_info_tbpost").html();
-    var list_info_tbpost_template = Handlebars.compile(list_info_tbpost);
+    var list_info_tbnotice = $("#list_info_tbnotice").html();
+    var list_info_tbnotice_template = Handlebars.compile(list_info_tbnotice);
 </script>
 
 <main id="main">
@@ -53,8 +53,8 @@
                     <div class="col-sm-4">
                         <select class="select_search_keyword form-control m-b" keyword="cate" id="search_cate" onchange="listener_keyword_changed()">
                             <option value="" selected="selected">전체</option>
-                            <option value="economy">경제</option>
-                            <option value="politics">정치</option>
+                            <option value="normal">일반</option>
+                            <option value="top">상위고정</option>
                         </select>
                     </div>
                     <!--<label class="col-sm-6 col-form-label"></label>-->
@@ -99,11 +99,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="tbody_tbpost_list">
+            <div class="row" id="tbody_tbnotice_list">
             </div>
             <div style="margin-top:10px;text-align: right">
-                <button class="btn btn-success btn-sm" onclick="location.href='/tbpost/create'">신규작성</button>
-                <button class="btn btn-primary btn-sm" onclick="search_tbpost()">더보기</button>
+                <button class="btn btn-success btn-sm" onclick="location.href='/tbnotice/create'">신규작성</button>
+                <button class="btn btn-primary btn-sm" onclick="search_tbnotice()">더보기</button>
             </div>
         </div>
 
@@ -114,9 +114,9 @@
 <script>
     $( document ).ready(function() {
         console.log( "ready!" );
-        search_tbpost();
+        search_tbnotice();
     });
-    function search_tbpost(){
+    function search_tbnotice(){
         let search_cway = $("#search_cway").val() + "";
         let cdatetime = "";
         if(search_cway == "recent"){
@@ -131,12 +131,12 @@
             cdatetime = "";
             $("#search_sdatetime").val("");
             $("#search_fdatetime").val("");
-            $("#tbody_tbpost_list").html("");
+            $("#tbody_tbnotice_list").html("");
             $("#input_keyword_changed").val("0");
         }
 
         let _data = new Map();
-        _data.url = "/api/tbpost/moreList";
+        _data.url = "/api/tbnotice/moreList";
         _data.type = "POST";
         _data.param = {
             'sdate' : $("#search_sdate").val(),
@@ -174,9 +174,9 @@
                 let each_list = [];
                 each_list.push(resultlist[i]);
                 if(search_cway == "recent"){
-                    $("#tbody_tbpost_list").prepend(list_info_tbpost_template({"resultData_tbpost":each_list}));
+                    $("#tbody_tbnotice_list").prepend(list_info_tbnotice_template({"resultData_tbnotice":each_list}));
                 } else {
-                    $("#tbody_tbpost_list").append(list_info_tbpost_template({"resultData_tbpost":each_list}));
+                    $("#tbody_tbnotice_list").append(list_info_tbnotice_template({"resultData_tbnotice":each_list}));
                 }
                 listenerAfterList();
             }

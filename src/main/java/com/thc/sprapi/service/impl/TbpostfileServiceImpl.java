@@ -1,9 +1,7 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbpostfile;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbpostfileDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.dto.TbpostfileDto;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbpostfileMapper;
@@ -60,7 +58,10 @@ public class TbpostfileServiceImpl implements TbpostfileService {
         return params;
     }
 
-    public TbpostfileDto.TbpostfileSelectDto detail(String id){
+    public TbpostfileDto.TbpostfileSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbpostfileDto.TbpostfileSelectDto get(String id){
         return tbpostfileMapper.detail(id);
     }
     public List<TbpostfileDto.TbpostfileSelectDto> list(TbpostfileDto.TbpostfileListDto params){
@@ -77,7 +78,7 @@ public class TbpostfileServiceImpl implements TbpostfileService {
     public List<TbpostfileDto.TbpostfileSelectDto> addListDetails(List<TbpostfileDto.TbpostfileSelectDto> a_list){
         List<TbpostfileDto.TbpostfileSelectDto> result_list = new ArrayList<>();
         for(TbpostfileDto.TbpostfileSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

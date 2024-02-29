@@ -71,7 +71,7 @@ public class TbuserDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbuserCreateDto {
+	public static class TbuserCreateDto extends CommonGrantDto {
 		@Schema(description = "username", example="이메일 주소")
 		@NotNull
 		@Email
@@ -118,7 +118,7 @@ public class TbuserDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbuserUpdateDto {
+	public static class TbuserUpdateDto extends CommonGrantDto {
 		@Schema(description = "id", example="length32textnumber")
 		@NotNull
 		@NotEmpty
@@ -208,7 +208,7 @@ public class TbuserDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbuserListDto {
+	public static class TbuserListDto extends CommonGrantDto {
 		@Schema(description = "삭제 여부", example="Y")
 		private String deleted;
 

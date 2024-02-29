@@ -1,10 +1,7 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbgrant;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbgrantDto;
-import com.thc.sprapi.dto.TbgrantpartDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.exception.NoAccessGrantException;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbgrantMapper;
@@ -36,7 +33,8 @@ public class TbgrantServiceImpl implements TbgrantService {
         this.tbgrantpartService = tbgrantpartService;
     }
 
-    public boolean access(TbgrantDto.TbgrantAccessDto params){
+    public boolean access(String t, String c, boolean beAdmin, String tbuserId){
+        TbgrantDto.TbgrantAccessDto params = new TbgrantDto.TbgrantAccessDto(t, c, beAdmin, tbuserId);
         TbgrantDto.TbgrantSelectDto result = tbgrantMapper.access(params);
         /*
         return false;
@@ -83,7 +81,10 @@ public class TbgrantServiceImpl implements TbgrantService {
         return params;
     }
 
-    public TbgrantDto.TbgrantSelectDto detail(String id){
+    public TbgrantDto.TbgrantSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbgrantDto.TbgrantSelectDto get(String id){
         TbgrantDto.TbgrantSelectDto result = tbgrantMapper.detail(id);
         result.setTbgrantparts(tbgrantpartService.list(TbgrantpartDto.TbgrantpartListDto.builder().tbgrantId(id).build()));
         return result;
@@ -102,7 +103,7 @@ public class TbgrantServiceImpl implements TbgrantService {
     public List<TbgrantDto.TbgrantSelectDto> addListDetails(List<TbgrantDto.TbgrantSelectDto> a_list){
         List<TbgrantDto.TbgrantSelectDto> result_list = new ArrayList<>();
         for(TbgrantDto.TbgrantSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

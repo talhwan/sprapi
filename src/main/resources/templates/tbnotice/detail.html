@@ -6,50 +6,15 @@
 <body>
 <body th:replace="~{@{includes/default/header}}"></body>
 
-<script id="list_info_tbpostfile" type="text/x-handlebars-template">
-    {{#resultData_tbpostfile}}
-    <div class="col-sm-2" style="text-align: center">
-        <input type="hidden" class="input_tbpostfile_id" value="{{id}}"/>
-        <input type="hidden" class="input_tbpostfile_content" value="{{content}}"/>
-        <input type="hidden" class="input_tbpostfile_type" value="{{type}}"/>
-        <img class="img_tbpostfile_{{type}} img-fluid" style="height:100px;" src="{{content}}"/>
-        <p class="p_tbpostfile_{{type}}" style="word-break:break-all;">{{content}}</p>
-        <div style="text-align: right" onclick="listener_remove(this)">삭제</div>
-    </div>
-    {{/resultData_tbpostfile}}
-</script>
-<script type="text/javascript">
-    var list_info_tbpostfile = $("#list_info_tbpostfile").html();
-    var list_info_tbpostfile_template = Handlebars.compile(list_info_tbpostfile);
-</script>
-<script id="list_info_tbpostcmt" type="text/x-handlebars-template">
-    {{#resultData_tbpostcmt}}
-    <div id="div_tbpostcmt_{{id}}" class="comment">
-        <div class="comment-img"><img src="{{tbuserMpic}}" alt=""></div>
-        <div class="d-flex">
-            <div>
-                <h5><a href="/tbuser/detail/{{tbuserId}}">{{tbuserNick}}</a></h5>
-                <time>{{createdAt}}</time>
-                <p>{{content}}</p>
-            </div>
-        </div>
-    </div>
-    {{/resultData_tbpostcmt}}
-</script>
-<script type="text/javascript">
-    var list_info_tbpostcmt = $("#list_info_tbpostcmt").html();
-    var list_info_tbpostcmt_template = Handlebars.compile(list_info_tbpostcmt);
-</script>
-
 <main id="main">
     <section class="breadcrumbs">
         <div class="container">
             <ol>
                 <li><a href="/index">Home</a></li>
-                <li><a href="/tbpost/list">게시글 목록</a></li>
+                <li><a href="/tbnotice/list">게시글 목록</a></li>
                 <li>게시글 상세</li>
             </ol>
-            <h2><font class="font_tbpost_title">-</font></h2>
+            <h2><font class="font_tbnotice_title">-</font></h2>
         </div>
     </section>
 
@@ -58,36 +23,21 @@
             <div class="row">
                 <div class="col-lg-12 entries">
                     <article class="entry entry-single">
-                        <input type="hidden" id="detail_tbpost_id" value="" />
+                        <input type="hidden" id="detail_tbnotice_id" value="" />
                         <h2 class="entry-title">
-                            <a href="javascript:listener_page_tbpost()"><font class="font_tbpost_title">-</font></a>
+                            <font class="font_tbnotice_title">-</font>
                         </h2>
                         <div class="entry-meta">
                             <ul>
-                                <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-single.html"><font class="font_tbpost_tbuserNick">-</font></a></li>
-                                <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"><time><font class="font_tbpost_createdAt">-</font></time></a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"><time><font class="font_tbnotice_createdAt">-</font></time></a></li>
                                 <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-single.html">12 Comments</a></li>
                             </ul>
                         </div>
                         <div class="entry-content">
-                            <p><font class="font_tbpost_content">-</font></p>
+                            <img id="img_tbnotice_mpic" style="height: 100px;"/>
+                            <p><font class="font_tbnotice_content">-</font></p>
                         </div>
                     </article>
-                    <div class="blog-comments">
-                        <input type="hidden" id="search_sdatetime" value="" />
-                        <input type="hidden" id="search_fdatetime" value="" />
-                        <h4 class="comments-count">8 Comments</h4>
-                        <div id="tbody_tbpostcmt_list">
-                        </div>
-                        <div class="reply-form">
-                            <div class="row">
-                                <div class="col form-group">
-                                    <textarea name="comment" class="form-control" id="create_tbpostcmt_content" placeholder="내용을 입력하세요"></textarea>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" onclick="create_tbpostcmt()">Post Comment</button>
-                        </div>
-                    </div><!-- End blog comments -->
                 </div><!-- End blog entries list -->
             </div>
         </div>
@@ -99,109 +49,22 @@
 <script>
     $( document ).ready(function() {
         console.log( "ready!" );
-        detail_tbpost();
-        search_tbpostcmt('before');
+        detail_tbnotice();
     });
-    function detail_tbpost(){
-        let tbpostId = getIdFromUrl(null);
+    function detail_tbnotice(){
+        let tbnoticeId = getIdFromUrl(null);
         let _data = new Map();
-        _data.url = "/api/tbpost/" + tbpostId;
+        _data.url = "/api/tbnotice/" + tbnoticeId;
         _data.type = "GET";
         _data.success = function(obj_data, obj_status, obj_xhr){
             let detailKeys = Object.keys(obj_data)
             for (let eachKey of detailKeys){
-                $(".font_tbpost_" + eachKey).text(obj_data[eachKey]);
-                $("#detail_tbpost_" + eachKey).val(obj_data[eachKey]);
-                $("#img_tbpost_" + eachKey).attr("src", obj_data[eachKey]);
+                if(!isNull(obj_data[eachKey])){
+                    $(".font_tbnotice_" + eachKey).text(obj_data[eachKey]);
+                    $("#detail_tbnotice_" + eachKey).val(obj_data[eachKey]);
+                    $("#img_tbnotice_" + eachKey).attr("src", obj_data[eachKey]);
+                }
             }
-
-            let pics = obj_data.pics;
-            for(each of pics){
-                let each_list = [];
-                each_list.push(each);
-                $("#div_array_pics").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
-            }
-            let files = obj_data.files;
-            for(each of files){
-                let each_list = [];
-                each_list.push(each);
-                $("#div_array_files").append(list_info_tbpostfile_template({"resultData_tbpostfile": each_list}));
-            }
-            $(".img_tbpostfile_file").remove();
-            $(".p_tbpostfile_image").remove();
-        }
-        _data.error = function(obj_data, obj_status, obj_xhr){
-            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
-        }
-        func_ajax(_data);
-    }
-    function search_tbpostcmt(search_cway){
-
-        let tbpostId = getIdFromUrl(null);
-        let cdatetime = "";
-        if(search_cway == "recent"){
-            cdatetime = $("#search_fdatetime").val() + "";
-        } else {
-            cdatetime = $("#search_sdatetime").val() + "";
-        }
-
-        let _data = new Map();
-        _data.url = "/api/tbpostcmt/moreList";
-        _data.type = "POST";
-        _data.param = {
-            'cdatetime' : cdatetime,
-            'cway' : search_cway,
-            'permore' : "10"
-            ,'tbpostId' : tbpostId
-        };
-        _data.success = function(obj_data, obj_status, obj_xhr){
-            let resultlist = obj_data;
-            //alert(resultlist.length);
-            for(let i=0;i<resultlist.length;i++){
-                let this_created_at = resultlist[i].createdAt + "";
-                //초기값 설정
-                let search_sdatetime = $("#search_sdatetime").val() + "";
-                if(search_sdatetime == ""){
-                    $("#search_sdatetime").val(this_created_at);
-                }
-                let search_fdatetime = $("#search_fdatetime").val() + "";
-                if(search_fdatetime == ""){
-                    $("#search_fdatetime").val(this_created_at);
-                }
-                if(search_sdatetime > this_created_at){
-                    $("#search_sdatetime").val(this_created_at);
-                }
-                if(search_fdatetime < this_created_at){
-                    $("#search_fdatetime").val(this_created_at);
-                }
-
-                let each_list = [];
-                each_list.push(resultlist[i]);
-                if(search_cway == "recent"){
-                    $("#tbody_tbpostcmt_list").prepend(list_info_tbpostcmt_template({"resultData_tbpostcmt":each_list}));
-                } else {
-                    $("#tbody_tbpostcmt_list").append(list_info_tbpostcmt_template({"resultData_tbpostcmt":each_list}));
-                }
-                $("#detail_tbpostcmt_deleted_" + resultlist[i].id).val(resultlist[i].deleted);
-                $("#detail_tbpostcmt_content_" + resultlist[i].id).val(resultlist[i].content);
-                listenerAfterList();
-            }
-        }
-        _data.error = function(obj_data, obj_status, obj_xhr){
-            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
-        }
-        func_ajax(_data);
-    }
-    function create_tbpostcmt(){
-        let _param = {};
-        _param["tbpostId"] = $("#detail_tbpost_id").val();
-        _param["content"] = $("#create_tbpostcmt_content").val();
-        let _data = new Map();
-        _data.url = "/api/tbpostcmt";
-        _data.type = "POST";
-        _data.param = _param;
-        _data.success = function(obj_data, obj_status, obj_xhr){
-            search_tbpostcmt('recent');
         }
         _data.error = function(obj_data, obj_status, obj_xhr){
             alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");

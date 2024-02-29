@@ -1,6 +1,7 @@
 package com.thc.sprapi.service;
 
 import com.thc.sprapi.dto.CommonDeleteListDto;
+import com.thc.sprapi.dto.CommonDetailDto;
 import com.thc.sprapi.dto.RoletypeDto;
 import com.thc.sprapi.dto.RoletypeDto;
 

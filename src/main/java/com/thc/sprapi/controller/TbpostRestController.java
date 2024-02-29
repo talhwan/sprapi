@@ -1,9 +1,6 @@
 package com.thc.sprapi.controller;
 
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbgrantDto;
-import com.thc.sprapi.dto.TbpostDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbgrantService;
 import com.thc.sprapi.service.TbpostService;
@@ -46,7 +43,7 @@ public class TbpostRestController {
     @PostMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbpostDto.TbpostAfterCreateDto> save(@Valid @RequestBody TbpostDto.TbpostCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbpost", "create",false, principalDetails.getTbuser().getId())));
+        params.setNowGrant(tbgrantService.access("tbpost", "create",false, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbpostService.create(params));
     }
@@ -59,7 +56,7 @@ public class TbpostRestController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbpostDto.TbpostAfterUpdateDto> update(@Valid @RequestBody TbpostDto.TbpostUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbpost", "update",false, principalDetails.getTbuser().getId())));
+        params.setNowGrant(tbgrantService.access("tbpost", "update",false, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.update(params));
     }
@@ -73,7 +70,7 @@ public class TbpostRestController {
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
     public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbpost", "update",false, principalDetails.getTbuser().getId())));
+        params.setNowGrant(tbgrantService.access("tbpost", "update",false, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.deleteList(params));
     }
@@ -87,7 +84,8 @@ public class TbpostRestController {
     @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ResponseEntity<TbpostDto.TbpostSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(id));
+        CommonDetailDto params = CommonDetailDto.builder().id(id).build();
+        return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(params));
     }
     @Operation(summary = "게시글 목록 조회(검색 기능 포함)",
             description = "게시글 목록 조회 위한 컨트롤러 (모두 접근 가능) <br />"

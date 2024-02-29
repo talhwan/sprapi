@@ -82,7 +82,10 @@ public class TbpostServiceImpl implements TbpostService {
         return params;
     }
 
-    public TbpostDto.TbpostSelectDto detail(String id){
+    public TbpostDto.TbpostSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbpostDto.TbpostSelectDto get(String id){
         TbpostDto.TbpostSelectDto result = tbpostMapper.detail(id);
         result.setPics(tbpostfileService.list(new TbpostfileDto.TbpostfileListDto("N", id,"image",null)));
         result.setFiles(tbpostfileService.list(new TbpostfileDto.TbpostfileListDto("N", id,"file",null)));
@@ -102,7 +105,7 @@ public class TbpostServiceImpl implements TbpostService {
     public List<TbpostDto.TbpostSelectDto> addListDetails(List<TbpostDto.TbpostSelectDto> a_list){
         List<TbpostDto.TbpostSelectDto> result_list = new ArrayList<>();
         for(TbpostDto.TbpostSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

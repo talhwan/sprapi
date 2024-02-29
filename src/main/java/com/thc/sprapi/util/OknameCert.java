@@ -60,16 +60,14 @@ public class OknameCert {
 		SITE_NAME = siteName;
 		SITE_URL = siteURL;
 		RETURN_URL = returnURL;
+
+		license = "C:/workspace/uploadfiles/"
+				+ CP_CD + "_IDS_01_" + target + "_AES_license.dat";
+		/*
 		license = rootpath +
 						 "resources/common/okcert/"
 				+ CP_CD + "_IDS_01_" + target + "_AES_license.dat";
 
-		/*
-		license = "C:/workspace/uploadfiles/"
-				+ CP_CD + "_IDS_01_" + target + "_AES_license.dat";
-				*/
-
-		/*
 		license = request.getSession()
 				 .getServletContext()
 				 .getRealPath(
@@ -90,13 +88,13 @@ public class OknameCert {
 
 		String reqStr = reqJson.toString();
 		kcb.module.v3.OkCert okcert = new kcb.module.v3.OkCert();
-		logger.info("okcert : " + okcert);
+		logger.info("1. okcert : " + okcert);
 
 		resultStr = okcert.callOkCert(target, CP_CD, svcName_start, license, reqStr);
-		logger.info("resultStr : " + resultStr);
+		logger.info("2. resultStr : " + resultStr);
 
 		JSONObject resJson = new JSONObject(resultStr);
-		logger.info("resJson : " + resJson);
+		logger.info("3. resJson : " + resJson);
 
 		TbuserDto.TbuserOkcertTokenDto result =
 		new TbuserDto.TbuserOkcertTokenDto(

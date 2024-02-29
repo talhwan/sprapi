@@ -13,6 +13,7 @@ public class TbgrantpartDto {
 		{"tbgrant","접근권한"}
 		,{"tbuser", "사용자"}
 		,{"tbpost", "게시글"}
+		,{"tbnotice", "공지사항"}
 		,{"tbgsquid", "오징어게임"}
 	};
 

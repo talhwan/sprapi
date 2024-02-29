@@ -112,9 +112,11 @@ public class TbgsquidServiceImpl implements TbgsquidService {
         return params;
     }
 
-    public TbgsquidDto.TbgsquidSelectDto detail(String id){
-        TbgsquidDto.TbgsquidSelectDto result = tbgsquidMapper.detail(id);
-        return result;
+    public TbgsquidDto.TbgsquidSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbgsquidDto.TbgsquidSelectDto get(String id){
+        return tbgsquidMapper.detail(id);
     }
     public List<TbgsquidDto.TbgsquidSelectDto> list(TbgsquidDto.TbgsquidListDto params){
         return addListDetails(tbgsquidMapper.list(params));
@@ -130,7 +132,7 @@ public class TbgsquidServiceImpl implements TbgsquidService {
     public List<TbgsquidDto.TbgsquidSelectDto> addListDetails(List<TbgsquidDto.TbgsquidSelectDto> a_list){
         List<TbgsquidDto.TbgsquidSelectDto> result_list = new ArrayList<>();
         for(TbgsquidDto.TbgsquidSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }

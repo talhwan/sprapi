@@ -2,6 +2,7 @@ package com.thc.sprapi.controller;
 
 import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
+import com.thc.sprapi.dto.CommonDetailDto;
 import com.thc.sprapi.dto.TbgrantDto;
 import com.thc.sprapi.security.PrincipalDetails;
 import com.thc.sprapi.service.TbgrantService;
@@ -42,7 +43,7 @@ public class TbgrantRestController {
     @PostMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbgrantDto.TbgrantAfterCreateDto> save(@Valid @RequestBody TbgrantDto.TbgrantCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "create",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgrant", "create",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbgrantService.create(params));
     }
@@ -55,7 +56,7 @@ public class TbgrantRestController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbgrantDto.TbgrantAfterUpdateDto> update(@Valid @RequestBody TbgrantDto.TbgrantUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgrant", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.update(params));
     }
@@ -69,7 +70,7 @@ public class TbgrantRestController {
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
     public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgrant", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.deleteList(params));
     }
@@ -83,8 +84,9 @@ public class TbgrantRestController {
     @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ResponseEntity<TbgrantDto.TbgrantSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "read",true, principalDetails.getTbuser().getId()));
-        return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.detail(id));
+        CommonDetailDto params = CommonDetailDto.builder().id(id).build();
+        params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
+        return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.detail(params));
     }
     @Operation(summary = "접근권한 목록 조회(검색 기능 포함)",
             description = "접근권한 목록 조회 위한 컨트롤러 (모두 접근 가능) <br />"
@@ -95,7 +97,7 @@ public class TbgrantRestController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/list")
     public ResponseEntity<List<TbgrantDto.TbgrantSelectDto>> list(@Valid @RequestBody TbgrantDto.TbgrantListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "read",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.list(params));
     }
@@ -108,7 +110,7 @@ public class TbgrantRestController {
     @PreAuthorize("permitAll()")
     @PostMapping("/moreList")
     public ResponseEntity<List<TbgrantDto.TbgrantSelectDto>> moreList(@Valid @RequestBody TbgrantDto.TbgrantMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "read",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.moreList(params));
     }
@@ -122,7 +124,7 @@ public class TbgrantRestController {
     @PreAuthorize("permitAll()")
     @PostMapping("/pagedList")
     public ResponseEntity<CommonAfterPagedListDto<TbgrantDto.TbgrantSelectDto>> pagedList(@Valid @RequestBody TbgrantDto.TbgrantPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgrant", "read",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantService.pagedList(params));
     }

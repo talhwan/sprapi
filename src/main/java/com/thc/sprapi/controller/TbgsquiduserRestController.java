@@ -44,8 +44,8 @@ public class TbgsquiduserRestController {
     @PostMapping("/join")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbgsquiduserDto.TbgsquiduserAfterCreateDto> join(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setNowGrant(tbgrantService.access("tbgsquid", "create",false, principalDetails.getTbuser().getId()));
         params.setTbuserId(principalDetails.getTbuser().getId());
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "create",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(tbgsquiduserService.join(params));
     }
     /*
@@ -60,8 +60,8 @@ public class TbgsquiduserRestController {
     @PostMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbgsquiduserDto.TbgsquiduserAfterCreateDto> save(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setNowGrant(tbgrantService.access("tbgsquid", "create",true, principalDetails.getTbuser().getId()));
         params.setTbuserId(principalDetails.getTbuser().getId());
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "create",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(tbgsquiduserService.create(params));
     }
     @Operation(summary = "오징어게임 사용자 수정",
@@ -73,7 +73,7 @@ public class TbgsquiduserRestController {
     @PutMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TbgsquiduserDto.TbgsquiduserAfterUpdateDto> update(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "update",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.update(params));
     }
     @Operation(summary = "오징어게임 사용자 삭제",
@@ -85,7 +85,7 @@ public class TbgsquiduserRestController {
     @DeleteMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "update",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.deleteList(params));
     }
 
@@ -98,8 +98,9 @@ public class TbgsquiduserRestController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbgsquiduserDto.TbgsquiduserSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
-        return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.detail(id));
+        CommonDetailDto params = CommonDetailDto.builder().id(id).build();
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.detail(params));
     }
     @Operation(summary = "오징어게임 사용자 목록 조회(검색 기능 포함)",
             description = "오징어게임 사용자 목록 조회를 위한 컨트롤러 (모두 접근 가능) <br />"
@@ -110,7 +111,7 @@ public class TbgsquiduserRestController {
     @PostMapping("/list")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TbgsquiduserDto.TbgsquiduserSelectDto>> list(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.list(params));
     }
     @Operation(summary = "오징어게임 사용자 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -122,7 +123,7 @@ public class TbgsquiduserRestController {
     @PostMapping("/moreList")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TbgsquiduserDto.TbgsquiduserSelectDto>> moreList(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.moreList(params));
     }
 
@@ -135,7 +136,7 @@ public class TbgsquiduserRestController {
     @PostMapping("/pagedList")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CommonAfterPagedListDto<TbgsquiduserDto.TbgsquiduserSelectDto>> pagedList(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        tbgrantService.access(new TbgrantDto.TbgrantAccessDto("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.pagedList(params));
     }
 

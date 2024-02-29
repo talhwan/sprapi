@@ -1,9 +1,7 @@
 package com.thc.sprapi.service.impl;
 
 import com.thc.sprapi.domain.Tbgrantpart;
-import com.thc.sprapi.dto.CommonAfterPagedListDto;
-import com.thc.sprapi.dto.CommonDeleteListDto;
-import com.thc.sprapi.dto.TbgrantpartDto;
+import com.thc.sprapi.dto.*;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbgrantpartMapper;
 import com.thc.sprapi.repository.TbgrantpartRepository;
@@ -83,7 +81,10 @@ public class TbgrantpartServiceImpl implements TbgrantpartService {
         return params;
     }
 
-    public TbgrantpartDto.TbgrantpartSelectDto detail(String id){
+    public TbgrantpartDto.TbgrantpartSelectDto detail(CommonDetailDto params){
+        return get(params.getId());
+    }
+    public TbgrantpartDto.TbgrantpartSelectDto get(String id){
         return tbgrantpartMapper.detail(id);
     }
     public List<TbgrantpartDto.TbgrantpartSelectDto> list(TbgrantpartDto.TbgrantpartListDto params){
@@ -100,7 +101,7 @@ public class TbgrantpartServiceImpl implements TbgrantpartService {
     public List<TbgrantpartDto.TbgrantpartSelectDto> addListDetails(List<TbgrantpartDto.TbgrantpartSelectDto> a_list){
         List<TbgrantpartDto.TbgrantpartSelectDto> result_list = new ArrayList<>();
         for(TbgrantpartDto.TbgrantpartSelectDto a : a_list){
-            result_list.add(detail(a.getId()));
+            result_list.add(get(a.getId()));
         }
         return result_list;
     }
