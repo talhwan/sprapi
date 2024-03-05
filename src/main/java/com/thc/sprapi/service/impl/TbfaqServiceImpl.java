@@ -5,6 +5,7 @@ import com.thc.sprapi.dto.CommonAfterPagedListDto;
 import com.thc.sprapi.dto.CommonDeleteListDto;
 import com.thc.sprapi.dto.CommonDetailDto;
 import com.thc.sprapi.dto.TbfaqDto;
+import com.thc.sprapi.exception.CommonException;
 import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbfaqMapper;
 import com.thc.sprapi.repository.TbfaqRepository;
@@ -31,7 +32,36 @@ public class TbfaqServiceImpl implements TbfaqService {
         this.tbfaqMapper = tbfaqMapper;
     }
 
+    public TbfaqDto.TbfaqAfterUpdateDto sequence(TbfaqDto.TbfaqSequenceDto params){
+
+        Tbfaq tbfaq = tbfaqRepository.findById(params.getId())
+                .orElseThrow(() -> new NoMatchingDataException(""));
+        int nowSequence = tbfaq.getSequence();
+
+        int targetSequence = nowSequence;
+        if("up".equals(params.getWay())){
+            targetSequence++;
+        } else {
+            targetSequence--;
+        }
+        if(targetSequence == 0 || targetSequence > tbfaqMapper.pagedListCount(new TbfaqDto.TbfaqPagedListDto())){
+            return null;
+            //throw new CommonException("");
+        } else {
+            //잠시 순번에서 제외
+            update(TbfaqDto.TbfaqUpdateDto.builder().id(tbfaq.getId()).sequence(-1).build());
+            //바꾸고자 하는 순번의 정보에 이전 순번 저장
+            Tbfaq targetTbfaq = tbfaqRepository.findBySequence(targetSequence);
+            update(TbfaqDto.TbfaqUpdateDto.builder().id(targetTbfaq.getId()).sequence(nowSequence).build());
+            //다시 수정하고 리턴
+            return update(TbfaqDto.TbfaqUpdateDto.builder().id(tbfaq.getId()).sequence(targetSequence).build());
+        }
+    }
+
+    /**/
+
     public TbfaqDto.TbfaqAfterCreateDto create(TbfaqDto.TbfaqCreateDto params){
+        params.setSequence(tbfaqMapper.pagedListCount(new TbfaqDto.TbfaqPagedListDto()) + 1);
         return tbfaqRepository.save(params.toEntity()).toAfterCreateDto();
     }
     public TbfaqDto.TbfaqAfterUpdateDto update(TbfaqDto.TbfaqUpdateDto params){
@@ -39,6 +69,9 @@ public class TbfaqServiceImpl implements TbfaqService {
                 .orElseThrow(() -> new NoMatchingDataException(""));
         if(params.getTitle() != null){
             tbfaq.setTitle(params.getTitle());
+        }
+        if(params.getSequence() != null){
+            tbfaq.setSequence(params.getSequence());
         }
         if(params.getCate() != null){
             tbfaq.setCate(params.getCate());

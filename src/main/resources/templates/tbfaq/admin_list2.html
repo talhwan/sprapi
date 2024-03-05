@@ -5,44 +5,49 @@
 </head>
 <body>
 
-<script id="list_info_tbnotice" type="text/x-handlebars-template">
-    {{#resultData_tbnotice}}
-    <tr class="gradeA">
+<script id="list_info_tbfaq" type="text/x-handlebars-template">
+    {{#resultData_tbfaq}}
+    <tr class="gradeA" id="tr_tbfaq_{{id}}">
         <td>
             <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
+        </td>
+        <td style="width:50px;">
+            {{sequence}} //
+            <i class="cursor_pointer fa fa-arrow-up" onclick="listener_update_tbfaq('{{id}}',0)"></i>
+            <i class="cursor_pointer fa fa-arrow-down" onclick="listener_update_tbfaq('{{id}}',1)" style="float:right;"></i>
         </td>
         <td><font class="font_order"></font></td>
         <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
         <td><font class="font_cate_{{cate}}">{{cate}}</font></td>
-        <td class="cursor_pointer" onclick="location.href='/tbnotice/admin_detail/{{id}}';">{{title}}</td>
+        <td class="cursor_pointer" onclick="location.href='/tbfaq/admin_detail/{{id}}';">{{title}}</td>
         <td>{{createdAt}} / {{modifiedAt}}</td>
     </tr>
-    {{/resultData_tbnotice}}
+    {{/resultData_tbfaq}}
 </script>
 <script type="text/javascript">
-    var list_info_tbnotice = $("#list_info_tbnotice").html();
-    var list_info_tbnotice_template = Handlebars.compile(list_info_tbnotice);
+    var list_info_tbfaq = $("#list_info_tbfaq").html();
+    var list_info_tbfaq_template = Handlebars.compile(list_info_tbfaq);
 </script>
 
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_tbnotice").addClass("active");
+        $(".sidemenu_li_tbfaq").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>공지사항</h2>
+                <h2>FAQ</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/tbnotice/admin_list">글 모음</a>
+                        <a href="/tbfaq/admin_list">글 모음</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>공지사항 목록</strong>
+                        <strong>FAQ 목록</strong>
                     </li>
                 </ol>
             </div>
@@ -57,6 +62,8 @@
                         <input type="hidden" id="input_keyword_changed" value="0" />
                         <input type="hidden" id="search_sdatetime" value="" />
                         <input type="hidden" id="search_fdatetime" value="" />
+                        <input type="hidden" id="search_ssequence" value="" />
+                        <input type="hidden" id="search_fsequence" value="" />
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">삭제여부</label>
                             <div class="col-sm-4">
@@ -70,10 +77,11 @@
                             <div class="col-sm-4">
                                 <select class="select_search_keyword form-control m-b" keyword="cate" id="search_cate" onchange="listener_keyword_changed()">
                                     <option value="" selected="selected">전체</option>
-                                    <option value="normal">일반</option>
-                                    <option value="top">상위고정</option>
+                                    <option value="0001">주제1</option>
+                                    <option value="0002">주제2</option>
                                 </select>
                             </div>
+                            <!--<label class="col-sm-6 col-form-label"></label>-->
                             <label class="col-sm-2 col-form-label">등록 시기</label>
                             <div class="col-sm-3">
                                 <input class="form-control" id="search_sdate" type="date" onchange="listener_keyword_changed()"/>
@@ -111,7 +119,8 @@
                             <label class="col-sm-2 col-form-label">조회방향</label>
                             <div class="col-sm-3">
                                 <select class="form-control" id="search_cway" onchange="listener_tbcrew_list_by_page();">
-                                    <option value="before" selected="selected">이전글</option>
+                                    <option value="sequence" selected="selected">순서순</option>
+                                    <option value="before">이전글</option>
                                     <option value="recent">최신글</option>
                                 </select>
                             </div>
@@ -128,6 +137,7 @@
                         <th>
                             <input class="input_chk_delete_all" type="checkbox" keyword="all" id="input_chk_delete_all" onclick="listener_chk_delete(this)" />
                         </th>
+                        <th>순서</th>
                         <th>#</th>
                         <th>삭제여부</th>
                         <th>구분</th>
@@ -135,32 +145,71 @@
                         <th>입력일시/수정일시</th>
                     </tr>
                     </thead>
-                    <tbody id="tbody_tbnotice_list">
+                    <tbody id="tbody_tbfaq_list">
                     </tbody>
                 </table>
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="delete_tbnotice()">일괄삭제</button>
+                            <button class="btn btn-danger btn-sm" onclick="delete_tbfaq()">일괄삭제</button>
                         </td>
                         <td style="text-align: right;">
-                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbnotice/admin_create'">추가하기</button>
-                            <button class="btn btn-primary btn-sm" onclick="search_tbnotice()">더보기</button>
+                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbfaq/admin_create'">추가하기</button>
+                            <button class="btn btn-primary btn-sm" onclick="search_tbfaq()">더보기</button>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <script>
-            function delete_tbnotice(){
+            function check_chk_delete(){
+                let all_checked = true;
+                let input_chk_delete_each = $(".input_chk_delete_each");
+                for(let i=0;i<input_chk_delete_each.length;i++){
+                    let each_checked = $(input_chk_delete_each[i]).prop("checked");
+                    if(each_checked){
+                    } else {
+                        all_checked = false;
+                    }
+                }
+                $(".input_chk_delete_all").prop("checked", all_checked);
+            }
+            function listener_chk_delete(obj){
+                let keyword = $(obj).attr("keyword");
+                let checked = $(obj).prop("checked");
+                //alert(checked);
+                switch(keyword){
+                    case "all" :
+                        if(checked){
+                            $(".input_chk_delete_each").prop("checked", true);
+                        } else {
+                            $(".input_chk_delete_each").prop("checked", false);
+                        }
+                        break;
+                    default :
+                        check_chk_delete();
+                        break;
+                }
+            }
+            function delete_tbfaq(){
+
                 if (confirm("정말 삭제하시겠습니까?")) {
                 } else {
                     alert("취소");
                     return false;
                 }
-                let ids = listenerGetDeleteIds();
+
+                let ids = [];
+                let input_chk_delete_each = $(".input_chk_delete_each");
+                for(let i=0;i<input_chk_delete_each.length;i++){
+                    let each_checked = $(input_chk_delete_each[i]).prop("checked");
+                    if(each_checked){
+                        ids.push($(input_chk_delete_each[i]).attr("keyword"));
+                    }
+                }
+
                 let _data = new Map();
-                _data.url = "/api/tbnotice";
+                _data.url = "/api/tbfaq";
                 _data.type = "DELETE";
                 _data.param = {
                     'ids' : ids
@@ -188,33 +237,110 @@
             }
         </script>
         <script>
+            function listener_keyword_changed(){$("#input_keyword_changed").val("1");}
+            function set_search_sdatefdate(obj){
+                var temp_d = new Date();
+                $("#search_fdate").val(dateToStringFormat(temp_d));
+
+                switch(obj){
+                    case 'null':
+                        $("#search_fdate").val("");
+                        $("#search_sdate").val("");
+                        break;
+                    case 'today':
+                        $("#search_sdate").val(dateToStringFormat(temp_d));
+                        break;
+                    case 'week':
+                        temp_d.setDate(temp_d.getDate() - 7);
+                        $("#search_sdate").val(dateToStringFormat(temp_d));
+                        break;
+                    case 'month':
+                        temp_d.setMonth(temp_d.getMonth() - 1);
+                        $("#search_sdate").val(dateToStringFormat(temp_d));
+                        break;
+                }
+                listener_keyword_changed();
+            }
+            function set_search_keyword(){
+                let search_keyword = $("#search_keyword").val();
+                let search_keyword_each = $(".search_keyword_each");
+                for (let i = 0; i < search_keyword_each.length; i++) {
+                    let t_name = $(search_keyword_each[i]).attr("name") + "";
+                    $(search_keyword_each[i]).val("");
+                }
+                listener_keyword_changed();
+
+                $(".search_keyword_each").removeClass("hide");
+                $(".search_keyword_each").addClass("hide");
+                $(".search_keyword_each_" + search_keyword).removeClass("hide");
+            }
+        </script>
+        <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
-                search_tbnotice();
+                search_tbfaq();
             });
-            function search_tbnotice(){
-                let beforeListParam = listenerBeforeList("tbody_tbnotice_list");
-                //beforeListParam['process'] = $("#search_process").val();
-                beforeListParam['title'] = $("#search_title").val();
-                beforeListParam['cate'] = $("#search_cate").val();
+            function search_tbfaq(){
+                let search_cway = $("#search_cway").val() + "";
+                let cdatetime = "";
+                if(search_cway == "recent"){
+                    cdatetime = $("#search_fdatetime").val() + "";
+                } else {
+                    cdatetime = $("#search_sdatetime").val() + "";
+                }
+                let input_keyword_changed = $("#input_keyword_changed").val() + "";
+                if(input_keyword_changed == "1"){
+                    search_cway = "before";
+                    $("#search_cway").val(search_cway);
+                    cdatetime = "";
+                    $("#search_sdatetime").val("");
+                    $("#search_fdatetime").val("");
+                    $("#tbody_tbfaq_list").html("");
+                    $("#input_keyword_changed").val("0");
+                }
 
                 let _data = {};
-                _data.url = "/api/tbnotice/moreList";
+                _data.url = "/api/tbfaq/moreList";
                 _data.type = "POST";
-                _data.param = beforeListParam;
+                _data.param = {
+                    'sdate' : $("#search_sdate").val(),
+                    'fdate' : $("#search_fdate").val(),
+                    'cdatetime' : cdatetime,
+                    'cway' : search_cway,
+                    'permore' : $("#search_permore").val()
+                    ,'deleted' : $("#search_deleted").val()
+                    ,'cate' : $("#search_cate").val()
+                    ,'title' : $("#search_title").val()
+                };
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let resultlist = obj_data;
                     if(resultlist.length == 0){
                         alert("no data");
                     }
                     for(let i=0;i<resultlist.length;i++){
-                        listenerAfterListEach(resultlist[i].createdAt + "")
+                        let this_created_at = resultlist[i].createdAt + "";
+                        //초기값 설정
+                        let search_sdatetime = $("#search_sdatetime").val() + "";
+                        if(search_sdatetime == ""){
+                            $("#search_sdatetime").val(this_created_at);
+                        }
+                        let search_fdatetime = $("#search_fdatetime").val() + "";
+                        if(search_fdatetime == ""){
+                            $("#search_fdatetime").val(this_created_at);
+                        }
+                        if(search_sdatetime > this_created_at){
+                            $("#search_sdatetime").val(this_created_at);
+                        }
+                        if(search_fdatetime < this_created_at){
+                            $("#search_fdatetime").val(this_created_at);
+                        }
+
                         let each_list = [];
                         each_list.push(resultlist[i]);
                         if(search_cway == "recent"){
-                            $("#tbody_tbnotice_list").prepend(list_info_tbnotice_template({"resultData_tbnotice":each_list}));
+                            $("#tbody_tbfaq_list").prepend(list_info_tbfaq_template({"resultData_tbfaq":each_list}));
                         } else {
-                            $("#tbody_tbnotice_list").append(list_info_tbnotice_template({"resultData_tbnotice":each_list}));
+                            $("#tbody_tbfaq_list").append(list_info_tbfaq_template({"resultData_tbfaq":each_list}));
                         }
                         listenerAfterList();
                     }

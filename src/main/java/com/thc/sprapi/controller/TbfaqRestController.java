@@ -37,6 +37,22 @@ public class TbfaqRestController {
         this.tbfaqService = tbfaqService;
     }
 
+    @Operation(summary = "FAQ 순서 수정",
+            description = "FAQ 순서 수정 위한 컨트롤러 (권한 확인) <br />"
+                    + "@param TbfaqSequenceDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbfaqAfterUpdateDto\\> <br />"
+                    + "@exception 해당 자료 없음 <br />"
+    )
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/sequence")
+    public ResponseEntity<TbfaqDto.TbfaqAfterUpdateDto> sequence(@Valid @RequestBody TbfaqDto.TbfaqSequenceDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setNowGrant(tbgrantService.access("tbfaq", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowTbuserId(principalDetails.getTbuser().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(tbfaqService.sequence(params));
+    }
+
+    /**/
+
     @Operation(summary = "FAQ 등록",
             description = "FAQ 등록 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbfaqCreateDto <br />"

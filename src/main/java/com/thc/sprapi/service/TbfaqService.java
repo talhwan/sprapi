@@ -8,6 +8,8 @@ import com.thc.sprapi.dto.TbfaqDto;
 import java.util.List;
 
 public interface TbfaqService {
+    public TbfaqDto.TbfaqAfterUpdateDto sequence(TbfaqDto.TbfaqSequenceDto params);
+    /**/
     public TbfaqDto.TbfaqAfterCreateDto create(TbfaqDto.TbfaqCreateDto params);
     public TbfaqDto.TbfaqAfterUpdateDto update(TbfaqDto.TbfaqUpdateDto params);
     public TbfaqDto.TbfaqAfterUpdateDto delete(TbfaqDto.TbfaqUpdateDto params);

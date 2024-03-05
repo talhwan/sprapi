@@ -8,7 +8,30 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 public class TbfaqDto {
-	
+
+	@Schema
+	@Builder
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class TbfaqSequenceDto extends CommonGrantDto{
+		@Schema(description = "id", example="length32textnumber")
+		@NotNull
+		@NotEmpty
+		@Size(max=32)
+		private String id;
+
+		@Schema(description = "way", example="way")
+		private String way;
+
+		@Schema(description = "nowTbuserId", example="nowTbuserId")
+		private String nowTbuserId;
+
+	}
+
+	/**/
+
 	@Schema
 	@Builder
 	@Getter
@@ -22,10 +45,7 @@ public class TbfaqDto {
 		@Size(max=100)
 		private String title;
 		@Schema(description = "sequence", example="sequence")
-		@NotNull
-		@NotEmpty
-		@Size(max=100)
-		private int sequence;
+		private Integer sequence;
 		@Schema(description = "cate", example="cate")
 		@NotNull
 		@NotEmpty
@@ -71,8 +91,7 @@ public class TbfaqDto {
 		@Size(max=100)
 		private String title;
 		@Schema(description = "sequence", example="sequence")
-		@Size(max=100)
-		private int sequence;
+		private Integer sequence;
 		@Schema(description = "cate", example="cate")
 		@Size(max=100)
 		private String cate;
@@ -99,8 +118,7 @@ public class TbfaqDto {
 		@Size(max=100)
 		private String title;
 		@Schema(description = "sequence", example="sequence")
-		@Size(max=100)
-		private int sequence;
+		private Integer sequence;
 		@Schema(description = "cate", example="cate")
 		@Size(max=100)
 		private String cate;
