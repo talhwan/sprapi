@@ -1,13 +1,13 @@
 package com.thc.sprapi.dto;
 
-import com.thc.sprapi.domain.Tbfaq;
+import com.thc.sprapi.domain.Tbpopup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-public class TbfaqDto {
+public class TbpopupDto {
 
 	@Schema
 	@Builder
@@ -15,7 +15,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqSequenceDto extends CommonGrantDto{
+	public static class TbpopupSequenceDto extends CommonGrantDto{
 		@Schema(description = "id", example="length32textnumber")
 		@NotNull
 		@NotEmpty
@@ -38,7 +38,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqCreateDto extends CommonGrantDto{
+	public static class TbpopupCreateDto extends CommonGrantDto{
 		@Schema(description = "title", example="title")
 		@NotNull
 		@NotEmpty
@@ -56,13 +56,18 @@ public class TbfaqDto {
 		@NotEmpty
 		@Size(max=200)
 		private String mpic;
+		@Schema(description = "url", example="url")
+		@NotNull
+		@NotEmpty
+		@Size(max=200)
+		private String url;
 		@Schema(description = "content", example="content")
 		@NotNull
 		@NotEmpty
 		private String content;
 
-		public Tbfaq toEntity() {
-			return Tbfaq.of(title, sequence, cate, mpic, content);
+		public Tbpopup toEntity() {
+			return Tbpopup.of(title, sequence, cate, mpic, url, content);
 		}
 	}
 	@Schema
@@ -71,7 +76,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqAfterCreateDto {
+	public static class TbpopupAfterCreateDto {
 		@Schema(description = "id", example="length32textnumber")
 		private String id;
 	}
@@ -82,7 +87,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqUpdateDto extends CommonGrantDto{
+	public static class TbpopupUpdateDto extends CommonGrantDto{
 		@Schema(description = "id", example="length32textnumber")
 		@NotNull
 		@NotEmpty
@@ -102,6 +107,8 @@ public class TbfaqDto {
 		private String cate;
 		@Schema(description = "mpic", example="mpic")
 		private String mpic;
+		@Schema(description = "url", example="url")
+		private String url;
 		@Schema(description = "content", example="content")
 		private String content;
 
@@ -115,7 +122,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqAfterUpdateDto {
+	public static class TbpopupAfterUpdateDto {
 		@Schema(description = "id", example="length32textnumber")
 		private String id;
 		@Schema(description = "deleted", example="Y")
@@ -142,7 +149,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqSelectDto extends CommonSelectDto{
+	public static class TbpopupSelectDto extends CommonSelectDto{
 		@Schema(description = "title", example="title")
 		private String title;
 		@Schema(description = "sequence", example="sequence")
@@ -151,6 +158,8 @@ public class TbfaqDto {
 		private String cate;
 		@Schema(description = "mpic", example="mpic")
 		private String mpic;
+		@Schema(description = "url", example="url")
+		private String url;
 		@Schema(description = "content", example="content")
 		private String content;
 	}
@@ -161,7 +170,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqListDto extends CommonGrantDto {
+	public static class TbpopupListDto extends CommonGrantDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -176,7 +185,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqPagedListDto extends CommonPagedListDto {
+	public static class TbpopupPagedListDto extends CommonPagedListDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 
@@ -190,7 +199,7 @@ public class TbfaqDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class TbfaqMoreListDto extends CommonMoreListDto {
+	public static class TbpopupMoreListDto extends CommonMoreListDto {
 		@Schema(description = "deleted", example="N")
 		private String deleted;
 

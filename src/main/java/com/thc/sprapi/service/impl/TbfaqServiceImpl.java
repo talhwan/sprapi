@@ -76,6 +76,9 @@ public class TbfaqServiceImpl implements TbfaqService {
         if(params.getCate() != null){
             tbfaq.setCate(params.getCate());
         }
+        if(params.getMpic() != null){
+            tbfaq.setMpic(params.getMpic());
+        }
         if(params.getContent() != null){
             tbfaq.setContent(params.getContent());
         }

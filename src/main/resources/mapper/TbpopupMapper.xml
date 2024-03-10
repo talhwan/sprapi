@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.sprapi.mapper.TbpopupMapper">
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbpopupDto$TbpopupSelectDto">
+		SELECT tbpopup.id
+			,tbpopup.created_at as createdAt
+			,tbpopup.modified_at as modifiedAt
+			,tbpopup.deleted
+			,tbpopup.title
+			,tbpopup.sequence
+			,tbpopup.cate
+			,tbpopup.mpic
+			,tbpopup.url
+			,tbpopup.content
+			/*,CONVERT(tbpopup.content USING utf8) as content*/
+		FROM tbpopup
+		WHERE tbpopup.id = #{id}
+	</select>
+
+	<select id="list" parameterType="com.thc.sprapi.dto.TbpopupDto$TbpopupListDto" resultType="com.thc.sprapi.dto.TbpopupDto$TbpopupSelectDto">
+		SELECT tbpopup.id
+		FROM tbpopup
+		WHERE tbpopup.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbpopup.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND tbpopup.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "cate != null and cate !=''">AND tbpopup.cate = #{cate}</if>
+		<!--<if test = "sdate != null and sdate !=''">AND tbpopup.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpopup.created_at</if>-->
+		ORDER BY tbpopup.sequence DESC
+	</select>
+
+	<select id="moreList" parameterType="com.thc.sprapi.dto.TbpopupDto$TbpopupMoreListDto" resultType="com.thc.sprapi.dto.TbpopupDto$TbpopupSelectDto">
+		SELECT tbpopup.id
+		FROM tbpopup
+		WHERE tbpopup.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbpopup.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND tbpopup.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "cate != null and cate !=''">AND tbpopup.cate = #{cate}</if>
+		<if test = "sdate != null and sdate !=''">AND tbpopup.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpopup.created_at</if>
+		<if test = "cdatetime != null and cdatetime !=''">
+			<if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > tbpopup.created_at ORDER BY tbpopup.created_at DESC</if>
+			<if test = "cway =='recent'">AND tbpopup.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tbpopup.created_at ASC</if>
+		</if>
+		LIMIT 0, #{permore}
+	</select>
+
+	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbpopupDto$TbpopupPagedListDto" resultType="com.thc.sprapi.dto.TbpopupDto$TbpopupSelectDto">
+		SELECT tbpopup.id
+		FROM tbpopup
+		WHERE tbpopup.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbpopup.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND tbpopup.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "cate != null and cate !=''">AND tbpopup.cate = #{cate}</if>
+		<if test = "sdate != null and sdate !=''">AND tbpopup.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpopup.created_at</if>
+		<if test = "orderby =='created_at'">ORDER BY tbpopup.created_at </if>
+		<if test = "orderby =='title'">ORDER BY tbpopup.title </if>
+		<if test = "orderway =='asc'">ASC</if>
+		<if test = "orderway =='desc'">DESC</if>
+		LIMIT #{callpage}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbpopupDto$TbpopupPagedListDto" resultType="Integer">
+		SELECT count(tbpopup.id) as listsize
+		FROM tbpopup
+		WHERE tbpopup.id is not null
+		<if test = "deleted != null and deleted !=''">AND tbpopup.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND tbpopup.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "cate != null and cate !=''">AND tbpopup.cate = #{cate}</if>
+		<if test = "sdate != null and sdate !=''">AND tbpopup.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbpopup.created_at</if>
+	</select>
+
+</mapper>

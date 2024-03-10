@@ -12,9 +12,13 @@ public class TbgrantpartDto {
 	public static String[][] types = {
 		{"tbgrant","접근권한"}
 		,{"tbuser", "사용자"}
-		,{"tbpost", "게시글"}
-		,{"tbfaq", "FAQ"}
+
 		,{"tbnotice", "공지사항"}
+		,{"tbfaq", "FAQ"}
+		,{"tbbanner", "배너"}
+		,{"tbpopup", "팝업"}
+		,{"tbpost", "게시글"}
+
 		,{"tbgsquid", "오징어게임"}
 	};
 

@@ -10,6 +10,7 @@
 			,tbfaq.title
 			,tbfaq.sequence
 			,tbfaq.cate
+			,tbfaq.mpic
 			,tbfaq.content
 			/*,CONVERT(tbfaq.content USING utf8) as content*/
 		FROM tbfaq
