@@ -18,6 +18,8 @@ public class TbgrantpartDto {
 		,{"tbbanner", "배너"}
 		,{"tbpopup", "팝업"}
 		,{"tbpost", "게시글"}
+			
+		,{"tbcrew", "가맹점"}
 
 		,{"tbgsquid", "오징어게임"}
 	};

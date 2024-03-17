@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "2. 공지사항 API 안내",
+@Tag(name = "2-1. 공지사항 API 안내",
         description = "공지사항 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbnotice")
 @RestController

@@ -21,7 +21,7 @@ public class CommonAfterPagedListDto<T> {
 	@Schema(description = "전체 갯수", example="1")
 	private int listsize;
 
-	@Schema(description = "리스트", example="해당 리스트")
+	@Schema(description = "리스트", example="상세정보가 담긴 리스트")
 	private List<T> list;
 
 	public CommonAfterPagedListDto(int[] calc, List<T> list){

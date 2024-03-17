@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@Tag(name = "0. 기본 API 안내",
+@Tag(name = "0-1. 기본 API 안내",
         description = "기본 기능 정의한 RestController.")
 @RequestMapping("/api/default")
 @RestController

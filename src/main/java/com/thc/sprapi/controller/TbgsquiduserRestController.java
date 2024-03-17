@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "0-2. 오징어게임 사용자 API 안내",
+@Tag(name = "4-1_2. 오징어게임 사용자 API 안내",
         description = "오징어게임 사용자 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbgsquiduser")
 @RestController

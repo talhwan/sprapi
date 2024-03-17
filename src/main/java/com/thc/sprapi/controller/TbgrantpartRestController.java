@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "0-1. 접근권한 기능 API 안내",
+@Tag(name = "1-1_1. 접근권한 기능 API 안내",
         description = "접근권한 기능 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbgrantpart")
 @RestController

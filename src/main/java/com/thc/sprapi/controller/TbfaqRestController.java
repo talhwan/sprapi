@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "2. FAQ API 안내",
+@Tag(name = "2-2. FAQ API 안내",
         description = "FAQ 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbfaq")
 @RestController

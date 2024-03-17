@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@Tag(name = "1. 회원 API 안내",
+@Tag(name = "1-2. 회원 API 안내",
         description = "회원 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbuser")
 @RestController

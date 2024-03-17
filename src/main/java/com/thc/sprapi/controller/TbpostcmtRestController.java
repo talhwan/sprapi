@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "2-1. 게시글 댓글 API 안내",
+@Tag(name = "2-5_2. 게시글 댓글 API 안내",
         description = "게시글 댓글 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbpostcmt")
 @RestController

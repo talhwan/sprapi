@@ -11,7 +11,7 @@ function func_ajax(_data) {
 		data: JSON.stringify(_data.param),
 		cache: false,
 		success: (data, status, xhr)=>{
-			alert(JSON.stringify(data));
+			// alert(JSON.stringify(data));
 			// success
 			if (xhr.status >= 200 && xhr.status < 300) {
 				_data.success(data, status, xhr);

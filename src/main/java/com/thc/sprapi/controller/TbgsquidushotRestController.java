@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "0-2. 오징어게임 사용자 API 안내",
-        description = "오징어게임 사용자 관련 기능 정의한 RestController.")
+@Tag(name = "4-1_1. 오징어게임 움직임 API 안내",
+        description = "오징어게임 움직임 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbgsquidushot")
 @RestController
 public class TbgsquidushotRestController {
@@ -34,8 +34,8 @@ public class TbgsquidushotRestController {
         this.tbgsquidushotService = tbgsquidushotService;
     }
 
-    @Operation(summary = "오징어게임 사용자 참여",
-            description = "오징어게임 사용자 신규 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 참여",
+            description = "오징어게임 움직임 신규 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgsquidushotCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbgsquidushotAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
@@ -47,8 +47,8 @@ public class TbgsquidushotRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tbgsquidushotService.join(params));
     }
     /**/
-    @Operation(summary = "오징어게임 사용자 등록",
-            description = "오징어게임 사용자 신규 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 등록",
+            description = "오징어게임 움직임 신규 등록을 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgsquidushotCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbgsquidushotAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
@@ -59,8 +59,8 @@ public class TbgsquidushotRestController {
         params.setNowGrant(tbgrantService.access("tbgsquid", "create",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(tbgsquidushotService.create(params));
     }
-    @Operation(summary = "오징어게임 사용자 수정",
-            description = "오징어게임 사용자 기존 수정을 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 수정",
+            description = "오징어게임 움직임 기존 수정을 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgsquidushotUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgsquidushotAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
@@ -71,8 +71,8 @@ public class TbgsquidushotRestController {
         params.setNowGrant(tbgrantService.access("tbgsquid", "update",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidushotService.update(params));
     }
-    @Operation(summary = "오징어게임 사용자 삭제",
-            description = "오징어게임 사용자 삭제를 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 삭제",
+            description = "오징어게임 움직임 삭제를 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgsquidushotUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgsquidushotAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
@@ -84,8 +84,8 @@ public class TbgsquidushotRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidushotService.deleteList(params));
     }
 
-    @Operation(summary = "오징어게임 사용자 조회",
-            description = "오징어게임 사용자 1개 조회를 위한 컨트롤러 (모두 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 조회",
+            description = "오징어게임 움직임 1개 조회를 위한 컨트롤러 (모두 접근 가능) <br />"
                     + "@param id(PathVariable) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgsquidushotSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
@@ -97,8 +97,8 @@ public class TbgsquidushotRestController {
         params.setNowGrant(tbgrantService.access("tbgsquid", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidushotService.detail(params));
     }
-    @Operation(summary = "오징어게임 사용자 목록 조회(검색 기능 포함)",
-            description = "오징어게임 사용자 목록 조회를 위한 컨트롤러 (모두 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 목록 조회(검색 기능 포함)",
+            description = "오징어게임 움직임 목록 조회를 위한 컨트롤러 (모두 접근 가능) <br />"
                     + "@param TbgsquidushotListDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgsquidushotSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
@@ -109,8 +109,8 @@ public class TbgsquidushotRestController {
         params.setNowGrant(tbgrantService.access("tbgsquid", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidushotService.list(params));
     }
-    @Operation(summary = "오징어게임 사용자 목록 조회 - 스크롤 (검색 기능 포함)",
-            description = "오징어게임 사용자 목록 조회 - 스크롤 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 목록 조회 - 스크롤 (검색 기능 포함)",
+            description = "오징어게임 움직임 목록 조회 - 스크롤 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgsquidushotMoreListDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
@@ -122,8 +122,8 @@ public class TbgsquidushotRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquidushotService.moreList(params));
     }
 
-    @Operation(summary = "오징어게임 사용자 목록 조회 - 페이지 (검색 기능 포함)",
-            description = "오징어게임 사용자 목록 조회 - 페이지 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "오징어게임 움직임 목록 조회 - 페이지 (검색 기능 포함)",
+            description = "오징어게임 움직임 목록 조회 - 페이지 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbgsquidushotPagedListDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"

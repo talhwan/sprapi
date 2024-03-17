@@ -5,8 +5,8 @@
 </head>
 <body>
 
-<script id="list_info_tbuser" type="text/x-handlebars-template">
-    {{#resultData_tbuser}}
+<script id="list_info_tbcrewuser" type="text/x-handlebars-template">
+    {{#resultData_tbcrewuser}}
     <tr class="gradeA">
         <td>
             <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
@@ -14,36 +14,42 @@
         <td><font class="font_order"></font></td>
         <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
         <td><font class="font_process_{{process}}">{{process}}</font></td>
-        <td class="cursor_pointer" onclick="location.href='/tbuser/admin_detail/{{id}}';">{{nick}}</td>
-        <td class="cursor_pointer" onclick="location.href='/tbuser/admin_detail/{{id}}';">{{username}}</td>
+        <td><font class="font_cate_{{cate}}">{{cate}}</font></td>
+        <td class="cursor_pointer" onclick="location.href='/tbcrewuser/admin_detail/{{id}}';">{{title}}</td>
         <td>{{createdAt}} / {{modifiedAt}}</td>
     </tr>
-    {{/resultData_tbuser}}
+    {{/resultData_tbcrewuser}}
 </script>
 <script type="text/javascript">
-    var list_info_tbuser = $("#list_info_tbuser").html();
-    var list_info_tbuser_template = Handlebars.compile(list_info_tbuser);
+    var list_info_tbcrewuser = $("#list_info_tbcrewuser").html();
+    var list_info_tbcrewuser_template = Handlebars.compile(list_info_tbcrewuser);
 </script>
 
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_tbuser").addClass("active");
+        $(".sidemenu_li_tbcrew").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>사용자</h2>
+                <h2>가맹점(<font class="font_tbcrew_title"></font>) 출입자 목록</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/tbgrant/admin_list">권한 관련</a>
+                        <a href="/tbcrew/admin_list">출입관리</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/tbcrew/admin_list">가맹점 목록</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:location_href_path_param('/tbcrew/admin_detail/', getIdFromUrl(null))">가맹점(<font class="font_tbcrew_title"></font>) 상세</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>사용자 목록</strong>
+                        <strong>가맹점 출입자 목록</strong>
                     </li>
                 </ol>
             </div>
@@ -67,14 +73,17 @@
                                     <option value="Y">삭제</option>
                                 </select>
                             </div>
-                            <label class="col-sm-2 col-form-label">진행</label>
+                            <label class="col-sm-2 col-form-label">진행도</label>
                             <div class="col-sm-4">
                                 <select class="select_search_keyword form-control m-b" keyword="process" id="search_process" onchange="listener_keyword_changed()">
                                     <option value="" selected="selected">전체</option>
-                                    <option value="0">0단계</option>
+                                    <option value="yet">승인 전</option>
+                                    <option value="ing">정상</option>
+                                    <option value="done">계약 종료</option>
+                                    <option value="blocked">차단됨</option>
                                 </select>
                             </div>
-                            <!--<label class="col-sm-6 col-form-label"></label>-->
+
                             <label class="col-sm-2 col-form-label">등록 시기</label>
                             <div class="col-sm-3">
                                 <input class="form-control" id="search_sdate" type="date" onchange="listener_keyword_changed()"/>
@@ -93,15 +102,12 @@
                             <label class="col-sm-2 col-form-label">키워드</label>
                             <div class="col-sm-4">
                                 <select class="form-control m-b" id="search_keyword" onchange="set_search_keyword()">
-                                    <option value="10" selected="selected">ID</option>
-                                    <option value="20">NICK</option>
+                                    <option value="10" selected="selected">회원 이름</option>
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <input id="search_username" onchange="listener_keyword_changed();"
+                                <input id="search_title" onchange="listener_keyword_changed();"
                                        class="form-control search_keyword_each search_keyword_each_10" type="text" placeholder="내용을 입력하세요"/>
-                                <input id="search_nick" onchange="listener_keyword_changed();"
-                                       class="hide form-control search_keyword_each search_keyword_each_20" type="text" placeholder="내용을 입력하세요"/>
                             </div>
                             <label class="col-sm-2"></label>
                             <label class="col-sm-2 col-form-label">한번에 불러올 갯수</label>
@@ -114,7 +120,7 @@
                             </div>
                             <label class="col-sm-2 col-form-label">조회방향</label>
                             <div class="col-sm-3">
-                                <select class="form-control" id="search_cway" onchange="listener_tbcrew_list_by_page();">
+                                <select class="form-control" id="search_cway" onchange="listener_tbcrewuser_list_by_page();">
                                     <option value="before" selected="selected">이전글</option>
                                     <option value="recent">최신글</option>
                                 </select>
@@ -135,77 +141,37 @@
                         <th>#</th>
                         <th>삭제여부</th>
                         <th>진행도</th>
-                        <th>NICK</th>
-                        <th>ID</th>
+                        <th>구분</th>
+                        <th>제목</th>
                         <th>입력일시/수정일시</th>
                     </tr>
                     </thead>
-                    <tbody id="tbody_tbuser_list">
+                    <tbody id="tbody_tbcrewuser_list">
                     </tbody>
                 </table>
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="delete_tbuser()">일괄삭제</button>
+                            <button class="btn btn-danger btn-sm" onclick="delete_tbcrewuser()">일괄삭제</button>
                         </td>
                         <td style="text-align: right;">
-                            <!--<button class="btn btn-secondary btn-sm" onclick="location.href='/tbuser/admin_insert'">추가하기</button>
-                            -->
-                            <button class="btn btn-primary btn-sm" onclick="search_tbuser()">더보기</button>
+                            <button class="btn btn-secondary btn-sm" onclick="location_href_path_param('/tbcrewuser/admin_create/', getIdFromUrl(null))">추가하기</button>
+                            <button class="btn btn-primary btn-sm" onclick="search_tbcrewuser()">더보기</button>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <script>
-            function check_chk_delete(){
-                let all_checked = true;
-                let input_chk_delete_each = $(".input_chk_delete_each");
-                for(let i=0;i<input_chk_delete_each.length;i++){
-                    let each_checked = $(input_chk_delete_each[i]).prop("checked");
-                    if(each_checked){
-                    } else {
-                        all_checked = false;
-                    }
-                }
-                $(".input_chk_delete_all").prop("checked", all_checked);
-            }
-            function listener_chk_delete(obj){
-                let keyword = $(obj).attr("keyword");
-                let checked = $(obj).prop("checked");
-                //alert(checked);
-                switch(keyword){
-                    case "all" :
-                        if(checked){
-                            $(".input_chk_delete_each").prop("checked", true);
-                        } else {
-                            $(".input_chk_delete_each").prop("checked", false);
-                        }
-                        break;
-                    default :
-                        check_chk_delete();
-                        break;
-                }
-            }
-            function delete_tbuser(){
-
+            function delete_tbcrewuser(){
                 if (confirm("정말 삭제하시겠습니까?")) {
                 } else {
                     alert("취소");
                     return false;
                 }
-
-                let ids = [];
-                let input_chk_delete_each = $(".input_chk_delete_each");
-                for(let i=0;i<input_chk_delete_each.length;i++){
-                    let each_checked = $(input_chk_delete_each[i]).prop("checked");
-                    if(each_checked){
-                        ids.push($(input_chk_delete_each[i]).attr("keyword"));
-                    }
-                }
-
+                let ids = listenerGetDeleteIds();
                 let _data = new Map();
-                _data.url = "/api/tbuser";
+                _data.url = "/api/tbcrewuser";
                 _data.type = "DELETE";
                 _data.param = {
                     'ids' : ids
@@ -233,109 +199,56 @@
             }
         </script>
         <script>
-            function listener_keyword_changed(){$("#input_keyword_changed").val("1");}
-            function set_search_sdatefdate(obj){
-                var temp_d = new Date();
-                $("#search_fdate").val(dateToStringFormat(temp_d));
-
-                switch(obj){
-                    case 'null':
-                        $("#search_fdate").val("");
-                        $("#search_sdate").val("");
-                        break;
-                    case 'today':
-                        $("#search_sdate").val(dateToStringFormat(temp_d));
-                        break;
-                    case 'week':
-                        temp_d.setDate(temp_d.getDate() - 7);
-                        $("#search_sdate").val(dateToStringFormat(temp_d));
-                        break;
-                    case 'month':
-                        temp_d.setMonth(temp_d.getMonth() - 1);
-                        $("#search_sdate").val(dateToStringFormat(temp_d));
-                        break;
-                }
-                listener_keyword_changed();
-            }
-            function set_search_keyword(){
-                let search_keyword = $("#search_keyword").val();
-                let search_keyword_each = $(".search_keyword_each");
-                for (let i = 0; i < search_keyword_each.length; i++) {
-                    let t_name = $(search_keyword_each[i]).attr("name") + "";
-                    $(search_keyword_each[i]).val("");
-                }
-                listener_keyword_changed();
-
-                $(".search_keyword_each").removeClass("hide");
-                $(".search_keyword_each").addClass("hide");
-                $(".search_keyword_each_" + search_keyword).removeClass("hide");
-            }
-        </script>
-        <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
-                search_tbuser();
+                detail_tbcrew();
+                search_tbcrewuser();
             });
-            function search_tbuser(){
-                let search_cway = $("#search_cway").val() + "";
-                let cdatetime = "";
-                if(search_cway == "recent"){
-                    cdatetime = $("#search_fdatetime").val() + "";
-                } else {
-                    cdatetime = $("#search_sdatetime").val() + "";
-                }
-                let input_keyword_changed = $("#input_keyword_changed").val() + "";
-                if(input_keyword_changed == "1"){
-                    search_cway = "before";
-                    $("#search_cway").val(search_cway);
-                    cdatetime = "";
-                    $("#search_sdatetime").val("");
-                    $("#search_fdatetime").val("");
-                    $("#tbody_tbuser_list").html("");
-                    $("#input_keyword_changed").val("0");
-                }
-
+            function detail_tbcrew() {
+                let tbcrewId = getIdFromUrl(null);
                 let _data = new Map();
-                _data.url = "/api/tbuser/moreList";
+                _data.url = "/api/tbcrew/" + tbcrewId;
+                _data.type = "GET";
+                _data.success = function (obj_data, obj_status, obj_xhr) {
+                    let detailKeys = Object.keys(obj_data)
+                    for (let eachKey of detailKeys) {
+                        if (!isNull(obj_data[eachKey])) {
+                            $(".font_tbcrew_" + eachKey).text(obj_data[eachKey]);
+                            $("#detail_tbcrew_" + eachKey).val(obj_data[eachKey]);
+                            $("#img_tbcrew_" + eachKey).attr("src", obj_data[eachKey]);
+                        }
+                    }
+                }
+                _data.error = function (obj_data, obj_status, obj_xhr) {
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+
+            function search_tbcrewuser() {
+                let beforeListParam = listenerBeforeList("tbody_tbcrewuser_list");
+                beforeListParam['process'] = $("#search_process").val();
+                beforeListParam['cate'] = $("#search_cate").val();
+                beforeListParam['title'] = $("#search_title").val();
+                beforeListParam['tbcrewId'] = getIdFromUrl(null);
+
+                let _data = {};
+                _data.url = "/api/tbcrewuser/moreList";
                 _data.type = "POST";
-                _data.param = {
-                    'sdate' : $("#search_sdate").val(),
-                    'fdate' : $("#search_fdate").val(),
-                    'cdatetime' : cdatetime,
-                    'cway' : search_cway,
-                    'permore' : $("#search_permore").val()
-                    ,'deleted' : $("#search_deleted").val()
-                    ,'username' : $("#search_username").val()
-                };
+                _data.param = beforeListParam;
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let resultlist = obj_data;
                     if(resultlist.length == 0){
                         alert("no data");
                     }
                     for(let i=0;i<resultlist.length;i++){
-                        let this_created_at = resultlist[i].createdAt + "";
-                        //초기값 설정
-                        let search_sdatetime = $("#search_sdatetime").val() + "";
-                        if(search_sdatetime == ""){
-                            $("#search_sdatetime").val(this_created_at);
-                        }
-                        let search_fdatetime = $("#search_fdatetime").val() + "";
-                        if(search_fdatetime == ""){
-                            $("#search_fdatetime").val(this_created_at);
-                        }
-                        if(search_sdatetime > this_created_at){
-                            $("#search_sdatetime").val(this_created_at);
-                        }
-                        if(search_fdatetime < this_created_at){
-                            $("#search_fdatetime").val(this_created_at);
-                        }
-
+                        listenerAfterListEach(resultlist[i].createdAt + "")
                         let each_list = [];
                         each_list.push(resultlist[i]);
                         if(search_cway == "recent"){
-                            $("#tbody_tbuser_list").prepend(list_info_tbuser_template({"resultData_tbuser":each_list}));
+                            $("#tbody_tbcrewuser_list").prepend(list_info_tbcrewuser_template({"resultData_tbcrewuser":each_list}));
                         } else {
-                            $("#tbody_tbuser_list").append(list_info_tbuser_template({"resultData_tbuser":each_list}));
+                            $("#tbody_tbcrewuser_list").append(list_info_tbcrewuser_template({"resultData_tbcrewuser":each_list}));
                         }
                         listenerAfterList();
                     }

@@ -24,8 +24,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import com.thc.sprapi.security.JwtTokenDto;
 
-@Tag(name = "0. 권한 API 안내",
-		description = "권한 기능 정의한 RestController.")
+@Tag(name = "0-2. 시큐리티 권한 API 안내",
+		description = "시큐리티 권한 기능 정의한 RestController.")
 @RequestMapping("/api/auth")
 @RestController
 public class AuthRestController {
