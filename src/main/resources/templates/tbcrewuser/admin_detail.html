@@ -98,15 +98,6 @@
             </div>
         </div>
         <script>
-            function listener_location_href(part, subject){
-                let detail_id = $("#detail_tbcrewuser_id").val();
-                if(isNull(detail_id)){
-                    return false;
-                }
-                location.href='/'+subject+'/'+part+'/' + $("#detail_tbcrewuser_id").val();
-            }
-        </script>
-        <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
                 detail_tbcrewuser();
