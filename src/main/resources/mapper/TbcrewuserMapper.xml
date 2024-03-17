@@ -17,9 +17,11 @@
 			,tbcrew.id as tbcrewId
 			,tbcrew.process as tbcrewProcess
 			,tbcrew.title as tbcrewTitle
+			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.name) as tbuserUsername
+			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.name) as tbuserName
 			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
+			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.phone) as tbuserPhone
 			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
-			,IF(tbcrewuser.process = tbcrew.process, 'alive', 'dead') as alive
 		FROM tbcrewuser, tbcrew, tbuser
 		WHERE tbcrewuser.tbuser_id = tbuser.id
 		  AND tbcrewuser.tbcrew_id = tbcrew.id
@@ -33,6 +35,7 @@
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbcrewuser.tbuser_id = #{tbuserId}</if>
 		<if test = "process != null and process !=''">AND tbcrewuser.process = #{process}</if>
+		<if test = "cate != null and cate !=''">AND tbcrewuser.cate = #{cate}</if>
 		ORDER BY tbcrewuser.created_at ASC
 	</select>
 
@@ -44,6 +47,7 @@
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbcrewuser.tbuser_id = #{tbuserId}</if>
 		<if test = "process != null and process !=''">AND tbcrewuser.process = #{process}</if>
+		<if test = "cate != null and cate !=''">AND tbcrewuser.cate = #{cate}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewuser.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewuser.created_at</if>
 		<if test = "cdatetime != null and cdatetime !=''">
@@ -61,6 +65,7 @@
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbcrewuser.tbuser_id = #{tbuserId}</if>
 		<if test = "process != null and process !=''">AND tbcrewuser.process = #{process}</if>
+		<if test = "cate != null and cate !=''">AND tbcrewuser.cate = #{cate}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewuser.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewuser.created_at</if>
 		<if test = "orderby =='created_at'">ORDER BY tbcrewuser.created_at </if>
@@ -77,6 +82,7 @@
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbuserId != null and tbuserId !=''">AND tbcrewuser.tbuser_id = #{tbuserId}</if>
 		<if test = "process != null and process !=''">AND tbcrewuser.process = #{process}</if>
+		<if test = "cate != null and cate !=''">AND tbcrewuser.cate = #{cate}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewuser.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewuser.created_at</if>
 	</select>

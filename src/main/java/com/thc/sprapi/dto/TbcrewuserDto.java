@@ -121,6 +121,10 @@ public class TbcrewuserDto {
 		private String tbuserUsername;
 		@Schema(description = "tbuserNick", example="tbuserNick")
 		private String tbuserNick;
+		@Schema(description = "tbuserName", example="tbuserName")
+		private String tbuserName;
+		@Schema(description = "tbuserPhone", example="tbuserPhone")
+		private String tbuserPhone;
 		@Schema(description = "tbuserMpic", example="tbuserMpic")
 		private String tbuserMpic;
 

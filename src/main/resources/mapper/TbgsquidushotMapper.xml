@@ -21,7 +21,7 @@
 			,tbgsquidushot.tbgsquiduser_id as tbgsquiduserId
 			,tbgsquidushot.level
 			,tbgsquidushot.content
-			,tbuser.tbuser_id as tbuserId
+			,tbgsquiduser.tbuser_id as tbuserId
 			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.username) as tbuserUsername
 			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
 			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic

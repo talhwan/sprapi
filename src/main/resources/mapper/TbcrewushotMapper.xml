@@ -2,32 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thc.sprapi.mapper.TbcrewushotMapper">
 
-	<select id="next" parameterType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotListDto" resultType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotSelectDto">
-		SELECT tbcrewuser_id as tbcrewuserId
-		FROM(
-			SELECT count(*) as listsize, tbcrewuser_id, content FROM tbcrewushot
-			WHERE tbcrewushot.level = #{level}
-			AND tbcrewushot.content > 0
-			GROUP BY content
-			) as tbcrewushot_broup_by_content
-		WHERE tbcrewushot_broup_by_content.listsize = 1
-	</select>
-
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotSelectDto">
 		SELECT tbcrewushot.id
 			 ,tbcrewushot.deleted
 			,tbcrewushot.created_at as createdAt
 			,tbcrewushot.modified_at as modifiedAt
 			,tbcrewushot.tbcrewuser_id as tbcrewuserId
-			,tbcrewushot.level
+			,tbcrewushot.process
 			,tbcrewushot.content
-			,tbuser.tbuser_id as tbuserId
-			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.username) as tbuserUsername
-			,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
-			,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
-		FROM tbcrewushot, tbcrewuser, tbuser
+			,tbcrewuser.tbuser_id as tbuserId
+			,tbcrewuser.tbcrew_id as tbcrewId
+			,tbcrew.title as tbcrewTitle
+			 ,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.name) as tbuserUsername
+			 ,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.name) as tbuserName
+			 ,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.nick) as tbuserNick
+			 ,IF(tbuser.deleted = 'Y', '(deleted)', tbuser.phone) as tbuserPhone
+			 ,IF(tbuser.deleted = 'Y', '', tbuser.mpic) as tbuserMpic
+		FROM tbcrewushot, tbcrewuser, tbuser, tbcrew
 		WHERE tbcrewushot.tbcrewuser_id = tbcrewuser.id
 		  AND tbcrewuser.tbuser_id = tbuser.id
+		  AND tbcrewuser.tbcrew_id = tbcrew.id
 		  AND tbcrewushot.id = #{id}
 	</select>
 
@@ -37,7 +31,7 @@
 		WHERE tbcrewushot.tbcrewuser_id = tbcrewuser.id
 		<if test = "deleted != null and deleted !=''">AND tbcrewushot.deleted = #{deleted}</if>
 		<if test = "tbcrewuserId != null and tbcrewuserId !=''">AND tbcrewushot.tbcrewuser_id = #{tbcrewuserId}</if>
-		<if test = "level != null and level !=''">AND tbcrewushot.level = #{level}</if>
+		<if test = "process != null and process !=''">AND tbcrewushot.process = #{process}</if>
 		<if test = "content != null and content !=''">AND tbcrewushot.content = #{content}</if>
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		ORDER BY tbcrewushot.created_at ASC
@@ -45,12 +39,12 @@
 
 	<select id="moreList" parameterType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotMoreListDto" resultType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotSelectDto">
 		SELECT tbcrewushot.id
-		FROM tbcrewushot
-		WHERE tbcrewushot.id is not null
+		FROM tbcrewushot, tbcrewuser
+		WHERE tbcrewushot.tbcrewuser_id = tbcrewuser.id
 		<if test = "deleted != null and deleted !=''">AND tbcrewushot.deleted = #{deleted}</if>
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbcrewuserId != null and tbcrewuserId !=''">AND tbcrewushot.tbcrewuser_id = #{tbcrewuserId}</if>
-		<if test = "level != null and level !=''">AND tbcrewushot.level = #{level}</if>
+		<if test = "process != null and process !=''">AND tbcrewushot.process = #{process}</if>
 		<if test = "content != null and content !=''">AND tbcrewushot.content = #{content}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewushot.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewushot.created_at</if>
@@ -64,11 +58,12 @@
 	<select id="pagedList" parameterType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotPagedListDto" resultType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotSelectDto">
 		SELECT tbcrewushot.id
 		FROM tbcrewushot
-		WHERE tbcrewushot.id is not null
+		FROM tbcrewushot, tbcrewuser
+		WHERE tbcrewushot.tbcrewuser_id = tbcrewuser.id
 		<if test = "deleted != null and deleted !=''">AND tbcrewushot.deleted = #{deleted}</if>
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbcrewuserId != null and tbcrewuserId !=''">AND tbcrewushot.tbcrewuser_id = #{tbcrewuserId}</if>
-		<if test = "level != null and level !=''">AND tbcrewushot.level = #{level}</if>
+		<if test = "process != null and process !=''">AND tbcrewushot.process = #{process}</if>
 		<if test = "content != null and content !=''">AND tbcrewushot.content = #{content}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewushot.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewushot.created_at</if>
@@ -81,11 +76,12 @@
 	<select id="pagedListCount" parameterType="com.thc.sprapi.dto.TbcrewushotDto$TbcrewushotPagedListDto" resultType="Integer">
 		SELECT count(tbcrewushot.id) as listsize
 		FROM tbcrewushot
-		WHERE tbcrewushot.id is not null
+		FROM tbcrewushot, tbcrewuser
+		WHERE tbcrewushot.tbcrewuser_id = tbcrewuser.id
 		<if test = "deleted != null and deleted !=''">AND tbcrewushot.deleted = #{deleted}</if>
 		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewuser.tbcrew_id = #{tbcrewId}</if>
 		<if test = "tbcrewuserId != null and tbcrewuserId !=''">AND tbcrewushot.tbcrewuser_id = #{tbcrewuserId}</if>
-		<if test = "level != null and level !=''">AND tbcrewuser.level = #{level}</if>
+		<if test = "process != null and process !=''">AND tbcrewuser.process = #{process}</if>
 		<if test = "content != null and content !=''">AND tbcrewuser.content = #{content}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewushot.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewushot.created_at</if>

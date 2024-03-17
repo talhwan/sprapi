@@ -19,17 +19,17 @@ public class TbcrewushotDto {
 		@NotNull
 		@NotEmpty
 		private String tbcrewuserId;
-		@Schema(description = "level", example="level")
+		@Schema(description = "process", example="process")
 		@NotNull
 		@NotEmpty
-		private String level;
+		private String process;
 		@Schema(description = "content", example="point")
 		@NotNull
 		@NotEmpty
 		private String content;
 
 		public Tbcrewushot toEntity() {
-			return Tbcrewushot.of(tbcrewuserId, level, content);
+			return Tbcrewushot.of(tbcrewuserId, process, content);
 		}
 	}
 	@Schema
@@ -61,8 +61,8 @@ public class TbcrewushotDto {
 
 		@Schema(description = "tbcrewuserId", example="tbcrewuserId")
 		private String tbcrewuserId;
-		@Schema(description = "level", example="level")
-		private String level;
+		@Schema(description = "process", example="process")
+		private String process;
 		@Schema(description = "content", example="content")
 		private String content;
 	}
@@ -79,8 +79,8 @@ public class TbcrewushotDto {
 		private String deleted;
 		@Schema(description = "tbcrewuserId", example="tbcrewuserId")
 		private String tbcrewuserId;
-		@Schema(description = "level", example="level")
-		private String level;
+		@Schema(description = "process", example="process")
+		private String process;
 		@Schema(description = "content", example="content")
 		private String content;
 	}
@@ -94,6 +94,10 @@ public class TbcrewushotDto {
 	public static class TbcrewushotSelectDto extends CommonSelectDto{
 		@Schema(description = "tbcrewuserId", example="tbcrewId")
 		private String tbcrewuserId;
+		@Schema(description = "tbcrewId", example="tbcrewId")
+		private String tbcrewId;
+		@Schema(description = "tbcrewTitle", example="tbcrewTitle")
+		private String tbcrewTitle;
 		@Schema(description = "tbuserId", example="tbuserId")
 		private String tbuserId;
 		@Schema(description = "tbuserUsername", example="tbuserUsername")
@@ -103,8 +107,8 @@ public class TbcrewushotDto {
 		@Schema(description = "tbcrewuserMpic", example="tbcrewuserMpic")
 		private String tbuserMpic;
 
-		@Schema(description = "level", example="level")
-		private String level;
+		@Schema(description = "process", example="process")
+		private String process;
 		@Schema(description = "content", example="content")
 		private String content;
 		@Schema(description = "hasgrant", example="hasgrant")
@@ -125,8 +129,8 @@ public class TbcrewushotDto {
 		private String tbcrewId;
 		@Schema(description = "tbcrewuserId", example="tbcrewId")
 		private String tbcrewuserId;
-		@Schema(description = "level", example="level")
-		private String level;
+		@Schema(description = "process", example="process")
+		private String process;
 		@Schema(description = "content", example="content")
 		private String content;
 	}
@@ -144,8 +148,8 @@ public class TbcrewushotDto {
 		private String tbcrewId;
 		@Schema(description = "tbcrewuserId", example="tbcrewId")
 		private String tbcrewuserId;
-		@Schema(description = "level", example="level")
-		private String level;
+		@Schema(description = "process", example="process")
+		private String process;
 		@Schema(description = "content", example="content")
 		private String content;
 	}
@@ -162,8 +166,8 @@ public class TbcrewushotDto {
 		private String tbcrewId;
 		@Schema(description = "tbcrewuserId", example="tbcrewId")
 		private String tbcrewuserId;
-		@Schema(description = "level", example="level")
-		private String level;
+		@Schema(description = "process", example="process")
+		private String process;
 		@Schema(description = "content", example="content")
 		private String content;
 

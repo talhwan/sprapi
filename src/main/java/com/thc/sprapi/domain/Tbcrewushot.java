@@ -12,13 +12,13 @@ import lombok.ToString;
         @Index(columnList = "createdAt")
         ,@Index(columnList = "modifiedAt")
         ,@Index(columnList = "tbcrewuserId")
-        ,@Index(columnList = "level")
+        ,@Index(columnList = "process")
         ,@Index(columnList = "content")
         }
         ,uniqueConstraints={
         @UniqueConstraint(
-                name="UQ_tbcrewushot_tbcrew_tbcrewuser_level"
-                ,columnNames={"tbcrewuserId", "level"}
+                name="UQ_tbcrewushot_tbcrew_tbcrewuser_process"
+                ,columnNames={"tbcrewuserId", "process"}
         )
 }
 )
@@ -26,17 +26,17 @@ import lombok.ToString;
 public class Tbcrewushot extends AuditingFields {
 
     @Setter @Column(nullable = false) private String tbcrewuserId;
-    @Setter @Column(nullable = false) private String level;
+    @Setter @Column(nullable = false) private String process;
     @Setter @Column(nullable = false) private String content;
 
     protected Tbcrewushot(){}
-    private Tbcrewushot(String tbcrewuserId, String level, String content) {
+    private Tbcrewushot(String tbcrewuserId, String process, String content) {
         this.tbcrewuserId = tbcrewuserId;
-        this.level = level;
+        this.process = process;
         this.content = content;
     }
-    public static Tbcrewushot of(String tbcrewuserId, String level, String content) {
-        return new Tbcrewushot(tbcrewuserId, level, content);
+    public static Tbcrewushot of(String tbcrewuserId, String process, String content) {
+        return new Tbcrewushot(tbcrewuserId, process, content);
     }
 
     public TbcrewushotDto.TbcrewushotAfterCreateDto toAfterCreateDto() {
@@ -49,7 +49,7 @@ public class Tbcrewushot extends AuditingFields {
                 .id(super.getId())
                 .deleted(super.getDeleted())
                 .tbcrewuserId(getTbcrewuserId())
-                .level(getLevel())
+                .process(getProcess())
                 .content(getContent())
                 .build();
     }

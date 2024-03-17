@@ -52,6 +52,9 @@ public class TbcrewuserServiceImpl implements TbcrewuserService {
         if(params.getProcess() != null){
             tbcrewuser.setProcess(params.getProcess());
         }
+        if(params.getCate() != null){
+            tbcrewuser.setCate(params.getCate());
+        }
         if(params.getContent() != null){
             tbcrewuser.setContent(params.getContent());
         }
