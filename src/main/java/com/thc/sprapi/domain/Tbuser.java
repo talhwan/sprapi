@@ -37,7 +37,11 @@ public class Tbuser extends AuditingFields {
     @Setter @Column(nullable = true) private String phone;
     @Setter @Column(nullable = true) private String mpic;
     @Setter @Column(nullable = true, length = 10000) private String content;
-
+    //TO-DO
+    //birth 추가
+    //brief (자기소개)
+    //select 했을때 adult 부분 추가 0일때 청소년 1일때 성인
+    
     //fetch 타입 바꾸고, toString 순환 참조 수정
     @OneToMany(mappedBy = "tbuser", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<TbuserRoleType> tbuserRoleType = new ArrayList<>();

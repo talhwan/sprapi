@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "4-1_1. 가맹점 출입시도 API 안내",
+@Tag(name = "3-1_1. 가맹점 출입시도 API 안내",
         description = "가맹점 출입시도 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbcrewushot")
 @RestController

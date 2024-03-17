@@ -36,6 +36,9 @@ public class TbuserRestController {
         this.tbuserService = tbuserService;
     }
 
+    //TO-DO
+    // /qrcode 요청 만들고 리턴은 {code:""}
+
     @Operation(summary = "본인인증 토큰 발급",
             description = "본인인증 토큰 발급 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param String token <br />"

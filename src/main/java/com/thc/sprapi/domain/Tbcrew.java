@@ -22,6 +22,8 @@ public class Tbcrew extends AuditingFields {
     @Setter @Column(nullable = false) private String cate; // 구분
     @Setter @Column(nullable = false) private String mpic; // 대표사진
     @Setter @Column(nullable = false, length=2000000) @Lob private String content; // 본문
+    //TO-DO
+    //birth 추가
 
     protected Tbcrew(){}
     private Tbcrew(String title, String nick, String process, String cate, String mpic, String content) {

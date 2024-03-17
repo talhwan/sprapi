@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "2-5_0. 게시글 API 안내",
+@Tag(name = "2-5. 게시글 API 안내",
         description = "게시글 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbpost")
 @RestController

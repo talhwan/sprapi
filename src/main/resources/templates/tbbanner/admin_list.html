@@ -200,7 +200,7 @@
                     ,'title' : $("#search_title").val()
                 };
                 _data.success = function(obj_data, obj_status, obj_xhr){
-                    //alert(JSON.stringify(obj_data));
+                    //alert(JSON.stringify(obj_status));
                     $("#tbody_tbbanner_list").html("");
                     let resultlist = obj_data;
                     if(resultlist.length == 0){
