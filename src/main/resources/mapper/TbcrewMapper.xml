@@ -8,7 +8,7 @@
 			,tbcrew.modified_at as modifiedAt
 			,tbcrew.deleted
 			,tbcrew.title
-			,tbcrew.nick
+			,tbcrew.code
 			,tbcrew.process
 			,tbcrew.cate
 			,tbcrew.mpic

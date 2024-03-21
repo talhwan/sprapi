@@ -21,11 +21,11 @@ public class TbcrewDto {
 		@NotEmpty
 		@Size(max=100)
 		private String title;
-		@Schema(description = "nick", example="nick")
+		@Schema(description = "code", example="code")
 		@NotNull
 		@NotEmpty
 		@Size(max=100)
-		private String nick;
+		private String code;
 		@Schema(description = "process", example="process")
 		@NotNull
 		@NotEmpty
@@ -46,7 +46,7 @@ public class TbcrewDto {
 		private String content;
 
 		public Tbcrew toEntity() {
-			return Tbcrew.of(title, nick, process, cate, mpic, content);
+			return Tbcrew.of(title, code, process, cate, mpic, content);
 		}
 	}
 	@Schema
@@ -79,9 +79,9 @@ public class TbcrewDto {
 		@Schema(description = "title", example="title")
 		@Size(max=100)
 		private String title;
-		@Schema(description = "nick", example="nick")
+		@Schema(description = "code", example="code")
 		@Size(max=100)
-		private String nick;
+		private String code;
 		@Schema(description = "process", example="process")
 		private String process;
 		@Schema(description = "cate", example="1970-01-01")
@@ -106,8 +106,8 @@ public class TbcrewDto {
 
 		@Schema(description = "title", example="title")
 		private String title;
-		@Schema(description = "nick", example="nick")
-		private String nick;
+		@Schema(description = "code", example="code")
+		private String code;
 		@Schema(description = "process", example="process")
 		private String process;
 		@Schema(description = "cate", example="1970-01-01")
@@ -128,8 +128,8 @@ public class TbcrewDto {
 	public static class TbcrewSelectDto extends CommonSelectDto{
 		@Schema(description = "title", example="title")
 		private String title;
-		@Schema(description = "nick", example="nick")
-		private String nick;
+		@Schema(description = "code", example="code")
+		private String code;
 		@Schema(description = "process", example="process")
 		private String process;
 		@Schema(description = "cate", example="1970-01-01")

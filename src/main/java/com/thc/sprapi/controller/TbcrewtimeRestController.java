@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "2-3. 배너 API 안내",
-        description = "배너 관련 기능 정의한 RestController.")
+@Tag(name = "3-1_3. 가맹점 출입시간 API 안내",
+        description = "가맹점 출입시간 관련 기능 정의한 RestController.")
 @RequestMapping("/api/tbcrewtime")
 @RestController
 public class TbcrewtimeRestController {
@@ -37,8 +37,8 @@ public class TbcrewtimeRestController {
         this.tbcrewtimeService = tbcrewtimeService;
     }
 
-    @Operation(summary = "배너 순서 수정",
-            description = "배너 순서 수정 위한 컨트롤러 (권한 확인) <br />"
+    @Operation(summary = "가맹점 출입시간 순서 수정",
+            description = "가맹점 출입시간 순서 수정 위한 컨트롤러 (권한 확인) <br />"
                     + "@param TbcrewtimeSequenceDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewtimeAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
@@ -53,8 +53,8 @@ public class TbcrewtimeRestController {
 
     /**/
 
-    @Operation(summary = "배너 등록",
-            description = "배너 등록 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 등록",
+            description = "가맹점 출입시간 등록 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcrewtimeCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbcrewtimeAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />"
@@ -66,8 +66,8 @@ public class TbcrewtimeRestController {
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbcrewtimeService.create(params));
     }
-    @Operation(summary = "배너 수정",
-            description = "배너 수정 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 수정",
+            description = "가맹점 출입시간 수정 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcrewtimeUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewtimeAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
@@ -80,8 +80,8 @@ public class TbcrewtimeRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.update(params));
     }
 
-    @Operation(summary = "배너 삭제",
-            description = "배너 삭제 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 삭제",
+            description = "가맹점 출입시간 삭제 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcrewtimeUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewtimeAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
@@ -94,8 +94,8 @@ public class TbcrewtimeRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.deleteList(params));
     }
 
-    @Operation(summary = "배너 조회",
-            description = "배너 1개 조회 위한 컨트롤러 (모두 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 조회",
+            description = "가맹점 출입시간 1개 조회 위한 컨트롤러 (모두 접근 가능) <br />"
                     + "@param id(PathVariable) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewtimeSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
@@ -107,37 +107,37 @@ public class TbcrewtimeRestController {
         //params.setNowGrant(tbgrantService.access("tbcrewtime", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.detail(params));
     }
-    @Operation(summary = "배너 목록 조회(검색 기능 포함)",
-            description = "배너 목록 조회 위한 컨트롤러 (모두 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 목록 조회(검색 기능 포함)",
+            description = "가맹점 출입시간 목록 조회 위한 컨트롤러 (모두 접근 가능) <br />"
                     + "@param TbcrewtimeListDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewtimeSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity<List<TbcrewtimeDto.TbcrewtimeSelectDto>> list(@Valid TbcrewtimeDto.TbcrewtimeListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.list(params));
     }
-    @Operation(summary = "배너 목록 조회 - 스크롤 (검색 기능 포함)",
-            description = "배너 목록 조회 - 스크롤 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 목록 조회 - 스크롤 (검색 기능 포함)",
+            description = "가맹점 출입시간 목록 조회 - 스크롤 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcrewtimeMoreListDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/moreList")
+    @GetMapping("/moreList")
     public ResponseEntity<List<TbcrewtimeDto.TbcrewtimeSelectDto>> moreList(@Valid TbcrewtimeDto.TbcrewtimeMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.moreList(params));
     }
 
-    @Operation(summary = "배너 목록 조회 - 페이지 (검색 기능 포함)",
-            description = "배너 목록 조회 - 페이지 위한 컨트롤러 (누구나 접근 가능) <br />"
+    @Operation(summary = "가맹점 출입시간 목록 조회 - 페이지 (검색 기능 포함)",
+            description = "가맹점 출입시간 목록 조회 - 페이지 위한 컨트롤러 (누구나 접근 가능) <br />"
                     + "@param TbcrewtimePagedListDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/pagedList")
+    @GetMapping("/pagedList")
     public ResponseEntity<CommonAfterPagedListDto<TbcrewtimeDto.TbcrewtimeSelectDto>> pagedList(@Valid TbcrewtimeDto.TbcrewtimePagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.pagedList(params));
     }

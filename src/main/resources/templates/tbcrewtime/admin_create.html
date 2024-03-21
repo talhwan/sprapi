@@ -14,7 +14,7 @@
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>가맹점(<font class="font_tbcrew_title"></font>) 출입자 신규</h2>
+                <h2>가맹점(<font class="font_tbcrew_title"></font>) 출입시간 신규</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -29,10 +29,10 @@
                         <a href="javascript:location_href_path_param('/tbcrew/admin_detail/', getIdFromUrl(null))">가맹점(<font class="font_tbcrew_title"></font>) 상세</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="javascript:location_href_path_param('/tbcrewuser/admin_list/', getIdFromUrl(null))">가맹점(<font class="font_tbcrew_title"></font>) 출입자 목록</a>
+                        <a href="javascript:location_href_path_param('/tbcrewtime/admin_list/', getIdFromUrl(null))">가맹점(<font class="font_tbcrew_title"></font>) 출입시간 목록</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>가맹점(<font class="font_tbcrew_title"></font>) 출입자 신규</strong>
+                        <strong>가맹점(<font class="font_tbcrew_title"></font>) 출입시간 신규</strong>
                     </li>
                 </ol>
             </div>
@@ -50,7 +50,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">*삭제여부</label>
                             <div class="col-sm-4">
-                                <select class="input_required form-control m-b" id="create_tbcrewuser_deleted" keyword="deleted" errormsg="필수값입니다!.">
+                                <select class="input_required form-control m-b" id="create_tbcrewtime_deleted" keyword="deleted" errormsg="필수값입니다!.">
                                     <!--<option value="">&#45;&#45;선택하세요&#45;&#45;</option>-->
                                     <option value="N">일반</option>
                                     <option value="Y">삭제</option>
@@ -58,7 +58,7 @@
                             </div>
                             <label class="col-sm-2 col-form-label">*진행도</label>
                             <div class="col-sm-4">
-                                <select class="form-control m-b" id="create_tbcrewuser_process" keyword="process">
+                                <select class="form-control m-b" id="create_tbcrewtime_process" keyword="process">
                                     <option value="yet">승인 전</option>
                                     <option value="ing" selected="selected">정상</option>
                                     <option value="done">계약 종료</option>
@@ -67,7 +67,7 @@
                             </div>
                             <label class="col-sm-2 col-form-label">*구분</label>
                             <div class="col-sm-4">
-                                <select class="form-control m-b" id="create_tbcrewuser_cate" keyword="cate">
+                                <select class="form-control m-b" id="create_tbcrewtime_cate" keyword="cate">
                                     <option value="admin">관리자</option>
                                     <option value="normal" selected="selected">일반</option>
                                 </select>
@@ -76,13 +76,13 @@
 
                             <label class="col-sm-2 col-form-label">*회원 ID</label>
                             <div class="col-sm-4">
-                                <input type="text" class="input_required form-control m-b" id="create_tbcrewuser_tbuserId" keyword="tbuserId" placeholder="내용을 입력하세요" errormsg="필수값입니다."/>
+                                <input type="text" class="input_required form-control m-b" id="create_tbcrewtime_tbuserId" keyword="tbuserId" placeholder="내용을 입력하세요" errormsg="필수값입니다."/>
                             </div>
                             <label class="col-sm-6"></label>
 
                         </div>
                         <div class="m-b" style="text-align: right;">
-                            <button class="btn btn-primary btn-sm" onclick="create_tbcrewuser()">등록하기</button>
+                            <button class="btn btn-primary btn-sm" onclick="create_tbcrewtime()">등록하기</button>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
             $( document ).ready(function() {
                 console.log( "ready!" );
                 detail_tbcrew();
-                //create_tbcrewuser();
+                //create_tbcrewtime();
             });
             function detail_tbcrew() {
                 let tbcrewId = getIdFromUrl(null);
@@ -114,20 +114,20 @@
                 }
                 func_ajax(_data);
             }
-            function create_tbcrewuser(){
+            function create_tbcrewtime(){
                 if(!listenerBeforeCreate()){
                     return false;
                 }
 
                 let _param = {
-                    'process' : $("#create_tbcrewuser_process").val(),
-                    'cate' : $("#create_tbcrewuser_cate").val(),
+                    'process' : $("#create_tbcrewtime_process").val(),
+                    'cate' : $("#create_tbcrewtime_cate").val(),
                     'tbcrewId' : getIdFromUrl(null),
-                    'tbuserId' : $("#create_tbcrewuser_tbuserId").val()
+                    'tbuserId' : $("#create_tbcrewtime_tbuserId").val()
                 };
 
                 let _data = new Map();
-                _data.url = "/api/tbcrewuser";
+                _data.url = "/api/tbcrewtime";
                 _data.type = "POST";
                 _data.param = _param;
                 _data.success = function(obj_data, obj_status, obj_xhr){

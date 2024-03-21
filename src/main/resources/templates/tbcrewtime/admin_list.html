@@ -5,8 +5,8 @@
 </head>
 <body>
 
-<script id="list_info_tbcrew" type="text/x-handlebars-template">
-    {{#resultData_tbcrew}}
+<script id="list_info_tbcrewtime" type="text/x-handlebars-template">
+    {{#resultData_tbcrewtime}}
     <tr class="gradeA">
         <td>
             <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
@@ -15,19 +15,16 @@
         <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
         <td><font class="font_process_{{process}}">{{process}}</font></td>
         <td><font class="font_cate_{{cate}}">{{cate}}</font></td>
-        <td class="cursor_pointer" onclick="location.href='/tbcrew/admin_detail/{{id}}';">{{title}}</td>
-        <td>
-            <button class="btn btn-outline-info btn-sm" onclick="location.href='/tbcrewuser/admin_list/{{id}}'">회원목록</button>
-            <button class="btn btn-outline-dark btn-sm" onclick="location.href='/tbcrewushot/admin_list/{{id}}'">출입기록</button>
-            <button class="btn btn-outline-primary btn-sm" onclick="location.href='/tbcrewtime/admin_list/{{id}}'">출입시간</button>
-        </td>
+        <td class="cursor_pointer" onclick="location.href='/tbcrewtime/admin_detail/{{id}}';">{{tbuserNick}}</td>
+        <td class="cursor_pointer" onclick="location.href='/tbcrewtime/admin_detail/{{id}}';">{{tbuserName}}</td>
+        <td class="cursor_pointer" onclick="location.href='/tbcrewtime/admin_detail/{{id}}';">{{tbuserPhone}}</td>
         <td>{{createdAt}} / {{modifiedAt}}</td>
     </tr>
-    {{/resultData_tbcrew}}
+    {{/resultData_tbcrewtime}}
 </script>
 <script type="text/javascript">
-    var list_info_tbcrew = $("#list_info_tbcrew").html();
-    var list_info_tbcrew_template = Handlebars.compile(list_info_tbcrew);
+    var list_info_tbcrewtime = $("#list_info_tbcrewtime").html();
+    var list_info_tbcrewtime_template = Handlebars.compile(list_info_tbcrewtime);
 </script>
 
 <div id="wrapper">
@@ -39,7 +36,7 @@
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>가맹점</h2>
+                <h2>가맹점(<font class="font_tbcrew_title"></font>) 출입시간 목록</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -47,8 +44,14 @@
                     <li class="breadcrumb-item">
                         <a href="/tbcrew/admin_list">출입관리</a>
                     </li>
+                    <li class="breadcrumb-item">
+                        <a href="/tbcrew/admin_list">가맹점 목록</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:location_href_path_param('/tbcrew/admin_detail/', getIdFromUrl(null))">가맹점(<font class="font_tbcrew_title"></font>) 상세</a>
+                    </li>
                     <li class="breadcrumb-item active">
-                        <strong>가맹점 목록</strong>
+                        <strong>가맹점 출입시간 목록</strong>
                     </li>
                 </ol>
             </div>
@@ -86,11 +89,12 @@
                             <div class="col-sm-4">
                                 <select class="select_search_keyword form-control m-b" keyword="cate" id="search_cate" onchange="listener_keyword_changed()">
                                     <option value="" selected="selected">전체</option>
-                                    <option value="muinguard">무인가드</option>
-                                    <option value="custom">개별매장</option>
+                                    <option value="admin">관리자</option>
+                                    <option value="normal">일반</option>
                                 </select>
                             </div>
-                            <label class="col-sm-6 col-form-label"></label>
+                            <label class="col-sm-6"></label>
+
                             <label class="col-sm-2 col-form-label">등록 시기</label>
                             <div class="col-sm-3">
                                 <input class="form-control" id="search_sdate" type="date" onchange="listener_keyword_changed()"/>
@@ -109,7 +113,7 @@
                             <label class="col-sm-2 col-form-label">키워드</label>
                             <div class="col-sm-4">
                                 <select class="form-control m-b" id="search_keyword" onchange="set_search_keyword()">
-                                    <option value="10" selected="selected">제목</option>
+                                    <option value="10" selected="selected">회원 이름</option>
                                 </select>
                             </div>
                             <div class="col-sm-6">
@@ -127,7 +131,7 @@
                             </div>
                             <label class="col-sm-2 col-form-label">조회방향</label>
                             <div class="col-sm-3">
-                                <select class="form-control" id="search_cway" onchange="listener_tbcrew_list_by_page();">
+                                <select class="form-control" id="search_cway" onchange="listener_tbcrewtime_list_by_page();">
                                     <option value="before" selected="selected">이전글</option>
                                     <option value="recent">최신글</option>
                                 </select>
@@ -149,28 +153,28 @@
                         <th>삭제여부</th>
                         <th>진행도</th>
                         <th>구분</th>
-                        <th colspan="2">제목</th>
+                        <th colspan="3">사용자</th>
                         <th>입력일시/수정일시</th>
                     </tr>
                     </thead>
-                    <tbody id="tbody_tbcrew_list">
+                    <tbody id="tbody_tbcrewtime_list">
                     </tbody>
                 </table>
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="delete_tbcrew()">일괄삭제</button>
+                            <button class="btn btn-danger btn-sm" onclick="delete_tbcrewtime()">일괄삭제</button>
                         </td>
                         <td style="text-align: right;">
-                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbcrew/admin_create'">추가하기</button>
-                            <button class="btn btn-primary btn-sm" onclick="search_tbcrew()">더보기</button>
+                            <button class="btn btn-secondary btn-sm" onclick="location_href_path_param('/tbcrewtime/admin_create/', getIdFromUrl(null))">추가하기</button>
+                            <button class="btn btn-primary btn-sm" onclick="search_tbcrewtime()">더보기</button>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <script>
-            function delete_tbcrew(){
+            function delete_tbcrewtime(){
                 if (confirm("정말 삭제하시겠습니까?")) {
                 } else {
                     alert("취소");
@@ -178,7 +182,7 @@
                 }
                 let ids = listenerGetDeleteIds();
                 let _data = new Map();
-                _data.url = "/api/tbcrew";
+                _data.url = "/api/tbcrewtime";
                 _data.type = "DELETE";
                 _data.param = {
                     'ids' : ids
@@ -208,19 +212,43 @@
         <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
-                search_tbcrew();
+                detail_tbcrew();
+                search_tbcrewtime();
             });
-            function search_tbcrew(){
-                let beforeListParam = listenerBeforeList("tbody_tbcrew_list");
+            function detail_tbcrew() {
+                let tbcrewId = getIdFromUrl(null);
+                let _data = new Map();
+                _data.url = "/api/tbcrew/get/" + tbcrewId;
+                _data.type = "GET";
+                _data.success = function (obj_data, obj_status, obj_xhr) {
+                    let detailKeys = Object.keys(obj_data)
+                    for (let eachKey of detailKeys) {
+                        if (!isNull(obj_data[eachKey])) {
+                            $(".font_tbcrew_" + eachKey).text(obj_data[eachKey]);
+                            $("#detail_tbcrew_" + eachKey).val(obj_data[eachKey]);
+                            $("#img_tbcrew_" + eachKey).attr("src", obj_data[eachKey]);
+                        }
+                    }
+                }
+                _data.error = function (obj_data, obj_status, obj_xhr) {
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+
+            function search_tbcrewtime() {
+                let beforeListParam = listenerBeforeList("tbody_tbcrewtime_list");
                 beforeListParam['process'] = $("#search_process").val();
                 beforeListParam['cate'] = $("#search_cate").val();
                 beforeListParam['title'] = $("#search_title").val();
+                beforeListParam['tbcrewId'] = getIdFromUrl(null);
 
                 let _data = {};
-                _data.url = "/api/tbcrew/moreList";
+                _data.url = "/api/tbcrewtime/moreList";
                 _data.type = "GET";
                 _data.param = beforeListParam;
                 _data.success = function(obj_data, obj_status, obj_xhr){
+                    //alert(JSON.stringify(obj_data));
                     let resultlist = obj_data;
                     if(resultlist.length == 0){
                         alert("no data");
@@ -230,9 +258,9 @@
                         let each_list = [];
                         each_list.push(resultlist[i]);
                         if(search_cway == "recent"){
-                            $("#tbody_tbcrew_list").prepend(list_info_tbcrew_template({"resultData_tbcrew":each_list}));
+                            $("#tbody_tbcrewtime_list").prepend(list_info_tbcrewtime_template({"resultData_tbcrewtime":each_list}));
                         } else {
-                            $("#tbody_tbcrew_list").append(list_info_tbcrew_template({"resultData_tbcrew":each_list}));
+                            $("#tbody_tbcrewtime_list").append(list_info_tbcrewtime_template({"resultData_tbcrewtime":each_list}));
                         }
                         listenerAfterList();
                     }
