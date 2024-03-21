@@ -82,7 +82,7 @@ public class TbnoticeRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TbnoticeDto.TbnoticeSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
         //params.setNowGrant(tbgrantService.access("tbnotice", "read",true, principalDetails.getTbuser().getId()));
@@ -95,8 +95,8 @@ public class TbnoticeRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/list")
-    public ResponseEntity<List<TbnoticeDto.TbnoticeSelectDto>> list(@Valid @RequestBody TbnoticeDto.TbnoticeListDto params) {
+    @GetMapping("/list")
+    public ResponseEntity<List<TbnoticeDto.TbnoticeSelectDto>> list(@Valid TbnoticeDto.TbnoticeListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbnoticeService.list(params));
     }
     @Operation(summary = "공지사항 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -106,8 +106,8 @@ public class TbnoticeRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/moreList")
-    public ResponseEntity<List<TbnoticeDto.TbnoticeSelectDto>> moreList(@Valid @RequestBody TbnoticeDto.TbnoticeMoreListDto params) {
+    @GetMapping("/moreList")
+    public ResponseEntity<List<TbnoticeDto.TbnoticeSelectDto>> moreList(@Valid TbnoticeDto.TbnoticeMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbnoticeService.moreList(params));
     }
 
@@ -118,8 +118,8 @@ public class TbnoticeRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbnoticeDto.TbnoticeSelectDto>> pagedList(@Valid @RequestBody TbnoticeDto.TbnoticePagedListDto params) {
+    @GetMapping("/pagedList")
+    public ResponseEntity<CommonAfterPagedListDto<TbnoticeDto.TbnoticeSelectDto>> pagedList(@Valid TbnoticeDto.TbnoticePagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbnoticeService.pagedList(params));
     }
 

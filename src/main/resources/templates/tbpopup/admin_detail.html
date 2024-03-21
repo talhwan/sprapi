@@ -103,7 +103,7 @@
             function detail_tbpopup(){
                 let tbpopupId = getIdFromUrl(null);
                 let _data = new Map();
-                _data.url = "/api/tbpopup/" + tbpopupId;
+                _data.url = "/api/tbpopup/get/" + tbpopupId;
                 _data.type = "GET";
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let detailKeys = Object.keys(obj_data)

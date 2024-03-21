@@ -75,7 +75,7 @@ public class TbpostcmtRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostcmtSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TbpostcmtDto.TbpostcmtSelectDto> detail(@PathVariable("id") String id) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
@@ -87,9 +87,9 @@ public class TbpostcmtRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostcmtSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/list")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbpostcmtDto.TbpostcmtSelectDto>> list(@Valid @RequestBody TbpostcmtDto.TbpostcmtListDto params) {
+    public ResponseEntity<List<TbpostcmtDto.TbpostcmtSelectDto>> list(@Valid TbpostcmtDto.TbpostcmtListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.list(params));
     }
     @Operation(summary = "게시글 댓글 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -98,9 +98,9 @@ public class TbpostcmtRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreList")
+    @GetMapping("/moreList")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TbpostcmtDto.TbpostcmtSelectDto>> moreList(@Valid @RequestBody TbpostcmtDto.TbpostcmtMoreListDto params) {
+    public ResponseEntity<List<TbpostcmtDto.TbpostcmtSelectDto>> moreList(@Valid TbpostcmtDto.TbpostcmtMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.moreList(params));
     }
 
@@ -110,9 +110,9 @@ public class TbpostcmtRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/pagedList")
+    @GetMapping("/pagedList")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<CommonAfterPagedListDto<TbpostcmtDto.TbpostcmtSelectDto>> pagedList(@Valid @RequestBody TbpostcmtDto.TbpostcmtPagedListDto params) {
+    public ResponseEntity<CommonAfterPagedListDto<TbpostcmtDto.TbpostcmtSelectDto>> pagedList(@Valid TbpostcmtDto.TbpostcmtPagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostcmtService.pagedList(params));
     }
 

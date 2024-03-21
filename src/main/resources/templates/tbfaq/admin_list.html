@@ -193,7 +193,7 @@
             function search_tbfaq(){
                 let _data = {};
                 _data.url = "/api/tbfaq/list";
-                _data.type = "POST";
+                _data.type = "GET";
                 _data.param = {
                     'deleted' : $("#search_deleted").val()
                     ,'cate' : $("#search_cate").val()

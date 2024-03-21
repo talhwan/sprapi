@@ -117,7 +117,7 @@
             function detail_tbcrew(){
                 let tbcrewId = getIdFromUrl(null);
                 let _data = new Map();
-                _data.url = "/api/tbcrew/" + tbcrewId;
+                _data.url = "/api/tbcrew/get/" + tbcrewId;
                 _data.type = "GET";
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let detailKeys = Object.keys(obj_data)

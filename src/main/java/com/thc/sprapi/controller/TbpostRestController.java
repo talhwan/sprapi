@@ -82,7 +82,7 @@ public class TbpostRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TbpostDto.TbpostSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.detail(params));
@@ -94,8 +94,8 @@ public class TbpostRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/list")
-    public ResponseEntity<List<TbpostDto.TbpostSelectDto>> list(@Valid @RequestBody TbpostDto.TbpostListDto params) {
+    @GetMapping("/list")
+    public ResponseEntity<List<TbpostDto.TbpostSelectDto>> list(@Valid TbpostDto.TbpostListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.list(params));
     }
     @Operation(summary = "게시글 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -105,8 +105,8 @@ public class TbpostRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/moreList")
-    public ResponseEntity<List<TbpostDto.TbpostSelectDto>> moreList(@Valid @RequestBody TbpostDto.TbpostMoreListDto params) {
+    @GetMapping("/moreList")
+    public ResponseEntity<List<TbpostDto.TbpostSelectDto>> moreList(@Valid TbpostDto.TbpostMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.moreList(params));
     }
 
@@ -117,8 +117,8 @@ public class TbpostRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbpostDto.TbpostSelectDto>> pagedList(@Valid @RequestBody TbpostDto.TbpostPagedListDto params) {
+    @GetMapping("/pagedList")
+    public ResponseEntity<CommonAfterPagedListDto<TbpostDto.TbpostSelectDto>> pagedList(@Valid TbpostDto.TbpostPagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostService.pagedList(params));
     }
 

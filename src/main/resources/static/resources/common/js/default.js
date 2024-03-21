@@ -1,5 +1,23 @@
 /* ajax 관련 */
 function func_ajax(_data) {
+	let paramData = null;
+	//alert(JSON.stringify(_data.param));
+/*
+	let formData = new FormData();
+	formData.forEach((value, key) => _data.param[key] = value);
+	let data2 = $.param(_data.param);
+	alert(JSON.stringify(data2));
+	//return false;
+*/
+	if(isNull(_data.param)){
+	} else {
+		if(_data.type == "GET"){
+			paramData = $.param(_data.param);
+		} else {
+			paramData = JSON.stringify(_data.param);
+		}
+	}
+
 	$.ajax({
 		url: _data.url,
 		type: _data.type,
@@ -8,7 +26,8 @@ function func_ajax(_data) {
 			xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
 		},
 		contentType : 'application/json; charset=utf-8',
-		data: JSON.stringify(_data.param),
+		//data: JSON.stringify(_data.param),
+		data: paramData,
 		cache: false,
 		success: (data, status, xhr)=>{
 			// alert(JSON.stringify(data));

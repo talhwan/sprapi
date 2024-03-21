@@ -138,7 +138,7 @@ public class TbuserRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TbuserDto.TbuserSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.detail(params));
@@ -149,8 +149,8 @@ public class TbuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/list")
-    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> list(@Valid @RequestBody TbuserDto.TbuserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping("/list")
+    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> list(@Valid TbuserDto.TbuserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.list(params));
     }
     @Operation(summary = "회원 정보 추가조회 목록 조회(검색 기능 포함)",
@@ -159,8 +159,8 @@ public class TbuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreList")
-    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> moreList(@Valid @RequestBody TbuserDto.TbuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping("/moreList")
+    public ResponseEntity<List<TbuserDto.TbuserSelectDto>> moreList(@Valid TbuserDto.TbuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.moreList(params));
     }
 
@@ -170,8 +170,8 @@ public class TbuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbuserDto.TbuserSelectDto>> pagedList(@Valid @RequestBody TbuserDto.TbuserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping("/pagedList")
+    public ResponseEntity<CommonAfterPagedListDto<TbuserDto.TbuserSelectDto>> pagedList(@Valid TbuserDto.TbuserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(tbuserService.pagedList(params));
     }
 

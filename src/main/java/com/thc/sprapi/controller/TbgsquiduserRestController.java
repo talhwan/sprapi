@@ -95,7 +95,7 @@ public class TbgsquiduserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgsquiduserSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbgsquiduserDto.TbgsquiduserSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
@@ -108,9 +108,9 @@ public class TbgsquiduserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgsquiduserSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/list")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TbgsquiduserDto.TbgsquiduserSelectDto>> list(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbgsquiduserDto.TbgsquiduserSelectDto>> list(@Valid TbgsquiduserDto.TbgsquiduserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.list(params));
     }
@@ -120,9 +120,9 @@ public class TbgsquiduserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreList")
+    @GetMapping("/moreList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbgsquiduserDto.TbgsquiduserSelectDto>> moreList(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbgsquiduserDto.TbgsquiduserSelectDto>> moreList(@Valid TbgsquiduserDto.TbgsquiduserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.moreList(params));
     }
@@ -133,9 +133,9 @@ public class TbgsquiduserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/pagedList")
+    @GetMapping("/pagedList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CommonAfterPagedListDto<TbgsquiduserDto.TbgsquiduserSelectDto>> pagedList(@Valid @RequestBody TbgsquiduserDto.TbgsquiduserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<CommonAfterPagedListDto<TbgsquiduserDto.TbgsquiduserSelectDto>> pagedList(@Valid TbgsquiduserDto.TbgsquiduserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgsquid", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgsquiduserService.pagedList(params));
     }

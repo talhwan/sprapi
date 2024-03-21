@@ -101,7 +101,7 @@ public class TbpopupRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TbpopupDto.TbpopupSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
         //params.setNowGrant(tbgrantService.access("tbpopup", "read",true, principalDetails.getTbuser().getId()));
@@ -114,8 +114,8 @@ public class TbpopupRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/list")
-    public ResponseEntity<List<TbpopupDto.TbpopupSelectDto>> list(@Valid @RequestBody TbpopupDto.TbpopupListDto params) {
+    @GetMapping("/list")
+    public ResponseEntity<List<TbpopupDto.TbpopupSelectDto>> list(@Valid TbpopupDto.TbpopupListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpopupService.list(params));
     }
     @Operation(summary = "팝업 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -125,8 +125,8 @@ public class TbpopupRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/moreList")
-    public ResponseEntity<List<TbpopupDto.TbpopupSelectDto>> moreList(@Valid @RequestBody TbpopupDto.TbpopupMoreListDto params) {
+    @GetMapping("/moreList")
+    public ResponseEntity<List<TbpopupDto.TbpopupSelectDto>> moreList(@Valid TbpopupDto.TbpopupMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpopupService.moreList(params));
     }
 
@@ -137,8 +137,8 @@ public class TbpopupRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbpopupDto.TbpopupSelectDto>> pagedList(@Valid @RequestBody TbpopupDto.TbpopupPagedListDto params) {
+    @GetMapping("/pagedList")
+    public ResponseEntity<CommonAfterPagedListDto<TbpopupDto.TbpopupSelectDto>> pagedList(@Valid TbpopupDto.TbpopupPagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpopupService.pagedList(params));
     }
 

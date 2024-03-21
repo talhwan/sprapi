@@ -81,7 +81,7 @@ public class TbcrewushotRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewushotSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TbcrewushotDto.TbcrewushotSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
@@ -94,9 +94,9 @@ public class TbcrewushotRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbcrewushotSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/list")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbcrewushotDto.TbcrewushotSelectDto>> list(@Valid @RequestBody TbcrewushotDto.TbcrewushotListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbcrewushotDto.TbcrewushotSelectDto>> list(@Valid TbcrewushotDto.TbcrewushotListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewushotService.list(params));
     }
@@ -106,9 +106,9 @@ public class TbcrewushotRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreList")
+    @GetMapping("/moreList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbcrewushotDto.TbcrewushotSelectDto>> moreList(@Valid @RequestBody TbcrewushotDto.TbcrewushotMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbcrewushotDto.TbcrewushotSelectDto>> moreList(@Valid TbcrewushotDto.TbcrewushotMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewushotService.moreList(params));
     }
@@ -119,9 +119,9 @@ public class TbcrewushotRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/pagedList")
+    @GetMapping("/pagedList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CommonAfterPagedListDto<TbcrewushotDto.TbcrewushotSelectDto>> pagedList(@Valid @RequestBody TbcrewushotDto.TbcrewushotPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<CommonAfterPagedListDto<TbcrewushotDto.TbcrewushotSelectDto>> pagedList(@Valid TbcrewushotDto.TbcrewushotPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewushotService.pagedList(params));
     }

@@ -56,13 +56,13 @@
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_tbgrantuser").addClass("active");
+        $(".sidemenu_li_tbgrant").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>접근권한[<font class="font_tbgrant_title"></font>] 사용자 목록</h2>
+                <h2>접근권한(<font class="font_tbgrant_title"></font>) 사용자 목록</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -74,7 +74,7 @@
                         <a href="/tbgrant/admin_list">접근권한 목록</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="javascript:location_href_path_param('/tbgrant/admin_detail/', getIdFromUrl(null))">접근권한 상세</a>
+                        <a href="javascript:location_href_path_param('/tbgrant/admin_detail/', getIdFromUrl(null))">접근권한(<font class="font_tbgrant_title"></font>) 상세</a>
                     </li>
                     <li class="breadcrumb-item active">
                         <strong>접근권한 사용자 목록</strong>
@@ -185,7 +185,7 @@
                         </td>
                         <td style="text-align: right;">
                             <!--
-                            <button class="btn btn-secondary btn-sm" onclick="location.href='/tbgrantuser/admin_create'">추가하기</button>
+                            <button class="btn btn-secondary btn-sm" onclick="location_href_path_param('/tbgrantuser/admin_create/', getIdFromUrl(null))">추가하기</button>
                             -->
                             <button class="btn btn-primary btn-sm" onclick="search_tbgrantuser()">더보기</button>
                         </td>
@@ -238,7 +238,7 @@
             function detail_tbgrant(){
                 let tbgrantId = getIdFromUrl(null);
                 let _data = new Map();
-                _data.url = "/api/tbgrant/" + tbgrantId;
+                _data.url = "/api/tbgrant/get/" + tbgrantId;
                 _data.type = "GET";
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let detailKeys = Object.keys(obj_data)
@@ -262,7 +262,7 @@
 
                 let _data = {};
                 _data.url = "/api/tbgrantuser/moreListByTbgrantId";
-                _data.type = "POST";
+                _data.type = "GET";
                 _data.param = beforeListParam;
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let resultlist = obj_data;

@@ -73,7 +73,7 @@ public class TbpostfileRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostfileSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TbpostfileDto.TbpostfileSelectDto> detail(@PathVariable("id") String id) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
@@ -85,9 +85,9 @@ public class TbpostfileRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbpostfileSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/list")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbpostfileDto.TbpostfileSelectDto>> list(@Valid @RequestBody TbpostfileDto.TbpostfileListDto params) {
+    public ResponseEntity<List<TbpostfileDto.TbpostfileSelectDto>> list(@Valid TbpostfileDto.TbpostfileListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostfileService.list(params));
     }
     @Operation(summary = "게시글 파일 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -96,9 +96,9 @@ public class TbpostfileRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreList")
+    @GetMapping("/moreList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbpostfileDto.TbpostfileSelectDto>> moreList(@Valid @RequestBody TbpostfileDto.TbpostfileMoreListDto params) {
+    public ResponseEntity<List<TbpostfileDto.TbpostfileSelectDto>> moreList(@Valid TbpostfileDto.TbpostfileMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostfileService.moreList(params));
     }
 
@@ -108,9 +108,9 @@ public class TbpostfileRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/pagedList")
+    @GetMapping("/pagedList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CommonAfterPagedListDto<TbpostfileDto.TbpostfileSelectDto>> pagedList(@Valid @RequestBody TbpostfileDto.TbpostfilePagedListDto params) {
+    public ResponseEntity<CommonAfterPagedListDto<TbpostfileDto.TbpostfileSelectDto>> pagedList(@Valid TbpostfileDto.TbpostfilePagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbpostfileService.pagedList(params));
     }
 

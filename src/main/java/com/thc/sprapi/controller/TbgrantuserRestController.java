@@ -52,9 +52,9 @@ public class TbgrantuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreListByTbgrantId")
+    @GetMapping("/moreListByTbgrantId")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> moreListByTbgrantId(@Valid @RequestBody TbgrantuserDto.TbgrantuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> moreListByTbgrantId(@Valid TbgrantuserDto.TbgrantuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantuserService.moreListByTbgrantId(params));
     }
@@ -105,7 +105,7 @@ public class TbgrantuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgrantuserSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TbgrantuserDto.TbgrantuserSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
@@ -118,9 +118,9 @@ public class TbgrantuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbgrantuserSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/list")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> list(@Valid @RequestBody TbgrantuserDto.TbgrantuserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> list(@Valid TbgrantuserDto.TbgrantuserListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantuserService.list(params));
     }
@@ -130,9 +130,9 @@ public class TbgrantuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/moreList")
+    @GetMapping("/moreList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> moreList(@Valid @RequestBody TbgrantuserDto.TbgrantuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<List<TbgrantuserDto.TbgrantuserSelectDto>> moreList(@Valid TbgrantuserDto.TbgrantuserMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantuserService.moreList(params));
     }
@@ -143,9 +143,9 @@ public class TbgrantuserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<Map<String, Object>\\> <br />"
                     + "@exception (no Exception) <br />"
     )
-    @PostMapping("/pagedList")
+    @GetMapping("/pagedList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CommonAfterPagedListDto<TbgrantuserDto.TbgrantuserSelectDto>> pagedList(@Valid @RequestBody TbgrantuserDto.TbgrantuserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<CommonAfterPagedListDto<TbgrantuserDto.TbgrantuserSelectDto>> pagedList(@Valid TbgrantuserDto.TbgrantuserPagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         params.setNowGrant(tbgrantService.access("tbgrant", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbgrantuserService.pagedList(params));
     }

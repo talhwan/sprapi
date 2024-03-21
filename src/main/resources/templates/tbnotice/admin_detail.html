@@ -98,7 +98,7 @@
             function detail_tbnotice(){
                 let tbnoticeId = getIdFromUrl(null);
                 let _data = new Map();
-                _data.url = "/api/tbnotice/" + tbnoticeId;
+                _data.url = "/api/tbnotice/get/" + tbnoticeId;
                 _data.type = "GET";
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     let detailKeys = Object.keys(obj_data)

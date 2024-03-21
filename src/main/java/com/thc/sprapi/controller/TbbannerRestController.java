@@ -44,7 +44,7 @@ public class TbbannerRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/get/recommend")
+    @GetMapping("/recommend")
     public ResponseEntity<TbbannerDto.TbbannerSelectDto> recommend(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         //params.setNowGrant(tbgrantService.access("tbbanner", "read",false, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbbannerService.recommend());
@@ -114,7 +114,7 @@ public class TbbannerRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TbbannerDto.TbbannerSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
         //params.setNowGrant(tbgrantService.access("tbbanner", "read",true, principalDetails.getTbuser().getId()));
@@ -127,8 +127,8 @@ public class TbbannerRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/list")
-    public ResponseEntity<List<TbbannerDto.TbbannerSelectDto>> list(@Valid @RequestBody TbbannerDto.TbbannerListDto params) {
+    @GetMapping("/list")
+    public ResponseEntity<List<TbbannerDto.TbbannerSelectDto>> list(@Valid TbbannerDto.TbbannerListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbbannerService.list(params));
     }
     @Operation(summary = "배너 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -138,8 +138,8 @@ public class TbbannerRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/moreList")
-    public ResponseEntity<List<TbbannerDto.TbbannerSelectDto>> moreList(@Valid @RequestBody TbbannerDto.TbbannerMoreListDto params) {
+    @GetMapping("/moreList")
+    public ResponseEntity<List<TbbannerDto.TbbannerSelectDto>> moreList(@Valid TbbannerDto.TbbannerMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbbannerService.moreList(params));
     }
 
@@ -150,8 +150,8 @@ public class TbbannerRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbbannerDto.TbbannerSelectDto>> pagedList(@Valid @RequestBody TbbannerDto.TbbannerPagedListDto params) {
+    @GetMapping("/pagedList")
+    public ResponseEntity<CommonAfterPagedListDto<TbbannerDto.TbbannerSelectDto>> pagedList(@Valid TbbannerDto.TbbannerPagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbbannerService.pagedList(params));
     }
 

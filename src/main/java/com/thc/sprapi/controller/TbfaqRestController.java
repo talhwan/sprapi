@@ -101,7 +101,7 @@ public class TbfaqRestController {
                     + "@exception 정보 없음 <br />"
     )
     @PreAuthorize("permitAll()")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<TbfaqDto.TbfaqSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
         //params.setNowGrant(tbgrantService.access("tbfaq", "read",true, principalDetails.getTbuser().getId()));
@@ -114,8 +114,8 @@ public class TbfaqRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/list")
-    public ResponseEntity<List<TbfaqDto.TbfaqSelectDto>> list(@Valid @RequestBody TbfaqDto.TbfaqListDto params) {
+    @GetMapping("/list")
+    public ResponseEntity<List<TbfaqDto.TbfaqSelectDto>> list(@Valid TbfaqDto.TbfaqListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbfaqService.list(params));
     }
     @Operation(summary = "FAQ 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -125,8 +125,8 @@ public class TbfaqRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/moreList")
-    public ResponseEntity<List<TbfaqDto.TbfaqSelectDto>> moreList(@Valid @RequestBody TbfaqDto.TbfaqMoreListDto params) {
+    @GetMapping("/moreList")
+    public ResponseEntity<List<TbfaqDto.TbfaqSelectDto>> moreList(@Valid TbfaqDto.TbfaqMoreListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbfaqService.moreList(params));
     }
 
@@ -137,8 +137,8 @@ public class TbfaqRestController {
                     + "@exception (no Exception) <br />"
     )
     @PreAuthorize("permitAll()")
-    @PostMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbfaqDto.TbfaqSelectDto>> pagedList(@Valid @RequestBody TbfaqDto.TbfaqPagedListDto params) {
+    @GetMapping("/pagedList")
+    public ResponseEntity<CommonAfterPagedListDto<TbfaqDto.TbfaqSelectDto>> pagedList(@Valid TbfaqDto.TbfaqPagedListDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbfaqService.pagedList(params));
     }
 
