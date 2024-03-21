@@ -61,25 +61,117 @@
                                 <select class="form-control m-b" id="create_tbcrewtime_process" keyword="process">
                                     <option value="yet">승인 전</option>
                                     <option value="ing" selected="selected">정상</option>
-                                    <option value="done">계약 종료</option>
-                                    <option value="blocked">차단됨</option>
+                                    <option value="done">만료</option>
                                 </select>
                             </div>
                             <label class="col-sm-2 col-form-label">*구분</label>
                             <div class="col-sm-4">
                                 <select class="form-control m-b" id="create_tbcrewtime_cate" keyword="cate">
-                                    <option value="admin">관리자</option>
+                                    <option value="temp">임시</option>
                                     <option value="normal" selected="selected">일반</option>
                                 </select>
                             </div>
                             <label class="col-sm-6"></label>
 
-                            <label class="col-sm-2 col-form-label">*회원 ID</label>
+                            <label class="col-sm-2 col-form-label">*제목</label>
                             <div class="col-sm-4">
-                                <input type="text" class="input_required form-control m-b" id="create_tbcrewtime_tbuserId" keyword="tbuserId" placeholder="내용을 입력하세요" errormsg="필수값입니다."/>
+                                <input type="text" class="input_required form-control m-b" id="create_tbcrewtime_title" keyword="title" placeholder="내용을 입력하세요" errormsg="필수값입니다." />
                             </div>
                             <label class="col-sm-6"></label>
 
+                            <label class="col-sm-2 col-form-label">*나이(최소)</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="input_required form-control m-b" id="create_tbcrewtime_startage" keyword="startage" placeholder="내용을 입력하세요" errormsg="필수값입니다." value="0" />
+                            </div>
+                            <label class="col-sm-2 col-form-label">*나이(최대)</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="input_required form-control m-b" id="create_tbcrewtime_finishage" keyword="finishage" placeholder="내용을 입력하세요" errormsg="필수값입니다." value="19" />
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">*시작시간</label>
+                            <div class="col-sm-4">
+                                <input type="time" class="input_required form-control m-b" id="create_tbcrewtime_starttime" keyword="starttime" placeholder="내용을 입력하세요" errormsg="필수값입니다." value="00:00" />
+                            </div>
+                            <label class="col-sm-2 col-form-label">*종료시간 (ex. 22:00)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="input_required form-control m-b" id="create_tbcrewtime_finishtime" keyword="finishtime" placeholder="내용을 입력하세요" errormsg="필수값입니다." value="22:00" />
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">*요일</label>
+                            <div class="col-sm-10">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>전체</th>
+                                        <th>일</th>
+                                        <th>월</th>
+                                        <th>화</th>
+                                        <th>수</th>
+                                        <th>목</th>
+                                        <th>금</th>
+                                        <th>토</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_all" title="day" keyword="all" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')" />
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day0" id="input_tbcrewtime_day_day0" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day1" id="input_tbcrewtime_day_day1" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day2" id="input_tbcrewtime_day_day2" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day3" id="input_tbcrewtime_day_day3" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day4" id="input_tbcrewtime_day_day4" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day5" id="input_tbcrewtime_day_day5" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day6" id="input_tbcrewtime_day_day6" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day0" value="0"/>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day1" value="0"/>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day2" value="0"/>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day3" value="0"/>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day4" value="0"/>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day5" value="0"/>
+                                <input type="hidden" class="create_tbcrewtime_day_each" id="create_tbcrewtime_day6" value="0"/>
+                                <script>
+                                    function listener_chk_tbcrewtime(obj, obj_class){
+                                        listener_chk(obj, obj_class);
+                                        let keyword = $(obj).attr("keyword");
+                                        let checked = $(obj).prop("checked");
+                                        let title = $(obj).attr("title");
+                                        if(keyword == "all") {
+                                            if(checked){
+                                                $(".create_tbcrewtime_day_each").val("1");
+                                            } else {
+                                                $(".create_tbcrewtime_day_each").val("0");
+                                            }
+                                        } else {
+                                            if(checked){
+                                                $("#create_tbcrewtime_" + keyword).val("1");
+                                            } else {
+                                                $("#create_tbcrewtime_" + keyword).val("0");
+                                            }
+                                        }
+                                    }
+                                </script>
+
+                            </div>
                         </div>
                         <div class="m-b" style="text-align: right;">
                             <button class="btn btn-primary btn-sm" onclick="create_tbcrewtime()">등록하기</button>
@@ -122,8 +214,19 @@
                 let _param = {
                     'process' : $("#create_tbcrewtime_process").val(),
                     'cate' : $("#create_tbcrewtime_cate").val(),
-                    'tbcrewId' : getIdFromUrl(null),
-                    'tbuserId' : $("#create_tbcrewtime_tbuserId").val()
+                    'tbcrewId' : getIdFromUrl(null)
+                    ,'day0' : $("#create_tbcrewtime_day0").val()
+                    ,'day1' : $("#create_tbcrewtime_day1").val()
+                    ,'day2' : $("#create_tbcrewtime_day2").val()
+                    ,'day3' : $("#create_tbcrewtime_day3").val()
+                    ,'day4' : $("#create_tbcrewtime_day4").val()
+                    ,'day5' : $("#create_tbcrewtime_day5").val()
+                    ,'day6' : $("#create_tbcrewtime_day6").val()
+                    ,'starttime' : $("#create_tbcrewtime_starttime").val()
+                    ,'finishtime' : $("#create_tbcrewtime_finishtime").val()
+                    ,'startage' : $("#create_tbcrewtime_startage").val()
+                    ,'finishage' : $("#create_tbcrewtime_finishage").val()
+                    ,'title' : $("#create_tbcrewtime_title").val()
                 };
 
                 let _data = new Map();

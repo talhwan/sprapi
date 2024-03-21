@@ -90,12 +90,28 @@ public class TbcrewtimeServiceImpl implements TbcrewtimeService {
         if(params.getFinishage() != null) {
             tbcrewtime.setFinishage(params.getFinishage());
         }
-        if(params.getStartday() != null) {
-            tbcrewtime.setStartday(params.getStartday());
+        if(params.getDay0() != null) {
+            tbcrewtime.setDay0(params.getDay0());
         }
-        if(params.getFinishday() != null) {
-            tbcrewtime.setFinishday(params.getFinishday());
+        if(params.getDay1() != null) {
+            tbcrewtime.setDay1(params.getDay1());
         }
+        if(params.getDay2() != null) {
+            tbcrewtime.setDay2(params.getDay2());
+        }
+        if(params.getDay3() != null) {
+            tbcrewtime.setDay3(params.getDay3());
+        }
+        if(params.getDay4() != null) {
+            tbcrewtime.setDay4(params.getDay4());
+        }
+        if(params.getDay5() != null) {
+            tbcrewtime.setDay5(params.getDay5());
+        }
+        if(params.getDay6() != null) {
+            tbcrewtime.setDay6(params.getDay6());
+        }
+
         if(params.getStarttime() != null) {
             tbcrewtime.setStarttime(params.getStarttime());
         }

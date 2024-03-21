@@ -57,6 +57,10 @@ public class TbcrewtimeDto {
 		@NotEmpty
 		@Size(max=100)
 		private String cate;
+		@Schema(description = "process", example="process")
+		@NotNull
+		@NotEmpty
+		private String process;
 
 		@Schema(description = "startage", example="startage")
 		@NotNull
@@ -67,14 +71,34 @@ public class TbcrewtimeDto {
 		@NotEmpty
 		private Integer finishage;
 
-		@Schema(description = "startday", example="startday")
+		@Schema(description = "day0", example="day0")
 		@NotNull
 		@NotEmpty
-		private String startday;
-		@Schema(description = "finishday", example="finishday")
+		private String day0;
+		@Schema(description = "day1", example="day1")
 		@NotNull
 		@NotEmpty
-		private String finishday;
+		private String day1;
+		@Schema(description = "day2", example="day2")
+		@NotNull
+		@NotEmpty
+		private String day2;
+		@Schema(description = "day3", example="day3")
+		@NotNull
+		@NotEmpty
+		private String day3;
+		@Schema(description = "day4", example="day4")
+		@NotNull
+		@NotEmpty
+		private String day4;
+		@Schema(description = "day5", example="day5")
+		@NotNull
+		@NotEmpty
+		private String day5;
+		@Schema(description = "day6", example="day6")
+		@NotNull
+		@NotEmpty
+		private String day6;
 		@Schema(description = "starttime", example="starttime")
 		@NotNull
 		@NotEmpty
@@ -85,11 +109,16 @@ public class TbcrewtimeDto {
 		private String finishtime;
 
 		public Tbcrewtime toEntity() {
-			return Tbcrewtime.of(tbcrewId, title, sequence, cate
+			return Tbcrewtime.of(tbcrewId, title, sequence, cate, process
 					, startage
 					, finishage
-					, startday
-					, finishday
+					, day0
+					, day1
+					, day2
+					, day3
+					, day4
+					, day5
+					, day6
 					, starttime
 					, finishtime);
 		}
@@ -132,16 +161,29 @@ public class TbcrewtimeDto {
 		@Schema(description = "cate", example="cate")
 		@Size(max=100)
 		private String cate;
+		@Schema(description = "process", example="process")
+		@Size(max=100)
+		private String process;
 
 		@Schema(description = "startage", example="startage")
 		private Integer startage;
 		@Schema(description = "finishage", example="finishage")
 		private Integer finishage;
 
-		@Schema(description = "startday", example="startday")
-		private String startday;
-		@Schema(description = "finishday", example="finishday")
-		private String finishday;
+		@Schema(description = "day0", example="day0")
+		private String day0;
+		@Schema(description = "day1", example="day1")
+		private String day1;
+		@Schema(description = "day2", example="day2")
+		private String day2;
+		@Schema(description = "day3", example="day3")
+		private String day3;
+		@Schema(description = "day4", example="day4")
+		private String day4;
+		@Schema(description = "day5", example="day5")
+		private String day5;
+		@Schema(description = "day6", example="day6")
+		private String day6;
 		@Schema(description = "starttime", example="starttime")
 		private String starttime;
 		@Schema(description = "finishtime", example="finishtime")
@@ -174,16 +216,28 @@ public class TbcrewtimeDto {
 		@Schema(description = "cate", example="cate")
 		@Size(max=100)
 		private String cate;
+		@Schema(description = "process", example="process")
+		private String process;
 
 		@Schema(description = "startage", example="startage")
 		private Integer startage;
 		@Schema(description = "finishage", example="finishage")
 		private Integer finishage;
 
-		@Schema(description = "startday", example="startday")
-		private String startday;
-		@Schema(description = "finishday", example="finishday")
-		private String finishday;
+		@Schema(description = "day0", example="day0")
+		private String day0;
+		@Schema(description = "day1", example="day1")
+		private String day1;
+		@Schema(description = "day2", example="day2")
+		private String day2;
+		@Schema(description = "day3", example="day3")
+		private String day3;
+		@Schema(description = "day4", example="day4")
+		private String day4;
+		@Schema(description = "day5", example="day5")
+		private String day5;
+		@Schema(description = "day6", example="day6")
+		private String day6;
 		@Schema(description = "starttime", example="starttime")
 		private String starttime;
 		@Schema(description = "finishtime", example="finishtime")
@@ -205,16 +259,31 @@ public class TbcrewtimeDto {
 		private int sequence;
 		@Schema(description = "cate", example="cate")
 		private String cate;
+		@Schema(description = "process", example="process")
+		private String process;
+
+		@Schema(description = "tbcrewTitle", example="tbcrewTitle")
+		private String tbcrewTitle;
 
 		@Schema(description = "startage", example="startage")
 		private Integer startage;
 		@Schema(description = "finishage", example="finishage")
 		private Integer finishage;
 
-		@Schema(description = "startday", example="startday")
-		private String startday;
-		@Schema(description = "finishday", example="finishday")
-		private String finishday;
+		@Schema(description = "day0", example="day0")
+		private String day0;
+		@Schema(description = "day1", example="day1")
+		private String day1;
+		@Schema(description = "day2", example="day2")
+		private String day2;
+		@Schema(description = "day3", example="day3")
+		private String day3;
+		@Schema(description = "day4", example="day4")
+		private String day4;
+		@Schema(description = "day5", example="day5")
+		private String day5;
+		@Schema(description = "day6", example="day6")
+		private String day6;
 		@Schema(description = "starttime", example="starttime")
 		private String starttime;
 		@Schema(description = "finishtime", example="finishtime")
@@ -237,6 +306,8 @@ public class TbcrewtimeDto {
 		private String title;
 		@Schema(description = "cate", example="cate")
 		private String cate;
+		@Schema(description = "process", example="process")
+		private String process;
 	}
 
 	@Schema
@@ -254,6 +325,8 @@ public class TbcrewtimeDto {
 		private String title;
 		@Schema(description = "cate", example="cate")
 		private String cate;
+		@Schema(description = "process", example="process")
+		private String process;
 	}
 	@Schema
 	@Getter
@@ -270,6 +343,8 @@ public class TbcrewtimeDto {
 		private String title;
 		@Schema(description = "cate", example="cate")
 		private String cate;
+		@Schema(description = "process", example="process")
+		private String process;
 	}
 
 }

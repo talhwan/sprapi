@@ -2,31 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thc.sprapi.mapper.TbcrewtimeMapper">
 
-	<select id="random" parameterType="com.thc.sprapi.dto.TbcrewtimeDto$TbcrewtimeListDto" resultType="com.thc.sprapi.dto.TbcrewtimeDto$TbcrewtimeSelectDto">
-		SELECT tbcrewtime.id
-		FROM tbcrewtime
-		WHERE tbcrewtime.id is not null
-		<if test = "deleted != null and deleted !=''">AND tbcrewtime.deleted = #{deleted}</if>
-		<if test = "title != null and title !=''">AND tbcrewtime.title LIKE CONCAT('%', #{title}, '%')</if>
-		<if test = "cate != null and cate !=''">AND tbcrewtime.cate = #{cate}</if>
-		ORDER BY rand()
-		LIMIT 0,1
-	</select>
 	<!---->
 	<select id="detail" parameterType="hashMap" resultType="com.thc.sprapi.dto.TbcrewtimeDto$TbcrewtimeSelectDto">
 		SELECT tbcrewtime.id
 			,tbcrewtime.created_at as createdAt
 			,tbcrewtime.modified_at as modifiedAt
 			,tbcrewtime.deleted
+			,tbcrewtime.tbcrew_id as tbcrewId
 			,tbcrewtime.title
 			,tbcrewtime.sequence
 			,tbcrewtime.cate
-			,tbcrewtime.mpic
-			,tbcrewtime.url
-			,tbcrewtime.content
+			,tbcrewtime.process
+			, tbcrewtime.startage
+			, tbcrewtime.finishage
+			, tbcrewtime.day0
+			, tbcrewtime.day1
+			, tbcrewtime.day2
+			, tbcrewtime.day3
+			, tbcrewtime.day4
+			, tbcrewtime.day5
+			, tbcrewtime.day6
+			, tbcrewtime.starttime
+			, tbcrewtime.finishtime
+			, tbcrew.title as tbcrewTitle
 			/*,CONVERT(tbcrewtime.content USING utf8) as content*/
-		FROM tbcrewtime
-		WHERE tbcrewtime.id = #{id}
+		FROM tbcrewtime, tbcrew
+		WHERE tbcrewtime.tbcrew_id = tbcrew.id
+		AND tbcrewtime.id = #{id}
 	</select>
 
 	<select id="list" parameterType="com.thc.sprapi.dto.TbcrewtimeDto$TbcrewtimeListDto" resultType="com.thc.sprapi.dto.TbcrewtimeDto$TbcrewtimeSelectDto">
@@ -36,6 +38,8 @@
 		<if test = "deleted != null and deleted !=''">AND tbcrewtime.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbcrewtime.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "cate != null and cate !=''">AND tbcrewtime.cate = #{cate}</if>
+		<if test = "process != null and process !=''">AND tbcrewtime.process = #{process}</if>
+		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewtime.tbcrew_id = #{tbcrewId}</if>
 		<!--<if test = "sdate != null and sdate !=''">AND tbcrewtime.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewtime.created_at</if>-->
 		ORDER BY tbcrewtime.sequence DESC
@@ -48,6 +52,8 @@
 		<if test = "deleted != null and deleted !=''">AND tbcrewtime.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbcrewtime.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "cate != null and cate !=''">AND tbcrewtime.cate = #{cate}</if>
+		<if test = "process != null and process !=''">AND tbcrewtime.process = #{process}</if>
+		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewtime.tbcrew_id = #{tbcrewId}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewtime.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewtime.created_at</if>
 		<if test = "cdatetime != null and cdatetime !=''">
@@ -64,6 +70,8 @@
 		<if test = "deleted != null and deleted !=''">AND tbcrewtime.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbcrewtime.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "cate != null and cate !=''">AND tbcrewtime.cate = #{cate}</if>
+		<if test = "process != null and process !=''">AND tbcrewtime.process = #{process}</if>
+		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewtime.tbcrew_id = #{tbcrewId}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewtime.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewtime.created_at</if>
 		<if test = "orderby =='created_at'">ORDER BY tbcrewtime.created_at </if>
@@ -80,6 +88,8 @@
 		<if test = "deleted != null and deleted !=''">AND tbcrewtime.deleted = #{deleted}</if>
 		<if test = "title != null and title !=''">AND tbcrewtime.title LIKE CONCAT('%', #{title}, '%')</if>
 		<if test = "cate != null and cate !=''">AND tbcrewtime.cate = #{cate}</if>
+		<if test = "process != null and process !=''">AND tbcrewtime.process = #{process}</if>
+		<if test = "tbcrewId != null and tbcrewId !=''">AND tbcrewtime.tbcrew_id = #{tbcrewId}</if>
 		<if test = "sdate != null and sdate !=''">AND tbcrewtime.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
 		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= tbcrewtime.created_at</if>
 	</select>

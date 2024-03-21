@@ -46,7 +46,7 @@ public class TbcrewtimeRestController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/sequence")
     public ResponseEntity<TbcrewtimeDto.TbcrewtimeAfterUpdateDto> sequence(@Valid @RequestBody TbcrewtimeDto.TbcrewtimeSequenceDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access("tbcrewtime", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbcrew", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.sequence(params));
     }
@@ -62,7 +62,7 @@ public class TbcrewtimeRestController {
     @PostMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TbcrewtimeDto.TbcrewtimeAfterCreateDto> save(@Valid @RequestBody TbcrewtimeDto.TbcrewtimeCreateDto params, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access("tbcrewtime", "create",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbcrew", "create",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbcrewtimeService.create(params));
     }
@@ -75,7 +75,7 @@ public class TbcrewtimeRestController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbcrewtimeDto.TbcrewtimeAfterUpdateDto> update(@Valid @RequestBody TbcrewtimeDto.TbcrewtimeUpdateDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access("tbcrewtime", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbcrew", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.update(params));
     }
@@ -89,7 +89,7 @@ public class TbcrewtimeRestController {
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
     public ResponseEntity<CommonDeleteListDto> deleteList(@Valid @RequestBody CommonDeleteListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        params.setNowGrant(tbgrantService.access("tbcrewtime", "update",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbcrew", "update",true, principalDetails.getTbuser().getId()));
         params.setNowTbuserId(principalDetails.getTbuser().getId());
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.deleteList(params));
     }
@@ -104,7 +104,7 @@ public class TbcrewtimeRestController {
     @GetMapping("/get/{id}")
     public ResponseEntity<TbcrewtimeDto.TbcrewtimeSelectDto> detail(@PathVariable("id") String id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         CommonDetailDto params = CommonDetailDto.builder().id(id).build();
-        //params.setNowGrant(tbgrantService.access("tbcrewtime", "read",true, principalDetails.getTbuser().getId()));
+        params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.detail(params));
     }
     @Operation(summary = "가맹점 출입시간 목록 조회(검색 기능 포함)",
@@ -115,7 +115,8 @@ public class TbcrewtimeRestController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<List<TbcrewtimeDto.TbcrewtimeSelectDto>> list(@Valid TbcrewtimeDto.TbcrewtimeListDto params) {
+    public ResponseEntity<List<TbcrewtimeDto.TbcrewtimeSelectDto>> list(@Valid TbcrewtimeDto.TbcrewtimeListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.list(params));
     }
     @Operation(summary = "가맹점 출입시간 목록 조회 - 스크롤 (검색 기능 포함)",
@@ -126,7 +127,8 @@ public class TbcrewtimeRestController {
     )
     @PreAuthorize("permitAll()")
     @GetMapping("/moreList")
-    public ResponseEntity<List<TbcrewtimeDto.TbcrewtimeSelectDto>> moreList(@Valid TbcrewtimeDto.TbcrewtimeMoreListDto params) {
+    public ResponseEntity<List<TbcrewtimeDto.TbcrewtimeSelectDto>> moreList(@Valid TbcrewtimeDto.TbcrewtimeMoreListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.moreList(params));
     }
 
@@ -138,7 +140,8 @@ public class TbcrewtimeRestController {
     )
     @PreAuthorize("permitAll()")
     @GetMapping("/pagedList")
-    public ResponseEntity<CommonAfterPagedListDto<TbcrewtimeDto.TbcrewtimeSelectDto>> pagedList(@Valid TbcrewtimeDto.TbcrewtimePagedListDto params) {
+    public ResponseEntity<CommonAfterPagedListDto<TbcrewtimeDto.TbcrewtimeSelectDto>> pagedList(@Valid TbcrewtimeDto.TbcrewtimePagedListDto params, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        params.setNowGrant(tbgrantService.access("tbcrew", "read",true, principalDetails.getTbuser().getId()));
         return ResponseEntity.status(HttpStatus.OK).body(tbcrewtimeService.pagedList(params));
     }
 

@@ -14,7 +14,7 @@
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>가맹점 출입자 상세 : <font class="font_tbcrewtime_tbuserNick"></font></h2>
+                <h2>가맹점 출입시간 상세 : <font class="font_tbcrewtime_title"></font></h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -32,7 +32,7 @@
                         <a href="javascript:location_href_path_param('/tbcrewtime/admin_list/', $('#detail_tbcrewtime_tbcrewId').val())">가맹점(<font class="font_tbcrewtime_tbcrewTitle"></font>) 출입시간</a>
                     </li>
                     <li class="breadcrumb-item active">
-                    <strong>가맹점 출입자 상세</strong>
+                    <strong>가맹점 출입시간 상세</strong>
                     </li>
                 </ol>
             </div>
@@ -74,23 +74,116 @@
                             </div>
                             <label class="col-sm-6"></label>
 
-                            <label class="col-sm-2 col-form-label">가맹점 ID</label>
+                            <label class="col-sm-2 col-form-label">*제목</label>
                             <div class="col-sm-4">
-                                <input disabled type="text" class="form-control m-b" id="detail_tbcrewtime_tbcrewId" keyword="tbcrewId" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
+                                <input type="text" class="form-control m-b" id="detail_tbcrewtime_title" keyword="title" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
                             </div>
-                            <label class="col-sm-2 col-form-label">가맹점 제목</label>
+                            <label class="col-sm-6"></label>
+
+                            <label class="col-sm-2 col-form-label">*나이(최소)</label>
                             <div class="col-sm-4">
-                                <input disabled type="text" class="form-control m-b" id="detail_tbcrewtime_tbcrewTitle" keyword="tbcrewTitle" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
+                                <input type="number" class="form-control m-b" id="detail_tbcrewtime_startage" keyword="startage" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
+                            </div>
+                            <label class="col-sm-2 col-form-label">*나이(최대)</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control m-b" id="detail_tbcrewtime_finishage" keyword="finishage" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
                             </div>
 
-                            <label class="col-sm-2 col-form-label">회원 ID</label>
+                            <label class="col-sm-2 col-form-label">*시작시간</label>
                             <div class="col-sm-4">
-                                <input disabled type="text" class="form-control m-b" id="detail_tbcrewtime_tbuserId" keyword="tbuserId" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
+                                <input type="time" class="form-control m-b" id="detail_tbcrewtime_starttime" keyword="starttime" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
                             </div>
-                            <label class="col-sm-2 col-form-label">회원 닉네임</label>
+                            <label class="col-sm-2 col-form-label">*종료시간 (ex. 22:00)</label>
                             <div class="col-sm-4">
-                                <input disabled type="text" class="form-control m-b" id="detail_tbcrewtime_tbuserNick" keyword="tbuserNick" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
+                                <input type="text" class="form-control m-b" id="detail_tbcrewtime_finishtime" keyword="finishtime" placeholder="내용을 입력하세요" onchange="update_tbcrewtime(this)" />
                             </div>
+
+                            <label class="col-sm-2 col-form-label">*요일</label>
+                            <div class="col-sm-10">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>전체</th>
+                                        <th>일</th>
+                                        <th>월</th>
+                                        <th>화</th>
+                                        <th>수</th>
+                                        <th>목</th>
+                                        <th>금</th>
+                                        <th>토</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_all" title="day" keyword="all" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day0" id="input_tbcrewtime_day_day0" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day1" id="input_tbcrewtime_day_day1" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day2" id="input_tbcrewtime_day_day2" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day3" id="input_tbcrewtime_day_day3" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day4" id="input_tbcrewtime_day_day4" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day5" id="input_tbcrewtime_day_day5" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="input_tbcrewtime_day_each" title="day" keyword="day6" id="input_tbcrewtime_day_day6" onclick="listener_chk_tbcrewtime(this, 'input_tbcrewtime_day')"/>
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day0" keyword="day0" value="0"/>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day1" keyword="day1" value="0"/>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day2" keyword="day2" value="0"/>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day3" keyword="day3" value="0"/>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day4" keyword="day4" value="0"/>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day5" keyword="day5" value="0"/>
+                                <input type="hidden" class="detail_tbcrewtime_day_each" id="detail_tbcrewtime_day6" keyword="day6" value="0"/>
+                                <script>
+                                    function listener_chk_tbcrewtime(obj, obj_class){
+                                        listener_chk(obj, obj_class);
+                                        let keyword = $(obj).attr("keyword");
+                                        let checked = $(obj).prop("checked");
+                                        let title = $(obj).attr("title");
+                                        if(keyword == "all") {
+                                            if(checked){
+                                                $(".detail_tbcrewtime_day_each").val("1");
+                                            } else {
+                                                $(".detail_tbcrewtime_day_each").val("0");
+                                            }
+                                            let for_timeout = 300;
+                                            let detail_tbcrewtime_day_each = $(".detail_tbcrewtime_day_each");
+                                            for (let i=0; i<detail_tbcrewtime_day_each.length;i++){
+                                                for_timeout += 200;
+                                                setTimeout(function() {
+                                                    console.log('Works!');
+                                                    update_tbcrewtime("#detail_tbcrewtime_" + $(detail_tbcrewtime_day_each[i]).attr("keyword"));
+                                                }, for_timeout);
+                                            }
+                                        } else {
+                                            if(checked){
+                                                $("#detail_tbcrewtime_" + keyword).val("1");
+                                            } else {
+                                                $("#detail_tbcrewtime_" + keyword).val("0");
+                                            }
+                                            update_tbcrewtime("#detail_tbcrewtime_" + keyword);
+                                        }
+                                    }
+                                </script>
+
+                            </div>
+
 
                         </div>
                     </div>
@@ -115,6 +208,18 @@
                             $("#detail_tbcrewtime_" + eachKey).val(obj_data[eachKey]);
                             $("#img_tbcrewtime_" + eachKey).attr("src", obj_data[eachKey]);
                         }
+                    }
+
+                    let detail_tbcrewtime_day_each = $(".detail_tbcrewtime_day_each");
+                    let count_detail_tbcrewtime_day_each = 0;
+                    for (let i=0; i<detail_tbcrewtime_day_each.length;i++){
+                        if($(detail_tbcrewtime_day_each[i]).val() == 1){
+                            count_detail_tbcrewtime_day_each++;
+                            $("#input_tbcrewtime_day_" + $(detail_tbcrewtime_day_each[i]).attr("keyword")).prop("checked", true);
+                        }
+                    }
+                    if(count_detail_tbcrewtime_day_each == detail_tbcrewtime_day_each.length){
+                        $(".input_tbcrewtime_day_all").prop("checked", true);
                     }
                 }
                 _data.error = function(obj_data, obj_status, obj_xhr){
