@@ -6,8 +6,10 @@ import com.thc.sprapi.exception.NoMatchingDataException;
 import com.thc.sprapi.mapper.TbcrewMapper;
 import com.thc.sprapi.repository.TbcrewRepository;
 import com.thc.sprapi.service.TbcrewService;
+import com.thc.sprapi.service.TbcrewtimeService;
 import com.thc.sprapi.service.TbcrewuserService;
 import com.thc.sprapi.service.TbcrewushotService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,16 +28,19 @@ public class TbcrewServiceImpl implements TbcrewService {
     private final TbcrewMapper tbcrewMapper;
     private final TbcrewuserService tbcrewuserService;
     private final TbcrewushotService tbcrewushotService;
+    private final TbcrewtimeService tbcrewtimeService;
     public TbcrewServiceImpl(
             TbcrewRepository tbcrewRepository
             , TbcrewMapper tbcrewMapper
             , TbcrewuserService tbcrewuserService
             , TbcrewushotService tbcrewushotService
+            , TbcrewtimeService tbcrewtimeService
     ) {
         this.tbcrewRepository = tbcrewRepository;
         this.tbcrewMapper = tbcrewMapper;
         this.tbcrewuserService = tbcrewuserService;
         this.tbcrewushotService = tbcrewushotService;
+        this.tbcrewtimeService = tbcrewtimeService;
     }
 
 
@@ -84,7 +89,9 @@ public class TbcrewServiceImpl implements TbcrewService {
         return get(params.getId());
     }
     public TbcrewDto.TbcrewSelectDto get(String id){
-        return tbcrewMapper.detail(id);
+        TbcrewDto.TbcrewSelectDto result = tbcrewMapper.detail(id);
+        result.setTimes(tbcrewtimeService.list(new TbcrewtimeDto.TbcrewtimeListDto("N", id,null,null,null)));
+        return result;
     }
     public List<TbcrewDto.TbcrewSelectDto> list(TbcrewDto.TbcrewListDto params){
         return addListDetails(tbcrewMapper.list(params));

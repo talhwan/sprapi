@@ -5,6 +5,28 @@
 </head>
 <body>
 
+<script id="list_info_tbcrewtime" type="text/x-handlebars-template">
+    {{#resultData_tbcrewtime}}
+    <tr class="gradeA" id="tr_tbcrewtime_{{id}}">
+        <td><font class="font_cate_{{cate}}">{{cate}}</font></td>
+        <td>{{title}}</td>
+        <td>{{starttime}}</td>
+        <td>{{finishtime}}</td>
+        <td><font class="font_day_{{day0}}">{{day0}}</font></td>
+        <td><font class="font_day_{{day1}}">{{day1}}</font></td>
+        <td><font class="font_day_{{day2}}">{{day2}}</font></td>
+        <td><font class="font_day_{{day3}}">{{day3}}</font></td>
+        <td><font class="font_day_{{day4}}">{{day4}}</font></td>
+        <td><font class="font_day_{{day5}}">{{day5}}</font></td>
+        <td><font class="font_day_{{day6}}">{{day6}}</font></td>
+    </tr>
+    {{/resultData_tbcrewtime}}
+</script>
+<script type="text/javascript">
+    var list_info_tbcrewtime = $("#list_info_tbcrewtime").html();
+    var list_info_tbcrewtime_template = Handlebars.compile(list_info_tbcrewtime);
+</script>
+
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
@@ -99,11 +121,32 @@
                             <div class="col-sm-10">
                                 <textarea class="form-control m-b" id="detail_tbcrew_content" keyword="content" onkeyup="listener_maxlength_check(this, 2000);" onchange="update_tbcrew(this)" rows="4" placeholder="내용을 입력하세요"></textarea>
                             </div>
+                            <div class="col-sm-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>구분</th>
+                                        <th>제목</th>
+                                        <th>시작시간</th>
+                                        <th>종료시간</th>
+                                        <th>일</th>
+                                        <th>월</th>
+                                        <th>화</th>
+                                        <th>수</th>
+                                        <th>목</th>
+                                        <th>금</th>
+                                        <th>토</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="div_array_times">
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div class="col-sm-12">
                                 <button class="btn btn-outline-info btn-sm" onclick="location_href_path_param('/tbcrewuser/admin_list/',getIdFromUrl(null))">회원목록</button>
                                 <button class="btn btn-outline-dark btn-sm" onclick="location_href_path_param('/tbcrewushot/admin_list/',getIdFromUrl(null))">출입기록</button>
-                                <button class="btn btn-outline-primary btn-sm" onclick="location_href_path_param('/tbcrewtime/admin_list/',getIdFromUrl(null))">출입기록</button>
+                                <button class="btn btn-outline-primary btn-sm" onclick="location_href_path_param('/tbcrewtime/admin_list/',getIdFromUrl(null))">출입시간</button>
                             </div>
                         </div>
                     </div>
@@ -115,37 +158,47 @@
                 console.log( "ready!" );
                 detail_tbcrew();
             });
-            function detail_tbcrew(){
+            function detail_tbcrew() {
                 let tbcrewId = getIdFromUrl(null);
                 let _data = new Map();
                 _data.url = "/api/tbcrew/get/" + tbcrewId;
                 _data.type = "GET";
-                _data.success = function(obj_data, obj_status, obj_xhr){
+                _data.success = function (obj_data, obj_status, obj_xhr) {
                     let detailKeys = Object.keys(obj_data)
-                    for (let eachKey of detailKeys){
-                        if(!isNull(obj_data[eachKey])){
+                    for (let eachKey of detailKeys) {
+                        if (!isNull(obj_data[eachKey])) {
                             $(".font_tbcrew_" + eachKey).text(obj_data[eachKey]);
                             $("#detail_tbcrew_" + eachKey).val(obj_data[eachKey]);
                             $("#img_tbcrew_" + eachKey).attr("src", obj_data[eachKey]);
                         }
                     }
+
+                    let times = obj_data.times;
+                    for (each of times) {
+                        let each_list = [];
+                        each_list.push(each);
+                        $("#div_array_times").append(list_info_tbcrewtime_template({"resultData_tbcrewtime": each_list}));
+                    }
+                    $(".font_day_0").text("X");
+                    $(".font_day_1").text("O");
+                    $(".font_day_0").removeClass("font_day_0");
+                    $(".font_day_1").removeClass("font_day_1");
+
+                    $(".font_cate_temp").text("임시");
+                    $(".font_cate_normal").text("일반");
+                    $(".font_cate_temp").removeClass("font_cate_temp");
+                    $(".font_cate_normal").removeClass("font_cate_normal");
                 }
-                _data.error = function(obj_data, obj_status, obj_xhr){
+                _data.error = function (obj_data, obj_status, obj_xhr) {
                     alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
                 }
                 func_ajax(_data);
             }
-            function update_tbcrew(obj){
+
+            function update_tbcrew(obj) {
                 let _param = {};
                 _param["id"] = $("#detail_tbcrew_id").val();
                 _param[$(obj).attr("keyword")] = $(obj).val();
-                //alert(_param[$(obj).attr("keyword")]);
-                /*
-                
-                                if($(obj).attr("keyword") == "content"){
-                                    _param[$(obj).attr("keyword")] = new Blob([$(obj).val()]);
-                                }
-                */
 
                 let _data = new Map();
                 _data.url = "/api/tbcrew";

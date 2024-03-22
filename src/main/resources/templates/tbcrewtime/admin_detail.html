@@ -157,20 +157,12 @@
                                         let checked = $(obj).prop("checked");
                                         let title = $(obj).attr("title");
                                         if(keyword == "all") {
+                                            let day_value = "0";
                                             if(checked){
-                                                $(".detail_tbcrewtime_day_each").val("1");
-                                            } else {
-                                                $(".detail_tbcrewtime_day_each").val("0");
+                                                day_value = "1";
                                             }
-                                            let for_timeout = 300;
-                                            let detail_tbcrewtime_day_each = $(".detail_tbcrewtime_day_each");
-                                            for (let i=0; i<detail_tbcrewtime_day_each.length;i++){
-                                                for_timeout += 200;
-                                                setTimeout(function() {
-                                                    console.log('Works!');
-                                                    update_tbcrewtime("#detail_tbcrewtime_" + $(detail_tbcrewtime_day_each[i]).attr("keyword"));
-                                                }, for_timeout);
-                                            }
+                                            $(".detail_tbcrewtime_day_each").val(day_value);
+                                            update_tbcrewtime_days(day_value);
                                         } else {
                                             if(checked){
                                                 $("#detail_tbcrewtime_" + keyword).val("1");
@@ -179,6 +171,28 @@
                                             }
                                             update_tbcrewtime("#detail_tbcrewtime_" + keyword);
                                         }
+                                    }
+
+                                    function update_tbcrewtime_days(obj){
+                                        let _param = {};
+                                        _param["id"] = $("#detail_tbcrewtime_id").val();
+                                        let detail_tbcrewtime_day_each = $(".detail_tbcrewtime_day_each");
+                                        for (let i=0; i<detail_tbcrewtime_day_each.length;i++){
+                                            //alert($(detail_tbcrewtime_day_each[i]).attr("keyword"));
+                                            _param[$(detail_tbcrewtime_day_each[i]).attr("keyword")] = obj;
+                                        }
+
+                                        let _data = new Map();
+                                        _data.url = "/api/tbcrewtime";
+                                        _data.type = "PUT";
+                                        _data.param = _param;
+                                        _data.success = function(obj_data, obj_status, obj_xhr){
+                                            //alert("수정되었습니다.");
+                                        }
+                                        _data.error = function(obj_data, obj_status, obj_xhr){
+                                            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                                        }
+                                        func_ajax(_data);
                                     }
                                 </script>
 
@@ -210,8 +224,8 @@
                         }
                     }
 
-                    let detail_tbcrewtime_day_each = $(".detail_tbcrewtime_day_each");
                     let count_detail_tbcrewtime_day_each = 0;
+                    let detail_tbcrewtime_day_each = $(".detail_tbcrewtime_day_each");
                     for (let i=0; i<detail_tbcrewtime_day_each.length;i++){
                         if($(detail_tbcrewtime_day_each[i]).val() == 1){
                             count_detail_tbcrewtime_day_each++;

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 public class TbcrewDto {
 	/**/
 	@Schema
@@ -139,6 +141,8 @@ public class TbcrewDto {
 		@Schema(description = "content", example="content")
 		private String content;
 
+		@Schema(description = "times", example="times")
+		private List<TbcrewtimeDto.TbcrewtimeSelectDto> times;
 	}
 
 	@Schema
